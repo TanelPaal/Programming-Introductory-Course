@@ -3,7 +3,7 @@
 """ Add a to b. Print out the result."""
 a = int(input("Enter the value for a:"))
 b = int(input("Enter the value for b:"))
-print(f"The result of {a} + {b} is {a + b}")
+print(f"{a + b}")
 
 """ Subtract d from c. Print out the result."""
 c = int(input("Enter the value for c:"))
