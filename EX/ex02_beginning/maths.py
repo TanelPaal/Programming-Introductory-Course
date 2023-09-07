@@ -37,7 +37,7 @@ a = int(input("Enter the value of a: "))
 b = int(input("Enter the value of b: "))
 c = int(input("Enter the value of c: "))
 d = int(input("Enter the value of d: "))
-print(f"{round(a * 1 + b * 2 + c * 3 + d * 4)}")
+print(f"{(a * 1 + b * 2 + c * 3 + d * 4) / 4}")
 
 """
 Calculate the sum of two fractions.
