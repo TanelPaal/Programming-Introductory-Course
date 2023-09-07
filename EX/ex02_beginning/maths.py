@@ -72,7 +72,7 @@ x = int(input("Enter the value of x: "))
 y = int(input("Enter the value of y: "))
 u = int(input("Enter the value of u: "))
 t = int(input("Enter the value of t: "))
-print(f"Output\n{(x * t + u * y)} / {(y * t)}")
+print(f"{(x * t + u * y)} / {(y * t)}")
 
 """
 Calculate and print how many hours are needed per week with given ECTS and amount of weeks, if each ECTS is 26 hours.
