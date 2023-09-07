@@ -8,32 +8,32 @@ print(f"{a + b}")
 """ Subtract d from c. Print out the result."""
 c = int(input("Enter the value for c:"))
 d = int(input("Enter the value for d:"))
-print(f"The result of {c} - {d} is {c - d}")
+print(f"{c - d}")
 
 """ Multiply e by f. Print the result."""
 e = int(input("Enter the value for e:"))
 f = int(input("Enter the value for f:"))
-print(f"The result of {e} * {f} is {e * f}")
+print(f"{e * f}")
 
 """Divide g by h. Print the result."""
 g = int(input("Enter the value for g:"))
 h = int(input("Enter the value for h:"))
-print(f"The result of {g} / {h} is {g / h}")
+print(f"{g / h}")
 
 """Divide i by j. Print the remainder. Use an arithmetic operator."""
 i = int(input("Enter the value for i:"))
 j = int(input("Enter the value for j:"))
-print(f"The remainder of {i} % {j} is {i % j}")
+print(f"{i % j}")
 
 """Divide k by l. Print out the floor value. Use an arithmetic operator."""
 k = int(input("Enter the value for k:"))
 l: int = int(input("Enter the value for l:"))
-print(f"The result of {k} / {l} is {k // l}")
+print(f"{k // l}")
 
 """Calculate m raised to the power of n. Print out the result."""
 m = int(input("Enter the value for m:"))
 n = int(input("Enter the value for n:"))
-print(f"{m} is raised to the power of {n} is {m ** n}")
+print(f"{m ** n}")
 
 """If o is greater or equal than p then print True. If not then print False."""
 o = int(input("Enter the value for o:"))
