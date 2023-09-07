@@ -75,7 +75,7 @@ else:
 length = int(input("Enter the value for length:"))
 width = int(input("Enter the value for width:"))
 height = int(input("Enter the value for height:"))
-print(f"The volume of the cuboid {length} * {width} * {height} is {length * width * height}")
+print(f"{length * width * height}")
 
 """Convert days, minutes, hours and seconds into minutes.
 
@@ -101,4 +101,4 @@ days = int(input("Enter the value for days:"))
 hours = int(input("Enter the value for hours:"))
 minutes = int(input("Enter the value for minutes:"))
 seconds = int(input("Enter the value for seconds:"))
-print(f"The value of {days} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s) equals to {(days * 24 * 60) + (hours * 60) + minutes + (seconds / 60)} in minutes")
+print(f"{(days * 24 * 60) + (hours * 60) + minutes + (seconds / 60)}")
