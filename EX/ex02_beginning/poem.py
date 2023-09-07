@@ -3,6 +3,7 @@
 """
 Ask for user's inputs and print out a poem in one line using f string and newline (\n)
 
+
 Example input:
 color = "red"
 objects = "violets"
