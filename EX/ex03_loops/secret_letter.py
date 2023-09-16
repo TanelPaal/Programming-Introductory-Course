@@ -13,7 +13,6 @@ def secret_letter(letter: str) -> bool:
     :param letter: secret letter
     :return: validation
     """
-
     lowercase_count = 0
     uppercase_count = 0
     digit_sum = 0
