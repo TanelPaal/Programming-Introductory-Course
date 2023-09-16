@@ -1,6 +1,5 @@
 """Secret letter."""
 
-
 def secret_letter(letter: str) -> bool:
     """
     Check if the given secret letter follows all the necessary rules. Return True if it does, else False.
@@ -32,6 +31,7 @@ def secret_letter(letter: str) -> bool:
         return True
     else:
         return False
+
 
 if __name__ == '__main__':
     print(secret_letter("sOMEteSTLETTer8"))  # True
