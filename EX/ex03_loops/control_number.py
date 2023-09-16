@@ -39,6 +39,7 @@ def control_number(encrypted_string: str) -> bool:
     # Verify whether the digits extracted from the encrypted string correspond to the calculated control number
     return control_num_str == str(control_num)
 
+
 if __name__ == '__main__':
     print(control_number("mE0W5"))  # True
     print(control_number("SomeControlNR?20"))  # False
