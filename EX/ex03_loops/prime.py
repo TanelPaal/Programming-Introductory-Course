@@ -30,4 +30,5 @@ if __name__ == '__main__':
     print(is_prime_number(4))  # -> False
     print(is_prime_number(7))  # -> True
     print(is_prime_number(88))  # -> False
+    print(is_prime_number(1))  # -> False
     print(is_prime_number(174440041))  # -> True (Takes too long to find if it's a prime number)
