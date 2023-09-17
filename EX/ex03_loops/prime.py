@@ -14,6 +14,8 @@ def is_prime_number(number: int) -> bool:
     :param number: the number to check.
     :return: boolean True if number is a prime number or False if number is not a prime number.
     """
+    if number <= 1:
+        return False
     for i in range(2, number):
         if number % i == 0:
             return False
@@ -28,4 +30,5 @@ if __name__ == '__main__':
     print(is_prime_number(4))  # -> False
     print(is_prime_number(7))  # -> True
     print(is_prime_number(88))  # -> False
-    print(is_prime_number(174440041))  # -> True (Slow at finding the answer)
+    print(is_prime_number(5))
+    print(is_prime_number(6))
