@@ -123,10 +123,8 @@ def is_name_in_password(password: str, name: str) -> bool:
     for name_part in individual_name_parts:
         name_part_lower = name_part.lower()
 
-        # Check for name part or it's reversed option.
         if name_part_lower in password_lower or name_part_lower[::-1] in password_lower:
             return True
-
     return False
 
 
@@ -151,7 +149,6 @@ def is_birthday_in_password(password: str, birthdate: str) -> bool:
     :param birthdate: Birthday of the account owner, format is dd.mm.yyyy
     :return: True if the birthday is present in the password, False otherwise
     """
-    # Split the data from the birthdate.
     day, month, year = birthdate.split(".")
 
     # Check if the day, month, or year (in various formats) are in the password.
@@ -180,35 +177,27 @@ def is_password_valid(new_password: str, old_password: str, name: str, birthdate
     :param birthdate: The user's birthdate
     :return: True if the password is valid, False otherwise.
     """
-    # Check length
     if not is_correct_length(new_password):
         return False
 
-    # Check uppercase letter
     if not includes_uppercase(new_password):
         return False
 
-    # Check lowercase letter
     if not includes_lowercase(new_password):
         return False
 
-    # Check special character
     if not includes_special(new_password):
         return False
 
-    # Check number
     if not includes_number(new_password):
         return False
 
-    # Check old password difference
     if not is_different_from_old_password(old_password, new_password):
         return False
 
-    # Check name in password
     if is_name_in_password(new_password, name):
         return False
 
-    # Check birthday in password
     if is_birthday_in_password(new_password, birthdate):
         return False
 
@@ -246,6 +235,7 @@ if __name__ == '__main__':
     print(is_different_from_old_password("seinav2rv", "seinakapp"))  # -> False
     print(is_different_from_old_password("merineitsi99", "mereneitsi11"))  # -> False
     print(is_different_from_old_password("eva1970", "0791ave"))  # -> False
+    print(is_different_from_old_password("abxyab", "abcxy"))  # -> True
 
     print("\nPassword has your name:")
     print(is_name_in_password("ddccwemelani", "Melani Mets"))  # -> True
