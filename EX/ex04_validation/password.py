@@ -66,16 +66,16 @@ def includes_number(password: str) -> bool:
 
 def is_different_from_old_password(old_password: str, new_password: str) -> bool:
     """
-        Check if the new password is different enough from the old password.
+    Check if the new password is different enough from the old password.
 
-        The overlap between the new password and old password should be less than 50%.
-        The check for overlap is case-insensitive.
-        The overlap is also checked for the reversed version of the new password.
+    The overlap between the new password and old password should be less than 50%.
+    The check for overlap is case-insensitive.
+    The overlap is also checked for the reversed version of the new password.
 
-        :param old_password: The old password
-        :param new_password: The new password
-        :return: True if the new password is different enough, False otherwise
-        """
+    :param old_password: The old password
+    :param new_password: The new password
+    :return: True if the new password is different enough, False otherwise
+    """
     old_pass = old_password.lower()
     new_pass = new_password.lower()
 
