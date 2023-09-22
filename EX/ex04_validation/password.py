@@ -84,9 +84,10 @@ def is_different_from_old_password(old_password: str, new_password: str) -> bool
 
     # Check for overlap in both directions
     for i in range(max_overlap + 1):
-        substring = new_pass[i:i + len(new_pass) - i]
+        substring = new_pass[i:i + len(new_pass) - 2 * i]
         if substring in old_pass or substring[::-1] in old_pass:
             return False
+    # Check if the new password is a substring of the old password.
     return True
 
 
@@ -236,6 +237,7 @@ if __name__ == '__main__':
     print(is_different_from_old_password("merineitsi99", "mereneitsi11"))  # -> False
     print(is_different_from_old_password("eva1970", "0791ave"))  # -> False
     print(is_different_from_old_password("abxyab", "abcxy"))  # -> True
+    print(is_different_from_old_password("lammas987", "lammas789")) # -> False
 
     print("\nPassword has your name:")
     print(is_name_in_password("ddccwemelani", "Melani Mets"))  # -> True
