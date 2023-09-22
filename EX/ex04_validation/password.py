@@ -87,7 +87,6 @@ def is_different_from_old_password(old_password: str, new_password: str) -> bool
         substring = new_pass[i:i + len(new_pass) - 2 * i]
         if substring in old_pass or substring[::-1] in old_pass:
             return False
-    # Check if the new password is a substring of the old password.
     return True
 
 
