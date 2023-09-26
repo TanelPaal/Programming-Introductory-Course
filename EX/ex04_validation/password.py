@@ -78,15 +78,24 @@ def is_different_from_old_password(old_password: str, new_password: str) -> bool
     """
     old_pass = old_password.lower()
     new_pass = new_password.lower()
+    old_len = len(old_pass)
+    new_len = len(new_pass)
 
-    # Calculate the threshold for max overlap of the 2 passwords.
-    max_overlap = len(new_pass) // 2
-
-    # Check for overlap in both directions
-    for i in range(max_overlap + 1):
-        substring = new_pass[i:i + len(new_pass) - 2 * i]
-        if substring in old_pass or substring[::-1] in old_pass:
-            return False
+    for sub_len in range(1, new_len + 1):
+        for i in range(old_len - sub_len + 1):
+            sub_str = old_pass[i:i + sub_len]
+            if sub_str in new_pass:
+                overlap_percentage = len(sub_str) / new_len
+                if overlap_percentage >= 0.5:
+                    return False
+    reversed_old_pass = old_pass[::-1]
+    for sub_len in range(1, new_len + 1):
+        for i in range(old_len - sub_len + 1):
+            sub_str = reversed_old_pass[i:i + sub_len]
+            if sub_str in new_pass:
+                overlap_percentage = len(sub_str) / new_len
+                if overlap_percentage >= 0.5:
+                    return False
     return True
 
 
@@ -236,7 +245,8 @@ if __name__ == '__main__':
     print(is_different_from_old_password("merineitsi99", "mereneitsi11"))  # -> False
     print(is_different_from_old_password("eva1970", "0791ave"))  # -> False
     print(is_different_from_old_password("abxyab", "abcxy"))  # -> True
-    print(is_different_from_old_password("lammas987", "lammas789")) # -> False
+    print(is_different_from_old_password("lammas987", "lammas789"))  # -> False
+    print(is_different_from_old_password("laualina", "voodilina"))  # -> True
 
     print("\nPassword has your name:")
     print(is_name_in_password("ddccwemelani", "Melani Mets"))  # -> True
