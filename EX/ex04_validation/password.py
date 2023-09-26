@@ -1,6 +1,9 @@
 """Password validation."""
 
 
+import math
+
+
 def is_correct_length(password: str) -> bool:
     """
     Check if the password's length is within the valid range.
@@ -78,24 +81,14 @@ def is_different_from_old_password(old_password: str, new_password: str) -> bool
     """
     old_pass = old_password.lower()
     new_pass = new_password.lower()
-    old_len = len(old_pass)
-    new_len = len(new_pass)
-
-    for sub_len in range(1, new_len + 1):
-        for i in range(old_len - sub_len + 1):
-            sub_str = old_pass[i:i + sub_len]
-            if sub_str in new_pass:
-                overlap_percentage = len(sub_str) / new_len
-                if overlap_percentage >= 0.5:
-                    return False
-    reversed_old_pass = old_pass[::-1]
-    for sub_len in range(1, new_len + 1):
-        for i in range(old_len - sub_len + 1):
-            sub_str = reversed_old_pass[i:i + sub_len]
-            if sub_str in new_pass:
-                overlap_percentage = len(sub_str) / new_len
-                if overlap_percentage >= 0.5:
-                    return False
+    overlap = math.ceil(len(new_pass) / 2)
+    x = 0
+    while overlap <= len(new_pass):
+        if new_pass[x:overlap] in old_pass or new_pass[x:overlap] in old_pass[::-1]:
+            return False
+        else:
+            x += 1
+            overlap += 1
     return True
 
 
@@ -246,7 +239,6 @@ if __name__ == '__main__':
     print(is_different_from_old_password("eva1970", "0791ave"))  # -> False
     print(is_different_from_old_password("abxyab", "abcxy"))  # -> True
     print(is_different_from_old_password("lammas987", "lammas789"))  # -> False
-    print(is_different_from_old_password("laualina", "voodilina"))  # -> True
 
     print("\nPassword has your name:")
     print(is_name_in_password("ddccwemelani", "Melani Mets"))  # -> True
