@@ -54,7 +54,7 @@ def find_domain(email: str) -> str:
 
 def is_valid_domain(email: str) -> bool:
     """
-     Checks if the domain of an email address is valid based on certain criteria.
+     Check if the domain of an email address is valid based on certain criteria.
 
     :param email: A string representing an email address.
     :return: True if the domain is valid according to the criteria, False otherwise.
@@ -89,7 +89,7 @@ def is_valid_domain(email: str) -> bool:
 
 def is_valid_email_address(email: str) -> bool:
     """
-    Checks if a given string represents a valid email address based on certain criteria.
+    Check if a given string represents a valid email address based on certain criteria.
 
     :param email: A string representing an email address.
     :return: True if the email address is valid according to the criteria, False otherwise.
@@ -110,7 +110,7 @@ def is_valid_email_address(email: str) -> bool:
 
 def create_email_address(domain: str, username: str):
     """
-    Creates an email address by combining a domain and a username.
+    Create an email address by combining a domain and a username.
 
     :param domain: A string representing the domain part of the email address.
     :param username: A string representing the username part of the email address.
