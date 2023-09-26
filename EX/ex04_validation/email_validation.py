@@ -1,6 +1,7 @@
 """Email validation."""
 
 # Write your functions here
+
 def has_at_symbol(email: str) -> bool:
     if "@" in email:
         return True
