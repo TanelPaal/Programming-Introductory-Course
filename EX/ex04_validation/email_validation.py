@@ -77,7 +77,9 @@ def is_valid_domain(email: str) -> bool:
     domain_parts = domain.split('.')
     domain_first_part = domain_parts[0]
     domain_second_part = domain_parts[-1]
-
+    point_count = domain.count(".")
+    if point_count != 1:
+        return False
     if not domain_first_part.isalpha():
         return False
     if not (3 <= len(domain_first_part) <= 10):
