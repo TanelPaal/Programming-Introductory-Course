@@ -10,6 +10,7 @@ def list_of_phones(all_phones: str) -> list:
 
     "Google Pixel,Honor Magic5,Google Pixel" => ["Google Pixel', 'Honor Magic5', 'Google Pixel"]
     """
+    # Check for no input.
     if not all_phones.strip():
         return []
     # Split the input string by commas to separate brands and models.
@@ -72,6 +73,31 @@ def phone_models(all_phones: str) -> list:
     return unique_models
 
 
+def search_by_brand(all_phones: str, brand_to_search: str) -> list:
+    """
+    Search for phones by brand and return a list of matching phones (brand and model).
+
+    :param all_phones:
+    :param brand_to_search:
+    :return:
+    """
+    # Check for no input.
+    if not all_phones.strip():
+        return []
+    # Split the input string by commas to separate brands and models.
+    phones_list = all_phones.split(',')
+    matches_phones_set = set()
+
+    for phone in phones_list:
+        brand, model = phone.split(' ', 1)
+        if brand.lower() == brand_to_search.lower():
+            matches_phones_set.add(phone)
+
+    # Convert the set back to a list before returning.
+    matched_phones = list(matches_phones_set)
+    return matched_phones
+
+
 if __name__ == '__main__':
     print(list_of_phones("Google Pixel,Honor Magic5,Google Pixel"))  # ["Google Pixel', 'Honor Magic5', 'Google Pixel"]
     print(list_of_phones(""))  # []
@@ -79,3 +105,4 @@ if __name__ == '__main__':
     print(phone_brands("Google Pixel,Google Pixel,Google Pixel,Google Pixel"))  # ['Google']
     print(phone_brands(''))  # []
     print(phone_models("IPhone 14,Google Pixel,Honor Magic5,IPhone 14,Samsung Galaxy S23,IPhone 14 Pro Max"))  # ['14', 'Pixel', 'Magic5', 'Galaxy S23', '14 Pro Max']
+    print(search_by_brand("IPhone 14,iphone 7,IPHONE 11 Pro", "iphone"))
