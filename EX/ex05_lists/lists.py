@@ -25,12 +25,15 @@ def phone_brands(all_phones: str) -> list:
 
     "Google Pixel,Honor Magic5,Google Pixel" => ["Google", "Honor"]
     """
-    brand_list = []
+    brand_list = [] # Create an empty list to store unique phone brands.
+
+    # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        model = phone.split(' ', 1)[0]
+        model = phone.split(' ', 1)[0]  # Extract the brand (the part before the first space).
         if model in brand_list:
             continue
-        brand_list.append(model)
+        brand_list.append(model)  # Add the brand to the list if it's not already present.
+
     return brand_list
 
 
@@ -45,12 +48,15 @@ def phone_models(all_phones: str) -> list:
     # Check if the input string is empty.
     if not all_phones:
         return []
-    model_list = []
+
+    model_list = []  # Create an empty list to store unique phone models.
+
+    # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        model = phone.split(' ', 1)[1]
+        model = phone.split(' ', 1)[1]  # Extract the model (the part after the first space).
         if model in model_list:
             continue
-        model_list.append(model)
+        model_list.append(model)  # Add the model to the list if it's not already present.
     return model_list
 
 
@@ -62,13 +68,16 @@ def search_by_brand(all_phones: str, brand_to_search: str):
     :param brand_to_search:
     :return:
     """
-    results = []
-    search_term = brand_to_search.lower()
+    results_set = set()  # Use a set to store unique results.
+    search_term = brand_to_search.lower()  # Convert the search term to lowercase for case-insensitive matching.
+
+    # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        brand = phone.split(' ', 1)[0]
-        if brand.lower() == search_term and phone not in results:
-            results.append(phone)
-    return results
+        brand = phone.split(' ', 1)[0]  # Extract the brand (the part before the first space).
+        if brand.lower() == search_term:  # Check if the brand matches the search term.
+            results_set.add(phone)  # Add to the set to ensure uniqueness.
+
+    return list(results_set)  # Convert the set back to a list before returning it.
 
 
 def search_by_model(all_phones: str, model_to_search: str) -> list:
