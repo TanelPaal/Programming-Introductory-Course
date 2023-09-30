@@ -84,6 +84,7 @@ def search_by_brand(all_phones: str, brand_to_search: str):
     # Check for no input.
     if not all_phones.strip():
         return []
+
     # Split the input string by commas to separate brands and models.
     phones_list = all_phones.split(',')
     matched_phones_set = set()
@@ -106,20 +107,36 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
     :param model_to_search:
     :return:
     """
-    pass
+    # Check for no input.
+    if not all_phones.strip():
+        return []
+
+    # Split the input string by commas to separate brands and models.
+    phones_list = all_phones.split(',')
+    matched_phones = []
+
+    for phone in phones_list:
+        brand, model = phone.strip().split(' ', 1)
+        if model.lower().find(model_to_search.lower()) != -1:
+            matched_phones.append(phone)
+
+    return matched_phones
 
 
 if __name__ == '__main__':
     print(list_of_phones("Google Pixel,Honor Magic5,Google Pixel"))  # ["Google Pixel', 'Honor Magic5', 'Google Pixel"]
     print(list_of_phones(""))  # []
+
     print("Search for Brand names:")
     print(phone_brands("Google Pixel,Honor Magic5,Google Pix,Honor Magic6,IPhone 12,Samsung S10,Honor Magic,IPhone 11"))  # ['Google', 'Honor', 'IPhone', 'Samsung']
     print(phone_brands("Google Pixel,Google Pixel,Google Pixel,Google Pixel"))  # ['Google']
     print(phone_brands(''))  # []
     print(phone_models("IPhone 14,Google Pixel,Honor Magic5,IPhone 14,Samsung Galaxy S23,IPhone 14 Pro Max"))  # ['14', 'Pixel', 'Magic5', 'Galaxy S23', '14 Pro Max']
+
     print("Search by Brand:")
     print(search_by_brand("IPhone 14,iphone 7,IPHONE 11 Pro,IPhone 14,Google Pixel,Honor Magic5,IPhone 14 Pro Max", "iphone"))
     print(search_by_brand("Honor Magic6,Honor Magic5,Honor Whatever", "Honor"))
-    print(search_by_brand("Google Pixel,Google Pixel,Google Pixel,Google Pixel2,Google Pixel 2022", "Google"))
+    #  print(search_by_brand("Google Pixel", "Google Pixel", "Google Pixel", "Google Pixel2", "Google Pixel 2022", "Google"))
+
     print("Search by Model:")
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))
