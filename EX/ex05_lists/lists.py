@@ -123,10 +123,7 @@ if __name__ == '__main__':
     print("\nSearch by Brand:")
     print(search_by_brand("IPhone 14,iphone 7,IPHONE 11 Pro,IPhone 14,Google Pixel,Honor Magic5,IPhone 14 Pro Max,", "iphone"))
     print(search_by_brand("Honor Magic6,Honor Magic5,Honor Whatever", "Honor"))
-    print(search_by_brand("Google Pixel","Google Pixel","Google Pixel","Google Pixel2","Google Pixel 2022","Google"))
 
     print("\nSearch by Model:")
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro Max"))
-    print(search_by_brand("Google Pixel", "Google Pixel", "Google Pixel", "Google Pixel2", "Google Pixel 2022", "Pixel"))
-    print(search_by_brand("Google Pixel", "Google Pixel", "Google Pixel", "Google Pixel2", "Google Pixel 2022", "Pixel2"))
