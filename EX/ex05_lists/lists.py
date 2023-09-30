@@ -73,42 +73,54 @@ def phone_models(all_phones: str) -> list:
     return unique_models
 
 
-def search_by_brand(*all_phones: str) -> list:
-    # Extract the last string.
-    brand = all_phones[-1].lower()
+def search_by_brand(all_phones: str, brand_to_search: str):
+    """
+    Search for phones by brand and return a list of matching phones (brand and model).
 
-    # Combine all string into one large string, separating phone names with commas.
-    combined_phone_list = ', '.join(all_phones[:-1])
+    :param all_phones:
+    :param brand_to_search:
+    :return:
+    """
+    # Check for no input.
+    if not all_phones.strip():
+        return []
 
-    # Split the list of phones by comma and remove whitespace.
-    phones = combined_phone_list.split(',')
-    phones = [phone.strip() for phone in phones]
+    # Split the input string by commas to separate brands and models.
+    phones_list = all_phones.split(',')
+    matched_phones_set = set()
 
-    # Filter the list of phones, keeping only those from the searched brand.
-    result = [phone for phone in phones if brand in phone.lower()]
-    # Remove duplicates.
-    result = list(set(result))
+    for phone in phones_list:
+        brand, model = phone.split(' ', 1)
+        if brand.lower() == brand_to_search.lower():
+            matched_phones_set.add(phone)
 
-    return result
+    # Convert the set back to a list before returning.
+    matched_phones = list(matched_phones_set)
+    return matched_phones
 
 
-def search_by_model(*all_phones: str) -> list:
-    # Extract the last string.
-    model = all_phones[-1].lower()
+def search_by_model(all_phones: str, model_to_search: str) -> list:
+    """
+    Search for phones by model and return a list of matching phones (brand and model).
 
-    # Combine all string into one large string, separating phone names with commas.
-    combine_phone_list = ', '.join(all_phones[:-1])
+    :param all_phones:
+    :param model_to_search:
+    :return:
+    """
+    # Check for no input.
+    if not all_phones.strip():
+        return []
 
-    # Split the list of phones by comma and remove whitespace.
-    phones = combine_phone_list.split(',')
-    phones = [phone.strip() for phone in phones]
+    # Split the input string by commas to separate brands and models.
+    phones_list = all_phones.split(',')
+    matched_phones = []
 
-    # Filter the list of phones, keeping only those from the searched model.
-    result = [phone for phone in phones if model in phone.lower()]
-    # Remove duplicates.
-    result = list(set(result))
+    for phone in phones_list:
+        brand, model = phone.strip().split(' ', 1)
+        if model.lower().find(model_to_search.lower()) != -1:
+            matched_phones.append(phone)
 
-    return result
+    return matched_phones
 
 
 if __name__ == '__main__':
