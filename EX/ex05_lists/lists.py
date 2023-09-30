@@ -13,10 +13,8 @@ def list_of_phones(all_phones: str) -> list:
     # Check for no input.
     if not all_phones.strip():
         return []
-    # Split the input string by commas to separate brands and models.
-    phones_list = all_phones.split(',')
 
-    return phones_list
+    return [phone.strip() for phone in all_phones.strip().split(',')]
 
 
 def phone_brands(all_phones: str) -> list:
@@ -27,22 +25,13 @@ def phone_brands(all_phones: str) -> list:
 
     "Google Pixel,Honor Magic5,Google Pixel" => ["Google", "Honor"]
     """
-    # Check if the input string is empty.
-    if not all_phones:
-        return []
-    # An empty list for containing unique phone brands.
-    unique_brands = []
-    # Split the input string by commas to separate brands and models.
-    phones_list = all_phones.split(',')
-
-    for name in phones_list:
-        # Extract the brand.
-        brand = name.split(' ')[0]
-        # Check if the brand is not already in the list.
-        if brand not in unique_brands:
-            unique_brands.append(brand)
-
-    return unique_brands
+    brand_list = []
+    for phone in list_of_phones(all_phones):
+        model = phone.split(' ', 1)[0]
+        if model in brand_list:
+            continue
+        brand_list.append(model)
+    return brand_list
 
 
 def phone_models(all_phones: str) -> list:
@@ -56,21 +45,13 @@ def phone_models(all_phones: str) -> list:
     # Check if the input string is empty.
     if not all_phones:
         return []
-    # An empty list for containing unique phone models.
-    unique_models = []
-    # Split the input string by commas to separate brands and models.
-    phones_list = all_phones.split(',')
-
-    for name in phones_list:
-        # Extract the words in the name.
-        words = name.split(' ')
-        # Extract the model.
-        if len(words) >= 2:
-            model = ' '.join(words[1:])
-            if model not in unique_models:
-                unique_models.append(model)
-
-    return unique_models
+    model_list = []
+    for phone in list_of_phones(all_phones):
+        model = phone.split(' ', 1)[1]
+        if model in model_list:
+            continue
+        model_list.append(model)
+    return model_list
 
 
 def search_by_brand(all_phones: str, brand_to_search: str):
@@ -123,7 +104,8 @@ if __name__ == '__main__':
     print("\nSearch by Brand:")
     print(search_by_brand("IPhone 14,iphone 7,IPHONE 11 Pro,IPhone 14,Google Pixel,Honor Magic5,IPhone 14 Pro Max,", "iphone"))
     print(search_by_brand("Honor Magic6,Honor Magic5,Honor Whatever", "Honor"))
+    print(search_by_brand("Google Pixel,Google Pixel,Google Pixel,Google Pixel2,Google Pixel 2022", "Google"))
 
     print("\nSearch by Model:")
+    print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "14"))
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))
-    print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro Max"))
