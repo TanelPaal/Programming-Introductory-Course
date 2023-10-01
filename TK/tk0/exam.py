@@ -18,9 +18,16 @@ def workday_count(days: int) -> int:
     :return: workdays in given days
     """
     workdays = 0
-    for day in range(1, days + 1):
-        if day % 7 <= 5:
+    day_of_week = 0  # 0 corresponds to Monday, 1 to Tuesday, and so on
+
+    for day in range(days):
+        # Check if the current day is a workday (Monday to Friday)
+        if day_of_week < 5:
             workdays += 1
+
+        # Move to the next day of the week
+        day_of_week = (day_of_week + 1) % 7
+
     return workdays
 
 
@@ -135,6 +142,8 @@ def divisions(numbers: list) -> int:
 
 if __name__ == '__main__':
     print(workday_count(14))  # 12
+    print(workday_count(6))
+    print(workday_count(2345))
     print(sorta_sum(7, 5))  # 20
     print(sorta_sum(3, 6))  # 9
     print(sorta_sum(11, 10))  # 21
