@@ -100,12 +100,12 @@ def last_indices_elements_sum(nums: list) -> int:
     last_element_value = nums[-1]
     second_last_element_value = nums[-2]
 
-    last_element_index = last_element_value - 1 if 0 <= last_element_value - 1 < len(nums) else 0
-    second_last_element_index = second_last_element_value - 1 if 0 <= second_last_element_value - 1 < len(nums) else 0
+    last_element_index = last_element_value if last_element_value < len(nums) else 0
+    second_last_element_index = second_last_element_value if second_last_element_value < len(nums) else 0
 
-    sum = nums[last_element_index] + nums[second_last_element_index]
+    result = nums[last_element_index] + nums[second_last_element_index]
 
-    return sum
+    return result
 
 
 def divisions(numbers: list) -> int:
