@@ -90,7 +90,12 @@ def num_as_index(nums: list) -> int:
     :param nums: list of non-negative integers.
     :return: element value in the specific index.
     """
-    pass
+    smaller = min(nums[0], nums[-1])
+
+    if smaller < len(nums):
+        return nums[smaller]
+    else:
+        return smaller
 
 
 def remove_in_middle(text: str, to_remove: str) -> str:
@@ -109,3 +114,10 @@ def remove_in_middle(text: str, to_remove: str) -> str:
     :return: string with middle substrings removed.
     """
     pass
+
+
+if __name__ == '__main__':
+    print(num_as_index([1, 2, 3]))
+    print(num_as_index([4, 5, 6]))
+    print(num_as_index([0, 1, 0]))
+    print(num_as_index([3, 5, 6, 1, 1]))
