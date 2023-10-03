@@ -113,16 +113,16 @@ def remove_in_middle(text: str, to_remove: str) -> str:
     :param to_remove: substring to be removed.
     :return: string with middle substrings removed.
     """
-    start = text.find(to_remove)  # Find first.
-    end = text.rfind(to_remove)  # Find last.
-    text_remove = text.replace(to_remove, "")
-
-    # If substring presents only once then return original string.
-    if start == -1 or start == end:
+    if text.count(to_remove) < 3:
         return text
-
-    return text[:start + len(to_remove)] + text_remove + text[end:]
-
+    else:
+        first_remove = text.find(to_remove)
+        first = text[:first_remove] + to_remove
+        last_remove = text.rfind(to_remove)
+        last = text[last_remove:]
+        middle = text[first_remove + len(to_remove): last_remove]
+        middle_part = middle.replace(str(to_remove), "")
+        return first + middle_part + last
 
 if __name__ == '__main__':
     print(num_as_index([1, 2, 3]))
