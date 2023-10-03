@@ -115,15 +115,13 @@ def remove_in_middle(text: str, to_remove: str) -> str:
     """
     start = text.find(to_remove)  # Find first.
     end = text.rfind(to_remove)  # Find last.
+    text_remove = text.replace(to_remove, "")
 
+    # If substring presents only once then return original string.
     if start == -1 or start == end:
         return text
 
-    # Check if there are only two occurrences of to_remove.
-    if text.count(to_remove) == 2:
-        return text
-
-    return text[:start + len(to_remove)] + text[start + len(to_remove):end] + text[end + len(to_remove):]
+    return text[:start + len(to_remove)] + text_remove + text[end:]
 
 
 if __name__ == '__main__':
