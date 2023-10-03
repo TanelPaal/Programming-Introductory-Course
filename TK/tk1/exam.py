@@ -124,6 +124,7 @@ def remove_in_middle(text: str, to_remove: str) -> str:
         middle_part = middle.replace(str(to_remove), "")
         return first + middle_part + last
 
+
 if __name__ == '__main__':
     print(num_as_index([1, 2, 3]))
     print(num_as_index([4, 5, 6]))
