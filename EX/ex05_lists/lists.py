@@ -74,7 +74,7 @@ def search_by_brand(all_phones: str, brand_to_search: str):
     # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
         brand = phone.split(' ', 1)[0]  # Extract the brand (the part before the first space).
-        if brand.lower() == search_term and phone not in results:
+        if brand.lower() == search_term:  # and phone not in results:
             results.append(phone)  # Add the phone to the results list if it matches and is not already present.
     return results  # Return the list of matching phones (brand and model).
 
