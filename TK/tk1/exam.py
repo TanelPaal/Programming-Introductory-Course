@@ -115,12 +115,13 @@ def remove_in_middle(text: str, to_remove: str) -> str:
     """
     start = text.find(to_remove)  # Find first.
     end = text.rfind(to_remove)  # Find last.
+    text_remove = text.replace(to_remove, "")
 
     # If substring presents only once then return original string.
     if start == -1 or start == end:
         return text
 
-    return text[:start + len(to_remove)] + text[end:]
+    return text[:start + len(to_remove)] + text_remove + text[end:]
 
 
 if __name__ == '__main__':
@@ -128,3 +129,10 @@ if __name__ == '__main__':
     print(num_as_index([4, 5, 6]))
     print(num_as_index([0, 1, 0]))
     print(num_as_index([3, 5, 6, 1, 1]))
+
+    print(remove_in_middle("abc", "def"))  # "abc"
+    print(remove_in_middle("abcabcabc", "abc"))  # "abcabc"
+    print(remove_in_middle("abcdabceabcabc", "abc"))  # "abcdeabc"
+    print(remove_in_middle("abcd", "abc"))  # "abcd"
+    print(remove_in_middle("abcdabc", "abc"))  # "abcdabc"
+    print(remove_in_middle("ABCAaaaAA", "a"))  # "ABCAaaAA"
