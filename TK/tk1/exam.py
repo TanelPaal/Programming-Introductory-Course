@@ -61,10 +61,6 @@ def caught_speeding(speed: int, is_birthday: bool) -> int:
     else:
         return 2  # Big ticket
 
-print(caught_speeding(60, False))
-print(caught_speeding(65, False))
-print(caught_speeding(65, True))
-
 
 def first_half(text: str) -> str:
     """
@@ -76,7 +72,8 @@ def first_half(text: str) -> str:
     first_half('HelloThere') => 'Hello'
     first_half('abcdef') => 'abc'
     """
-    pass
+    half = len(text) // 2
+    return text[:half]
 
 
 def num_as_index(nums: list) -> int:
