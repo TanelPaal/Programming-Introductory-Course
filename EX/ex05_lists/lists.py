@@ -82,7 +82,6 @@ def search_by_brand(all_phones: str, brand_to_search: str):
 def search_by_model(all_phones: str, model_to_search: str) -> list:
     """
     Search for phones by model and return a list of matching phones (brand and model).
-
     :param all_phones:
     :param model_to_search:
     :return:
@@ -92,9 +91,9 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
 
     # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        model = phone.split(' ')[1]  # Extract the model (the part after the first space).
-        if model.lower() == search_term:
-            results.append(phone)  # Add the phone to the results list if it matches and is not already present.
+        if model_to_search.lower() in phone.lower():
+            results.append(phone)  # Add the phone to the results list if it contains the search term.
+
     return results  # Return the list of matching phones (brand and model).
 
 
