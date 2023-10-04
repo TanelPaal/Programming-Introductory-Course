@@ -87,15 +87,12 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
     :param model_to_search:
     :return:
     """
-    results = []  # Create an empty list to store matching phones.
     search_term = model_to_search.lower()  # Convert the search term to lowercase for case-insensitive matching.
 
-    # Iterate through each phone in the list of phones.
-    for phone in list_of_phones(all_phones):
-        model = phone.split(' ')[1]  # Extract the model (the part after the first space).
-        if model.strip().lower() == search_term:
-            results.append(phone)  # Add the phone to the results list if it matches and is not already present.
-    return results  # Return the list of matching phones (brand and model).
+    # Use list comprehension to filter phones that match the search term.
+    matching_phones = [phone for phone in list_of_phones(all_phones) if search_term in phone.lower()]
+
+    return matching_phones  # Return the list of matching phones (brand and model).
 
 
 if __name__ == '__main__':
@@ -118,5 +115,5 @@ if __name__ == '__main__':
 
     print("\nSearch by Model:")
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "14"))
-    print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))
+    print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))  # <- Not able to find with Pro or Pro Max or Max
     print(search_by_model("Google Pixel 2021,Samsa PIXEL,Google Pixel 2022", "Pixel"))
