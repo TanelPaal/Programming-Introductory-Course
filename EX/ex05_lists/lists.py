@@ -87,12 +87,15 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
     :param model_to_search:
     :return:
     """
+    results = []  # Create an empty list to store matching phones.
     search_term = model_to_search.lower()  # Convert the search term to lowercase for case-insensitive matching.
 
-    # Use list comprehension to filter phones that match the search term.
-    matching_phones = [phone for phone in list_of_phones(all_phones) if search_term in phone.lower()]
-
-    return matching_phones  # Return the list of matching phones (brand and model).
+    # Iterate through each phone in the list of phones.
+    for phone in list_of_phones(all_phones):
+        model = phone.split(' ')[1]  # Extract the model (the part after the first space).
+        if model.lower() == search_term:
+            results.append(phone)  # Add the phone to the results list if it matches and is not already present.
+    return results  # Return the list of matching phones (brand and model).
 
 
 if __name__ == '__main__':
