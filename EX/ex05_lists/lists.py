@@ -74,7 +74,7 @@ def search_by_brand(all_phones: str, brand_to_search: str):
     # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
         brand = phone.split(' ', 1)[0]  # Extract the brand (the part before the first space).
-        if brand.lower() == search_term and phone not in results:
+        if brand.lower() == search_term:
             results.append(phone)  # Add the phone to the results list if it matches and is not already present.
     return results  # Return the list of matching phones (brand and model).
 
@@ -82,7 +82,6 @@ def search_by_brand(all_phones: str, brand_to_search: str):
 def search_by_model(all_phones: str, model_to_search: str) -> list:
     """
     Search for phones by model and return a list of matching phones (brand and model).
-
     :param all_phones:
     :param model_to_search:
     :return:
@@ -92,11 +91,10 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
 
     # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        model = phone.split(' ', 1)[1]  # Extract the model (the part after the first space).
-        if model.lower() == search_term and phone not in results:
-            results.append(phone)  # Add the phone to the results list if it matches and is not already present.
-    return results  # Return the list of matching phones (brand and model).
+        if model_to_search.lower() in phone.lower():
+            results.append(phone)  # Add the phone to the results list if it contains the search term.
 
+    return results  # Return the list of matching phones (brand and model).
 
 if __name__ == '__main__':
     print("\nPrint of all phones:")
@@ -119,3 +117,4 @@ if __name__ == '__main__':
     print("\nSearch by Model:")
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "14"))
     print(search_by_model("IPhone 14,iphone 7,IPHONE 11 Pro,Google Pixel,IPhone 14 Pro Max,IPhone 14 Pro Max", "Pro"))
+    print(search_by_model("Google Pixel 2021,Samsa PIXEL,Google Pixel 2022", "Pixel"))
