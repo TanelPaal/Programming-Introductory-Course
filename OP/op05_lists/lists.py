@@ -178,7 +178,24 @@ def number_of_phones(all_phones: str) -> list:
     Each tuple is in the form: (brand_name: str, quantity: int).
     The order of the tuples (brands) is the same as the first appearance in the list.
     """
-    return []
+    phones = list_of_phones(all_phones)  # Get list of phones from the input string.
+    brand_quantity_dict = {}
+
+    for phone in phones:
+        brand = phone.split(' ', 1)[0]  # Split the phone into brand and model, and get the brand.
+        brand = brand.strip()  # Remove whitespace from brand.
+
+        if brand in brand_quantity_dict:
+            # If the brand already exists in the dictionary, increase the quantity by 1.
+            brand_quantity_dict[brand] += 1
+        else:
+            # If the brand is not in the dictionary, add it with a quantity of 1.
+            brand_quantity_dict[brand] = 1
+
+    # Create the final output list.
+    brand_quantity_list = [(brand, quantity) for brand, quantity in brand_quantity_dict.items()]
+
+    return brand_quantity_list
 
 
 def phone_list_as_string(phone_list: list) -> str:
@@ -193,13 +210,10 @@ def phone_list_as_string(phone_list: list) -> str:
 
 
 if __name__ == '__main__':
-    print(add_phones([['IPhone', ['11']], ['Google', ['Pixel']]], "IPhone 12,Samsung Galaxy S22,IPhone 11"))
-    # [['IPhone', ['11', '12']], ['Google', ['Pixel']], ['Samsung', ['Galaxy S22']]]
+    print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
 
-    #print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
+    print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
 
-    #print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
-
-    #print(number_of_phones(""))  # []
+    print(number_of_phones(""))  # []
 
     #print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
