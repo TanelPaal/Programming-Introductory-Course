@@ -92,8 +92,8 @@ def search_by_model(all_phones: str, model_to_search: str) -> list:
 
     # Iterate through each phone in the list of phones.
     for phone in list_of_phones(all_phones):
-        model = phone.split(' ')[1]  # Extract the model (the part after the first space).
-        if model.lower() == search_term:
+        model = ' '.join(phone.split(' '))  # Extract the model (the part after the first space).
+        if search_term in model.lower():
             results.append(phone)  # Add the phone to the results list if it matches and is not already present.
     return results  # Return the list of matching phones (brand and model).
 
