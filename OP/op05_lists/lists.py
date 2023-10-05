@@ -207,13 +207,19 @@ def phone_list_as_string(phone_list: list) -> str:
     [['IPhone', ['11']], ['Google', ['Pixel']]] =>
     "IPhone 11,Google Pixel"
     """
+    # Store phone strings in an empty list.
+    phone_strings = []
+
+    # Loop through the input list and create phone strings.
+    for brand, models in phone_list:
+        for model in models:
+            phone_strings.append(f"{brand} {model}")
+
+    # Create the final output string by joining the phone strings using commas.
+    result = ','.join(phone_strings)
+
+    return result
 
 
 if __name__ == '__main__':
-    print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
-
-    print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
-
-    print(number_of_phones(""))  # []
-
-    #print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
+    print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
