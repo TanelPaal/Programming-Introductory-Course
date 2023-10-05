@@ -112,14 +112,24 @@ def phone_brand_and_models(all_phones: str):
     "Honor Magic5,IPhone 11,IPhone 12,Google Pixel,Samsung Galaxy S22,IPhone 13,IPhone 13,Google Pixel2" =>
     [['Honor', ['Magic5']], ['IPhone', ['11', '12', '13']], ['Google', ['Pixel', 'Pixel2']], ['Samsung', ['Galaxy S22']]]
     """
-    phone_names = all_phones.split(',')
-    brand_models = {}
+    phones = list_of_phones(all_phones)  # Get list of phones from the input string.
+    brand_model_dict = {}  # Create a dictionary to store brands and their models.
 
-    
+    for phone in phones:
+        brand, model = phone.split(' ', 1)  # Split the phone into brand and model.
+        brand = brand.strip()
+        model = model.strip()
 
+        # If brand is not in the dictionary, add it with an empty list as the value.
+        if brand not in brand_model_dict:
+            brand_model_dict[brand] = []
+        # Add the model to the list of models for the brand, but only if it's not already there.
+        if model not in brand_model_dict[brand]:
+            brand_model_dict[brand].append(model)
 
-    result = []  # List in lists
-    return result
+    # Create the final output list with structured information about brands and models.
+    brand_model_list = [[brand, models] for brand, models in brand_model_dict.items()]
+    return brand_model_list
 
 
 def add_phones(phone_list, all_phones) -> list:
@@ -164,19 +174,19 @@ def phone_list_as_string(phone_list: list) -> str:
 
 
 if __name__ == '__main__':
-    print(phone_brand_and_models("Honor Magic5,Google Pixel2,Google Pixel6,IPhone 7,Google Pixel,Google Pixel,IPhone 14"))
+    print(phone_brand_and_models("Honor Magic5,Google Pixel2,Google Pixel6,IPhone 7,Google Pixel,Google Pixel,IPhone 14 Pro"))
     # [['Honor', ['Magic5']], ['Google', ['Pixel2', 'Pixel6', 'Pixel']], ['IPhone', ['7', '14']]]
 
     print(phone_brand_and_models("Google Pixel,Google Pixel,Google Pixel,Google Pixel"))  # [['Google', ['Pixel']]]
     print(phone_brand_and_models(""))  # []
 
-    print(add_phones([['IPhone', ['11']], ['Google', ['Pixel']]], "IPhone 12,Samsung Galaxy S22,IPhone 11"))
+    #print(add_phones([['IPhone', ['11']], ['Google', ['Pixel']]], "IPhone 12,Samsung Galaxy S22,IPhone 11"))
     # [['IPhone', ['11', '12']], ['Google', ['Pixel']], ['Samsung', ['Galaxy S22']]]
 
-    print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
+    #print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
 
-    print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
+    #print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
 
-    print(number_of_phones(""))  # []
+    #print(number_of_phones(""))  # []
 
-    print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
+    #print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
