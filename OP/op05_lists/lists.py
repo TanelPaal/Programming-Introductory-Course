@@ -220,6 +220,6 @@ def phone_list_as_string(phone_list: list) -> str:
 
     return result
 
-
+# Add test cases if needed.
 if __name__ == '__main__':
-    print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
+
