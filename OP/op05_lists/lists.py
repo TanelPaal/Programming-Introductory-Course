@@ -222,4 +222,10 @@ def phone_list_as_string(phone_list: list) -> str:
 
 # Add test cases if needed.
 if __name__ == '__main__':
+    print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
 
+    print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]
+
+    print(number_of_phones(""))  # []
+
+    print(phone_list_as_string([['IPhone', ['11']], ['Google', ['Pixel']]]))  # "IPhone 11,Google Pixel"
