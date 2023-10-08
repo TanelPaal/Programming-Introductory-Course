@@ -126,7 +126,17 @@ def destinations_list(schedule: dict) -> list:
     :param schedule: Dictionary containing the flight schedule (the result of flights_schedule function).
     :return: Alphabetically sorted list of unique destinations.
     """
-    pass
+    # Create an empty set to store unique destinations
+    unique_destinations = set()
+
+    # Go through the values in the schedule dict and add destinations to the set
+    for destination, flight_number in schedule.values():
+        unique_destinations.add(destination)
+
+    # Convert the set to a sorted list
+    sorted_destinations = sorted(unique_destinations)
+
+    return sorted_destinations
 
 
 def airlines_operating_today(schedule: dict, airline_names: dict) -> set:
