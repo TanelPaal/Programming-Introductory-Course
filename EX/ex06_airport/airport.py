@@ -100,7 +100,23 @@ def flights_schedule(flights: list) -> dict:
     :return: dictionary where the keys are departure times and values are tuples containing the destination and
     flight number.
     """
-    pass
+    # Create an empty dict to store flight schedule.
+    schedule = {}
+
+    for flight in flights:
+        flight_info = flight.split(',')  # Split the info using comma.
+
+        # Extract departure time, destination, and flight number from the flight info.
+        destination = flight_info[0]
+        departure_time = flight_info[1]
+        flight_number = flight_info[3]
+
+        flight_tuple = (destination, flight_number)
+
+        # Add the departure time as a key in the schedule dict with the tuple as it's value.
+        schedule[departure_time] = flight_tuple
+
+    return schedule
 
 
 def destinations_list(schedule: dict) -> list:
