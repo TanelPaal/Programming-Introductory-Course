@@ -84,6 +84,7 @@ def flights_to_destination(flights: list, destination: str) -> list:
     else:
         return []
 
+
 def flights_schedule(flights: list) -> dict:
     """
     Return flight schedule by departure times.
