@@ -156,9 +156,12 @@ def airlines_operating_today(schedule: dict, airline_names: dict) -> set:
     """
     operating_airlines = set()
     for departure_time, flight_info in schedule.items():
+        # Extract the 3-letter airline code from the flight code (3-letter code is at index 1).
         airline_code = flight_info[1][:3]
 
+        # Check if the airline code exists in the airline_names dict.
         if airline_code in airline_names:
+            # Add the corresponding airline name to the set.
             operating_airlines.add(airline_names[airline_code])
 
     return operating_airlines
@@ -178,7 +181,28 @@ def destinations_by_airline(schedule: dict, airline_names: dict) -> dict:
     :param airline_names: Dictionary containing mapping of airline codes to airline names.
     :return: Dictionary of airline names to sets of destinations.
     """
-    pass
+    airline_destinations = {}
+
+    for departure_time, flight_info in schedule.items():
+        # Extract the 3-letter airline code from the flight code (3-letter code is at index 1).
+        airline_code = flight_info[1][:3]
+
+        # Check if the airline code exists in the airline_names dict.
+        if airline_code in airline_names:
+            # Get the airline name from the airline_names dict.
+            airline_name = airline_names[airline_code]
+            # Get the destination from the flight information.
+            destination = flight_info[0]
+
+            # Check if the airline name already exists in airline_destinations.
+            if airline_name in airline_destinations:
+                # If it exists, add the destination to the existing set.
+                airline_destinations[airline_name].add(destination)
+            else:
+                # If it doesn't exist, create a new set with the destination and add it to airline_destinations.
+                airline_destinations[airline_name] = {destination}
+
+    return airline_destinations
 
 
 if __name__ == '__main__':
