@@ -195,7 +195,16 @@ def most_popular_destination(schedule: dict[str, tuple[str, str]], passenger_cou
                             the number of passengers as values.
     :return: A string representing the most popular destination.
     """
-    pass
+    destination_passenger_count = {}
+
+    for departure_time, (destination, flight_number) in schedule.items():
+        passengers = passenger_count.get(flight_number, 0)  # Get the number of passengers for the flight.
+        # Update the total passenger count for the destination.
+        destination_passenger_count[destination] = destination_passenger_count.get(destination, 0) + passengers
+
+    # Find the destination with the highest total passenger count.
+    most_popular = max(destination_passenger_count, key=destination_passenger_count.get)
+    return most_popular
 
 
 def least_popular_destination(schedule: dict[str, tuple[str, str]], passenger_count: dict[str, int]) -> str:
@@ -209,7 +218,16 @@ def least_popular_destination(schedule: dict[str, tuple[str, str]], passenger_co
                             the number of passengers as values.
     :return: A string representing the least popular destination.
     """
-    pass
+    destination_passenger_count = {}
+
+    for departure_time, (destination, flight_number) in schedule.items():
+        passengers = passenger_count.get(flight_number, 0)  # Get the number of passengers for the flight.
+        # Update the total passenger count for the destination.
+        destination_passenger_count[destination] = destination_passenger_count.get(destination, 0) + passengers
+
+    # Find the destination with the highest total passenger count.
+    least_popular = min(destination_passenger_count, key=destination_passenger_count.get)
+    return least_popular
 
 
 if __name__ == '__main__':
