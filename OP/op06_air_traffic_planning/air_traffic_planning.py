@@ -67,7 +67,26 @@ def busiest_time(schedule: dict[str, tuple[str, str]]) -> list[str]:
                      in the format "HH:mm" and values are tuples containing destination and flight number.
     :return: List of strings representing the busiest hour(s) in 24-hour format, such as ["08", "21"].
     """
-    pass
+    # Create a dict to count the number of flights for each hour.
+    hour_counts = {}
+
+    for departure_time in schedule.keys():
+        hour, minutes = departure_time.split(':')
+        if hour in hour_counts:
+            hour_counts[hour] += 1
+        else:
+            hour_counts[hour] = 1
+
+    # Find the max flight count.
+    max_flight_count = max(hour_counts.values())
+
+    # Create a list of hours with the maximum flight count.
+    busiest_hours = [hour for hour, count in hour_counts.items() if count == max_flight_count]
+
+    # Sort the busiest hours in ascending order.
+    busiest_hours.sort()
+
+    return busiest_hours
 
 
 def connecting_flights(schedule: dict[str, tuple[str, str]], arrival: tuple[str, str]) -> list[tuple[str, str]]:
@@ -100,7 +119,25 @@ def connecting_flights(schedule: dict[str, tuple[str, str]], arrival: tuple[str,
              ]
              If no connecting flights are available, the function returns an empty list.
     """
-    pass
+    arrival_time, arrival_location = arrival
+    connecting_flights = []
+
+    for departure_time, (destination, flight_number) in schedule.items():
+        if destination != arrival_location:  # Avoid returning to the same location.
+            # Convert times to minutes for easier comparison.
+            arrival_minutes = int(arrival_time.split(":")[0]) * 60 + int(arrival_time.split(":")[1])
+            departure_minutes = int(departure_time.split(":")[0]) * 60 + int(departure_time.split(":")[1])
+
+            # Check if the flight departs at least 45 minutes after the arrival time.
+            if departure_minutes >= arrival_minutes + 45:
+                # Check if the flight departs less than 4 hours after the arrival time.
+                if departure_minutes < arrival_minutes + 4 * 60:
+                    connecting_flights.append((departure_time, destination))
+
+    # Sort the connecting flights by departure time.
+    connecting_flights.sort()
+
+    return connecting_flights
 
 
 def busiest_hour(schedule: dict[str, tuple[str, str]]) -> list[str]:
@@ -189,6 +226,7 @@ if __name__ == '__main__':
     print(busiest_time(schedule))
     # ['06', '11']
 
+    print("\nConnecting Flights:")
     print(connecting_flights(schedule, ("04:00", "Tallinn")))
     # [('06:30', 'Paris'), ('07:29', 'London')]
 
