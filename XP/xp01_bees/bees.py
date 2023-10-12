@@ -32,12 +32,7 @@ def do_bees_meet(honeycomb_width: int, hh_data: str, pp_data: str) -> bool:
         return all(positions[i] / positions[i - 1] == ratio for i in range(1, len(positions))) and ratio <= width
 
     # Check if both sequences meet any of the specified criteria and return True if they do, False otherwise.
-    if (
-            (is_constant(hh_positions, honeycomb_width) and is_constant(pp_positions, honeycomb_width)) or
-            (is_increasing(hh_positions, honeycomb_width) and is_increasing(pp_positions, honeycomb_width)) or
-            (is_geometric(hh_positions, honeycomb_width) and is_geometric(pp_positions, honeycomb_width)) or
-            (is_geometric_ratio(hh_positions, honeycomb_width) and is_geometric_ratio(pp_positions, honeycomb_width))
-    ):
+    if ((is_constant(hh_positions, honeycomb_width) and is_constant(pp_positions, honeycomb_width)) or (is_increasing(hh_positions, honeycomb_width) and is_increasing(pp_positions, honeycomb_width)) or (is_geometric(hh_positions, honeycomb_width) and is_geometric(pp_positions, honeycomb_width)) or (is_geometric_ratio(hh_positions, honeycomb_width) and is_geometric_ratio(pp_positions, honeycomb_width))):
         return True
     else:
         return False
