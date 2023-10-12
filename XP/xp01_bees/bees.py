@@ -8,7 +8,7 @@ def do_bees_meet(honeycomb_width: int, hh_data: str, pp_data: str) -> bool:
     pp_positions = list(map(int, pp_data.split(',')))
 
     # Check if there are enough positions.
-    if len(hh_positions) < 5 or len(pp_positions) < 5:
+    if len(hh_positions) < 4 or len(pp_positions) < 4:
         raise ValueError("Insufficient data for sequence identification")
 
     # Define a function to check if a sequence is constant with a given width.
