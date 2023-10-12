@@ -140,6 +140,19 @@ def connecting_flights(schedule: dict[str, tuple[str, str]], arrival: tuple[str,
     return connecting_flights
 
 
+def time_components(time: str) -> (int, int):
+    """
+    Take the time given, separate hours and minutes, and return integers in tuple.
+
+    :param time:
+    :return:
+    """
+    components_list = [int(component) for component in time.split(':')]
+    components_tuple = tuple(components_list)
+
+    return components_tuple
+
+
 def busiest_hour(schedule: dict[str, tuple[str, str]]) -> list[str]:
     """
     Find the busiest hour-long slot(s) in the schedule.
@@ -163,25 +176,38 @@ def busiest_hour(schedule: dict[str, tuple[str, str]]) -> list[str]:
     if not schedule:
         return []
 
-    # Create a dict to count the number of flights in each hour slot.
-    hour_slot_counts = {}
+    busiest_hours = []  # Initialize a list to store hour-long slots with the most flights.
 
-    for departure_time in sorted(schedule.keys()):
-        hour, minute = map(int, departure_time.split(':'))
-        slot_start_time = f"{hour:02d}:{minute // 60 * 60:02d}"  # Calculate the start time of the slot.
+    for index, time in enumerate(schedule):
+        hour, minute = time_components(time)  # Extract hour and minute from the current time.
 
-        if slot_start_time in hour_slot_counts:
-            hour_slot_counts[slot_start_time].append(departure_time)
-        else:
-            hour_slot_counts[slot_start_time] = [departure_time]
+        keys = list(schedule.keys())
+        busiest_hour = []  # Initialize a list to store the current hour-long slot's times.
+        for comparing_to in keys[index:]:
+            comparing_hour, comparing_minute = time_components(comparing_to)
 
-    # Find the max flight count for any hour slot.
-    max_flight_count = max(len(times) for times in hour_slot_counts.values())
+            # Calculate the hour difference, accounting for minute differences.
+            hour_difference = comparing_hour - hour - int(comparing_minute < minute)
 
-    # Create a list of hour slots with max flight count.
-    busiest_slots = [time for times, times in hour_slot_counts.items() if len(times) == max_flight_count for time in times]
+            if hour_difference == 0:
+                busiest_hour.append(comparing_to)  # Add times in the same hour-long slot.
+            else:
+                break  # If the next time is in a different hour, stop processing.
 
-    return busiest_slots
+        if len(busiest_hour) > 0:
+            busiest_hours.append(busiest_hour)  # Store the hour-long slot if it has flights.
+
+    lengths = [len(time_list) for time_list in busiest_hours]  # Get the number of flights in each hour-long slot.
+    max_length = max(lengths)  # Find the maximum number of flights in any slot.
+
+    times = []  # Initialize a list to store the starting times of the busiest slots.
+    for hour in busiest_hours:
+        length = len(hour)
+
+        if length == max_length:
+            times.append(hour[0])  # If the slot has the maximum number of flights, add its starting time.
+
+    return sorted(list(times))  # Sort and return the list of starting times of the busiest slots.
 
 
 def most_popular_destination(schedule: dict[str, tuple[str, str]], passenger_count: dict[str, int]) -> str:
