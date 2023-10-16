@@ -115,7 +115,7 @@ def find_years(text: str) -> list:
     pattern = r'(?<!\d)\d{4}(?!\d)'
 
     years = re.findall(pattern, text)
-
+    years = str(years)
     return years
 
 
