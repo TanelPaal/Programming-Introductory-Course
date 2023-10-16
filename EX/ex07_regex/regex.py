@@ -94,7 +94,7 @@ def find_words_from_sentences_only(text: str) -> list:
     :param text: given string to find words from
     :return: list of words found in sentences from given string
     """
-    pass
+    return find_words_from_sentence(str(find_sentences(text)))
 
 
 def find_years(text: str) -> list:
@@ -112,7 +112,11 @@ def find_years(text: str) -> list:
     :param text: given string to find years from
     :return: list of years (integers) found in given string
     """
-    pass
+    pattern = r'(?<!\d)\d{4}(?!\d)'
+
+    years = re.findall(pattern, text)
+
+    return years
 
 
 def find_phone_numbers(text: str) -> dict:
