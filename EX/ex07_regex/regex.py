@@ -16,8 +16,10 @@ def find_words(text: str) -> list:
      find words from
     :return: list of words found in given string
     """
+    # Define a regular expression pattern to match words.
     pattern = r'[A-ZÕÄÖÜ][a-zõäöü]+'
 
+    # Use re.findall to find all matches of the pattern in the input text.
     words = re.findall(pattern, text)
 
     return words
@@ -36,8 +38,10 @@ def find_words_with_vowels(text: str) -> list:
     :param text: given string to find words from
     :return: list of words that start with a vowel found in given string
     """
+    # Define a regular expression pattern to match words.
     pattern = r'[A-EIOUÕÄÖÜ][a-zõäöü]+'
 
+    # Use re.findall to find all matches of the pattern in the input text.
     words = re.findall(pattern, text)
 
     return words
@@ -56,8 +60,10 @@ def find_sentences(text: str) -> list:
     :param text: given string to find sentences from
     :return: list of sentences found in given string
     """
+    # Define a regular expression pattern to match words.
     pattern = r'[A-ZÕÄÖÜ][^\.!?]*[\.!?]+'
 
+    # Use re.findall to find all matches of the pattern in the input text.
     sentence = re.findall(pattern, text)
 
     return sentence
@@ -77,8 +83,10 @@ def find_words_from_sentence(sentence: str) -> list:
     :param sentence: given sentence to find words from
     :return: list of words found in given sentence
     """
+    # Define a regular expression pattern to match words.
     pattern = r'[A-Za-zÕÄÖÜõäöü0-9]+'
 
+    # Use re.findall to find all matches of the pattern in the input text.
     words = re.findall(pattern, sentence)
 
     return words
@@ -112,11 +120,15 @@ def find_years(text: str) -> list:
     :param text: given string to find years from
     :return: list of years (integers) found in given string
     """
+    # Define a regular expression pattern to match 4-digit numbers (years).
     pattern = r'(?<!\d)\d{4}(?!\d)'
 
+    # Use re.findall to find all matches of the pattern in the input text.
     year_strings = re.findall(pattern, text)
 
+    # Convert the year strings to integers using list comprehension.
     years = [int(year) for year in year_strings]
+
     return years
 
 
