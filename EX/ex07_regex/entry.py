@@ -19,7 +19,17 @@ def parse(row: str) -> tuple:
     :param row: given string to find values from
     :return: tuple of values found in given string
     """
-    pass
+    pattern = r'([A-ZÕÄÖÜ][a-zõäöü]+)?([A-ZÕÄÖÜ][a-zõöäü]+)?([0-9]{11})((\+\d{3}\s*)?([0-9]{7,8}))?(\d{2}\-\d{2}\-\d{4})?(.+)?'
+    parsed_data = re.search(pattern, row)
+
+    name = parsed_data.group(1)
+    surname = parsed_data.group(2)
+    id_code = parsed_data.group(3)
+    phone_number = parsed_data.group(4)
+    date_of_birth = parsed_data.group(7)
+    address = parsed_data.group(8)
+
+    return (name, surname, id_code, phone_number, date_of_birth, address)
 
 
 if __name__ == '__main__':
