@@ -138,7 +138,29 @@ def find_phone_numbers(text: str) -> dict:
     :param text: given string to find phone numbers from
     :return: dict containing the numbers
     """
-    pass
+    # Define a regular expression pattern to match area codes and phone numbers.
+    pattern = r'(\+\d{3}\s*)?([0-9]{7,8})'
+
+    # Use re.findall to find all matches of the pattern in the input text.
+    list_numbers = re.findall(pattern, text)
+
+    # Initialize a dictionary to store phone numbers organized by area code.
+    phone_numbers_dict = {}
+
+    # Iterate through the list of matched phone numbers.
+    for key_value_pair in list_numbers:
+        key = key_value_pair[0].replace(' ', '')  # Clean up area code (remove whitespace).
+        value = key_value_pair[1]
+
+        # Check if the area code (key) is already in the dictionary.
+        if key in phone_numbers_dict:
+            # If it is, append the phone number (value) to the existing list.
+            phone_numbers_dict[key].append(value)
+        else:
+            # If it's not, create a new key-value pair with the area code and a list containing the phone number.
+            phone_numbers_dict[key] = [value]
+
+    return phone_numbers_dict
 
 
 if __name__ == '__main__':
