@@ -77,7 +77,7 @@ def find_words_from_sentence(sentence: str) -> list:
     :param sentence: given sentence to find words from
     :return: list of words found in given sentence
     """
-    pattern = r'[A-Za-zÕÄÖÜõäöü]+'
+    pattern = r'[A-Za-zÕÄÖÜõäöü0-9]+'
 
     words = re.findall(pattern, sentence)
 
