@@ -6,11 +6,11 @@ def parse(row: str) -> tuple:
     """
     Parse string row into a tuple.
 
-    The row has a first name, last name, ID code, phone number, date of birth and address.
+    The row has a first forename, last forename, ID code, phone number, date of birth and address.
     Only ID code is mandatory, other values may not be included.
 
     They can be found by the following rules:
-    - Both the first name and last name begin with a capital letter and are followed by a lowercase letter
+    - Both the first forename and last forename begin with a capital letter and are followed by a lowercase letter
     - ID code is an 11-digit number
     - Phone number has the same rules applied as in the previous task
     - Date of birth is in the form of dd-MM-YYYY
@@ -22,14 +22,14 @@ def parse(row: str) -> tuple:
     pattern = r'([A-ZÕÄÖÜ][a-zõäöü]+)?([A-ZÕÄÖÜ][a-zõöäü]+)?([0-9]{11})((\+\d{3}\s*)?([0-9]{7,8}))?(\d{2}\-\d{2}\-\d{4})?(.+)?'
     parsed_data = re.search(pattern, row)
 
-    name = parsed_data.group(1)
+    forename = parsed_data.group(1)
     surname = parsed_data.group(2)
     id_code = parsed_data.group(3)
     phone_number = parsed_data.group(4)
     date_of_birth = parsed_data.group(7)
     address = parsed_data.group(8)
 
-    return (name, surname, id_code, phone_number, date_of_birth, address)
+    return (forename, surname, id_code, phone_number, date_of_birth, address)
 
 
 if __name__ == '__main__':
