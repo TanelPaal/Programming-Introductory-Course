@@ -43,99 +43,98 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-    def convert_to_12_hour_format(hour, minute):
-        if hour == 0:
-            return f'12:{minute:02d} AM'
-        elif hour < 12:
-            return f'{hour}:{minute:02d} AM'
-        elif hour == 12:
-            return f'12:{minute:02d} PM'
+    pass
+
+
+    def get_times(text: str) -> list[tuple[int, int, int]]:
+        """
+        Get times from text using the time pattern.
+
+        The result should be a list of tuples containing the time that's not normalized and UTC offset.
+
+        For example:
+
+        [10:53 UTC+3] -> [(10, 53, 3)]
+        [1:43 UTC+0] -> [(1, 43, 0)]
+        [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
+
+        :param text: text to search for the times
+        :return: list of tuples containing the time and offset
+        """
+        time_pattern = r"\[([0-1]?\d|2[0-3])[^\d]([0-5]?\d) UTC([+-]\d(?!\d)|[+-]1?[0-2])"
+        matches = re.findall(time_pattern, text)
+        return [(int(hour), int(minute), int(utc)) for hour, minute, utc in matches]
+
+    def get_formatted_time(time_list):
+        def convert_to_12_hour_format(hour, minute, utc_offset):
+            hour = (hour - utc_offset) % 24
+            period = "AM" if 0 <= hour < 12 else "PM"
+            hour = 12 if hour == 0 or hour == 12 else hour % 12
+            return f"{hour}:{minute:02} {period}"
+
+        unique_times = sorted(set(time_list))
+        formatted_times = [convert_to_12_hour_format(hour, minute, utc) for hour, minute, utc in unique_times]
+        return ', '.join(formatted_times)
+
+
+    def get_usernames(text: str) -> list[str]:
+        """Get usernames from text."""
+        return list(set(re.findall(r"usr:([\w\d_]+)", text)))
+
+
+    def get_errors(text: str) -> list[int]:
+        """Get errors from text."""
+        return sorted(set(int(match) for match in re.findall(r"error (\d{1,3})", text, flags=re.IGNORECASE)))
+
+
+    def get_addresses(text: str) -> list[str]:
+        """Get IPv4 addresses from text."""
+        return list(set(re.findall(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", text)))
+
+
+    def get_endpoints(text: str) -> list[str]:
+        """Get endpoints from text."""
+        return list(set(re.findall(r"\/[\w\d&/?=_%-]+", text)))
+
+    categories = {
+        "time": get_times(text),
+        "user": get_usernames(text),
+        "error": get_errors(text),
+        "ipv4": get_addresses(text),
+        "endpoint": get_endpoints(text)
+    }
+
+    # Remove empty categories
+    categories = {key: value for key, value in categories.items() if value}
+
+    longest_header = max(map(len, categories))
+    result = ""
+    for key, value in categories.items():
+        if key == "time":
+            formatted_time = get_formatted_time(value)
+            result += f"{key:<{longest_header}} | {formatted_time}\n"
         else:
-            return f'{hour - 12}:{minute:02d} PM'
+            result += f"{key:<{longest_header}} | {', '.join(map(str, sorted(value)))}\n"
 
-    def normalize_time(hour, minute, offset):
-        # Convert the time to UTC.
-        hour = (hour - offset) % 24
-        return convert_to_12_hour_format(hour, minute)
-
-    times = get_times(text)
-    usernames = get_usernames(text)
-    errors = get_errors(text)
-    addresses = get_addresses(text)
-    endpoints = get_endpoints(text)
-
-    # Format the data into a table.
-    table = [
-        f'time     | {", ".join(normalize_time(hour, minute, offset) for hour, minute, offset in times)}',
-        f'user     | {", ".join(usernames)}',
-        f'error    | {", ".join(map(str, errors))}',
-        f'ipv4     | {", ".join(addresses)}',
-        f'endpoint | {", ".join(endpoints)}',
-    ]
-
-    return '\n'.join(table)
-
-
-def get_times(text: str) -> list[tuple[int, int, int]]:
-    """
-    Get times from text using the time pattern.
-
-    The result should be a list of tuples containing the time that's not normalized and UTC offset.
-
-    For example:
-
-    [10:53 UTC+3] -> [(10, 53, 3)]
-    [1:43 UTC+0] -> [(1, 43, 0)]
-    [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
-
-    :param text: text to search for the times
-    :return: list of tuples containing the time and offset
-    """
-    time_pattern = r'(\d{1,2})\D+(\d{2}) UTC([-+]\d{1,2})'
-    time_matches = re.findall(time_pattern, text)
-    times = [(int(hour), int(minute), int(offset)) for hour, minute, offset in time_matches]
-    return times
-
-
-def get_usernames(text: str) -> list[str]:
-    """Get usernames from text."""
-    username_pattern = r'usr:([a-zA-Z0-9_]+)'
-    usernames = re.findall(username_pattern, text)
-    return usernames
-
-
-def get_errors(text: str) -> list[int]:
-    """Get errors from text."""
-    error_pattern = r'error (\d{1,3})'
-    errors = [int(error) for error in re.findall(error_pattern, text, re.IGNORECASE)]
-    return errors
-
-
-def get_addresses(text: str) -> list[str]:
-    """Get IPv4 addresses from text."""
-    address_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
-    addresses = re.findall(address_pattern, text)
-    return addresses
-
-
-def get_endpoints(text: str) -> list[str]:
-    """Get endpoints from text."""
-    endpoint_pattern = r'\/[a-zA-Z0-9&\/=?\-_%]+'
-    endpoints = re.findall(endpoint_pattern, text)
-    return endpoints
+    return result.rstrip("\n")
 
 
 if __name__ == '__main__':
     logs = """
-            [-1b35 UTC-4] errOR 741
-            [24a48 UTC+0] 776.330.579.818
-            [02:53 UTC+5] usr:96NC9yqb /aA?Y4pK
-            [5b05 UTC+5] ERrOr 700 268.495.856.225
-            [24-09 UTC+10] usr:uJV5sf82_ eRrOR 844 715.545.485.989
-            [04=54 UTC+3] eRROR 452
-            [11=57 UTC-6] 15.822.272.473 error 9
-            [15=53 UTC+7] /NBYFaC0 468.793.214.681
-            [23-7 UTC+12] /1slr8I
-            [07.46 UTC+4] usr:B3HIyLm 119.892.677.533
-            """
+            [14?36 UTC+9] /tere eRRoR 418 192.168.0.255
+            [8B48 UTC-6] usr:kasutaja
+            [14?36 UTC+9] 1.1.1.1
+            [8B48 UTC-6] 20.234.454.111
+            [14?36 UTC+9] 192.1.3.54
+            [8B48 UTC-6] 145.34.5.6
+            [14?36 UTC+9] 23453.45643.5322
+            [8B48 UTC-6] 754.6.5.5
+            [14?36 UTC+9] /A-36DUV1 /DZ&jKith
+            [23B00 UTC-12] usr:whatever usr:waccaflower
+        """
     print(create_table_string(logs))
+    # time     | 5:36 AM, 2:48 PM
+    # user     | kasutaja
+    # error    | 418
+    # ipv4     | 192.168.0.255
+    # endpoint | /tere
