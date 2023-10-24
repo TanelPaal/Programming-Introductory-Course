@@ -150,7 +150,7 @@ def check_for_prime(num: int, i=None) -> bool:
     :param i: used to check if 'num' is a multiple of some integer.
     :return: boolean. True if 'num' is prime, False otherwise
     """
-    if num == 0 or num == 1:
+    if num <= 1:
         return False
     if i is None:
         i = num - 1
