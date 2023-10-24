@@ -194,7 +194,7 @@ def replace(input_string: str, char_to_replace: str, new_string: str) -> str:
         return input_string[0] + replace(input_string[1:], char_to_replace, new_string)
 
 
-def fibonacci(num: int, fib_list=[]) -> list:
+def fibonacci(num: int, fib_list: list = None) -> list:
     """
     Return a list of length 'num' of Fibonacci numbers using recursion.
 
@@ -210,7 +210,13 @@ def fibonacci(num: int, fib_list=[]) -> list:
     :param fib_list: used to pass the currently computed list on numbers
     :return: list of the first 'num' Fibonacci numbers
     """
-    pass
+    if fib_list is None:
+        fib_list = []
+
+    if num < 0:
+        return None
+    elif num < 2:
+        return [0, 1]
 
 
 def x_sum_loop(nums: list, x: int) -> int:
