@@ -43,25 +43,25 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-    dictionary = {}
-    dictionary["time"], dictionary["user"] = get_times(text), sorted(list(set(get_usernames(text))))
-    dictionary["error"], dictionary["ipv4"] = sorted(list(set(get_errors(text)))), sorted(list(set(get_addresses(text))))
-    dictionary["endpoint"] = sorted(list(set(get_endpoints(text))))
-    new_dict = dictionary.copy()
+    dict = {}
+    dict["time"], dict["user"] = get_times(text), sorted(list(set(get_usernames(text))))
+    dict["error"], dict["ipv4"] = sorted(list(set(get_errors(text)))), sorted(list(set(get_addresses(text))))
+    dict["endpoint"] = sorted(list(set(get_endpoints(text))))
+    new_dict = dict.copy()
     for key in new_dict:
-        if dictionary[key] == []:
-            del dictionary[key]
+        if dict[key] == []:
+            del dict[key]
         elif key == "time":
-            dictionary[key] = get_formatted_time(dictionary[key])
+            dict[key] = formatted_time(dict[key])
         elif key == "error":
-            dictionary[key] = ", ".join([str(error) for error in dictionary[key]])
+            dict[key] = ", ".join([str(error) for error in dict[key]])
         else:
-            dictionary[key] = ", ".join(dictionary[key])
+            dict[key] = ", ".join(dict[key])
     del new_dict, key
-    longest_header = max([len(key) for key in dictionary])
+    longest_header = max([len(key) for key in dict])
     result = ""
-    for key in dictionary:
-        result += f"{key:<{longest_header}} | {dictionary[key]}\n"
+    for key in dict:
+        result += f"{key:<{longest_header}} | {dict[key]}\n"
     return result.rstrip("\n")
 
 
@@ -84,7 +84,7 @@ def get_times(text: str) -> list[tuple[int, int, int]]:
     return [(int(hour), int(minute), int(utc)) for hour, minute, utc in str_list]
 
 
-def get_formatted_time(time_list: list[tuple[int, int, int]]) -> str:
+def formatted_time(time_list: list[tuple[int, int, int]]) -> str:
     """Format 24 hour time to the 12 hour time."""
     def format_time(hour, minute):
         period = "AM" if hour < 12 else "PM"
