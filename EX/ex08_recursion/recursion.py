@@ -152,14 +152,12 @@ def check_for_prime(num: int, i=2) -> bool:
     """
     if num <= 1:
         return False
-    if i is None:
-        i = num - 1
-    if i == 1:
+    if i * i > num:
         return True
     if num % i == 0:
         return False
     else:
-        return check_for_prime(num, i - 1)
+        return check_for_prime(num, i + 1)
 
 
 def replace(input_string: str, char_to_replace: str, new_string: str) -> str:
