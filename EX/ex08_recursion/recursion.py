@@ -210,13 +210,17 @@ def fibonacci(num: int, fib_list: list = None) -> list:
     :param fib_list: used to pass the currently computed list on numbers
     :return: list of the first 'num' Fibonacci numbers
     """
-    if fib_list is None:
-        fib_list = []
-
     if num < 0:
         return None
-    elif num < 2:
+    if num < 2:
         return [0, 1]
+    if fib_list is None:
+        fib_list = [0, 1]
+    if num < len(fib_list):
+        return fib_list[:num]
+    fib_list.append(fib_list[-1] + fib_list[-2])
+
+    return fibonacci(num, fib_list)
 
 
 def x_sum_loop(nums: list, x: int) -> int:
