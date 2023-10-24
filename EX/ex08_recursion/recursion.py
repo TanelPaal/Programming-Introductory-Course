@@ -210,21 +210,18 @@ def fibonacci(num: int, fib_list=None) -> list | None:
     :param fib_list: used to pass the currently computed list on numbers
     :return: list of the first 'num' Fibonacci numbers
     """
-    if fib_list is None:
-        fib_list = []
-
     if num < 0:
         return None
-    elif num == 0:
+    if num == 0:
         return [0, 1]
-    elif num == 1:
-        return [0, 1]
+    '''if num == 1:
+        return [0]'''
+
+    if fib_list is None:
+        fib_list = [0, 1]
 
     while len(fib_list) < num:
-        if len(fib_list) < 2:
-            fib_list.append(len(fib_list))
-        else:
-            fib_list.append(fib_list[-1] + fib_list[-2])
+        fib_list.append(fib_list[-1] + fib_list[-2])
 
     return fib_list
 
