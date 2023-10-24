@@ -43,78 +43,90 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-
-    def get_times(text: str) -> list[tuple[int, int, int]]:
-        """
-        Get times from text using the time pattern.
-
-        The result should be a list of tuples containing the time that's not normalized and UTC offset.
-
-        For example:
-
-        [10:53 UTC+3] -> [(10, 53, 3)]
-        [1:43 UTC+0] -> [(1, 43, 0)]
-        [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
-
-        :param text: text to search for the times
-        :return: list of tuples containing the time and offset
-        """
-        time_pattern = r"\[([0-1]?\d|2[0-3])[^\d]([0-5]?\d) UTC([+-]\d(?!\d)|[+-]1?[0-2])"
-        matches = re.findall(time_pattern, text)
-        return [(int(hour), int(minute), int(utc)) for hour, minute, utc in matches]
-
-    def get_formatted_time(time_list):
-        def convert_to_12_hour_format(hour, minute, utc_offset):
-            hour = (hour - utc_offset) % 24
-            period = "AM" if 0 <= hour < 12 else "PM"
-            hour = 12 if hour == 0 or hour == 12 else hour % 12
-            return f"{hour}:{minute:02} {period}"
-
-        unique_times = sorted(set(time_list))
-        formatted_times = [convert_to_12_hour_format(hour, minute, utc) for hour, minute, utc in unique_times]
-        return ', '.join(formatted_times)
-
-
-    def get_usernames(text: str) -> list[str]:
-        """Get usernames from text."""
-        return list(set(re.findall(r"usr:([\w\d_]+)", text)))
-
-
-    def get_errors(text: str) -> list[int]:
-        """Get errors from text."""
-        return sorted(set(int(match) for match in re.findall(r"error (\d{1,3})", text, flags=re.IGNORECASE)))
-
-
-    def get_addresses(text: str) -> list[str]:
-        """Get IPv4 addresses from text."""
-        return list(set(re.findall(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", text)))
-
-
-    def get_endpoints(text: str) -> list[str]:
-        """Get endpoints from text."""
-        return list(set(re.findall(r"\/[\w\d&/?=_%-]+", text)))
-
-    categories = {
-        "time": get_times(text),
-        "user": get_usernames(text),
-        "error": get_errors(text),
-        "ipv4": get_addresses(text),
-        "endpoint": get_endpoints(text)
-    }
-
-    # Remove empty categories
-    categories = {key: value for key, value in categories.items() if value}
-
-    longest_header = max(map(len, categories))
-    result = ""
-    for key, value in categories.items():
-        if key == "time":
-            formatted_time = get_formatted_time(value)
-            result += f"{key:<{longest_header}} | {formatted_time}\n"
+    dictionary = {}
+    dictionary["time"], dictionary["user"] = get_times(text), sorted(list(set(get_usernames(text))))
+    dictionary["error"], dictionary["ipv4"] = sorted(list(set(get_errors(text)))), sorted(list(set(get_addresses(text))))
+    dictionary["endpoint"] = sorted(list(set(get_endpoints(text))))
+    new_dict = dictionary.copy()
+    for key in new_dict:
+        if dictionary[key] == []:
+            del dictionary[key]
+        elif key == "time":
+            dictionary[key] = get_formatted_time(dictionary[key])
+        elif key == "error":
+            dictionary[key] = ", ".join([str(error) for error in dictionary[key]])
         else:
-            result += f"{key:<{longest_header}} | {', '.join(map(str, sorted(value)))}\n"
-
+            dictionary[key] = ", ".join(dictionary[key])
+    del new_dict, key
+    longest_header = max([len(key) for key in dictionary])
+    result = ""
+    for key in dictionary:
+        result += f"{key:<{longest_header}} | {dictionary[key]}\n"
     return result.rstrip("\n")
+
+
+def get_times(text: str) -> list[tuple[int, int, int]]:
+    """
+    Get times from text using the time pattern.
+
+    The result should be a list of tuples containing the time that's not normalized and UTC offset.
+
+    For example:
+
+    [10:53 UTC+3] -> [(10, 53, 3)]
+    [1:43 UTC+0] -> [(1, 43, 0)]
+    [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
+
+    :param text: text to search for the times
+    :return: list of tuples containing the time and offset
+    """
+    str_list = re.findall(r"\[([0-1]?[\d]|2[0-3])[^\d]([0-5]?[\d]) UTC([+-]\d(?!\d)|[+-]1?[0-2])", text)
+    return [(int(hour), int(minute), int(utc)) for hour, minute, utc in str_list]
+
+
+def get_formatted_time(time_list: list[tuple[int, int, int]]) -> str:
+    """Format 24 hour time to the 12 hour time."""
+    def format_time(hour, minute):
+        period = "AM" if hour < 12 else "PM"
+        if hour == 0:
+            return f"12:{minute:02} {period}, "
+        elif hour == 12:
+            return f"12:{minute:02} {period}, "
+        else:
+            return f"{hour % 12}:{minute:02} {period}, "
+
+    formatted_times = set()
+
+    for hour, minute, utc in time_list:
+        adjusted_hour = (hour - utc) % 24
+        formatted_times.add(format_time(adjusted_hour, minute))
+
+    result = ''.join(formatted_times).rstrip(', ')
+    return result
+
+
+def get_usernames(text: str) -> list[str]:
+    """Get usernames from text."""
+    result = []
+    for username in re.findall(r"usr:([\w\d_]+)", text):
+        if username not in result:
+            result += [username]
+    return result
+
+
+def get_errors(text: str) -> list[int]:
+    """Get errors from text."""
+    return [int(digit) for digit in re.findall(r"error (\d{1,3})", text, flags=re.IGNORECASE)]
+
+
+def get_addresses(text: str) -> list[str]:
+    """Get IPv4 addresses from text."""
+    return re.findall(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", text)
+
+
+def get_endpoints(text: str) -> list[str]:
+    """Get endpoints from text."""
+    return re.findall(r"\/[\w\d&\/=?\-_%]+", text)
 
 
 if __name__ == '__main__':
@@ -129,7 +141,7 @@ if __name__ == '__main__':
             [8B48 UTC-6] 754.6.5.5
             [14?36 UTC+9] /A-36DUV1 /DZ&jKith
             [23B00 UTC-12] usr:whatever usr:waccaflower
-        """
+            """
     print(create_table_string(logs))
     # time     | 5:36 AM, 2:48 PM
     # user     | kasutaja
