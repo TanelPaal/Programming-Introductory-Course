@@ -43,8 +43,6 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-    pass
-
 
     def get_times(text: str) -> list[tuple[int, int, int]]:
         """
