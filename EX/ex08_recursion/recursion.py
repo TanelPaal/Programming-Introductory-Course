@@ -137,7 +137,7 @@ def check_palindrome(string: str) -> bool:
         return False
 
 
-def check_for_prime(num: int, i=None) -> bool:
+def check_for_prime(num: int, i=2) -> bool:
     """
     Check if input number 'num' is a prime number using recursion.
 
