@@ -244,8 +244,6 @@ def x_sum_loop(nums: list, x: int) -> int:
     :param x: number indicating every which num to add to sum
     :return: sum of every x'th number in the list
     """
-    result = 0
-
     if x == 0:
         return 0
 
@@ -253,11 +251,12 @@ def x_sum_loop(nums: list, x: int) -> int:
         x = abs(x)
         nums = nums[::-1]
 
-    total = 0
+    result = 0
     for i in range(x - 1, len(nums), x):
-        total += nums[i]
+        result += nums[i]
 
-    return total
+    return result
+
 
 def x_sum_recursion(nums: list, x: int) -> int:
     """
