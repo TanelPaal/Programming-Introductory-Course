@@ -278,7 +278,12 @@ def x_sum_recursion(nums: list, x: int) -> int:
     :param x: number indicating every which num to add to sum
     :return: sum of every x'th number in the list
     """
-    pass
+    if x == 0 or len(nums) < abs(x):
+        return 0
+    if x > 0:
+        return nums[x - 1] + x_sum_recursion(nums[x:], x)
+    if x < 0:
+        return nums[x] + x_sum_recursion(nums[:x], x)
 
 
 def sum_squares(nested_list: list | int) -> int:
