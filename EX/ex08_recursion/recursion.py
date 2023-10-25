@@ -218,6 +218,7 @@ def fibonacci(num: int, fib_list: list = None) -> list:
         fib_list = [0, 1]
     if num < len(fib_list):
         return fib_list[:num]
+
     fib_list.append(fib_list[-1] + fib_list[-2])
 
     return fibonacci(num, fib_list)
@@ -243,8 +244,20 @@ def x_sum_loop(nums: list, x: int) -> int:
     :param x: number indicating every which num to add to sum
     :return: sum of every x'th number in the list
     """
-    pass
+    result = 0
 
+    if x == 0:
+        return 0
+
+    if x < 0:
+        x = abs(x)
+        nums = nums[::-1]
+
+    total = 0
+    for i in range(x - 1, len(nums), x):
+        total += nums[i]
+
+    return total
 
 def x_sum_recursion(nums: list, x: int) -> int:
     """
