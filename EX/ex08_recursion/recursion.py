@@ -300,34 +300,17 @@ def sum_squares(nested_list: list | int) -> int:
     :param nested_list: list of lists of lists of lists of lists ... and ints
     :return: sum of squares
     """
-    pass
+    result = 0
+    for item in nested_list:
+        if isinstance(item, list):
+            result += sum_squares(item)
+        elif isinstance(item, int):
+            result += item ** 2
+
+    return result
 
 
 if __name__ == '__main__':
-    print("\nfibonacci:")
-    print(fibonacci(-1))  # = > None
-    print(fibonacci(0))  # = > [0, 1]
-    print(fibonacci(1))  # = > [0, 1]
-    print(fibonacci(9))  # = > [0, 1, 1, 2, 3, 5, 8, 13, 21]
-
-    print("\nx sum loop:")
-    print(x_sum_loop([], 3))  # 0
-    print(x_sum_loop([2, 5, 6, 0, 15, 5], 3))  # 11
-    print(x_sum_loop([0, 5, 6, -5, -9, 3], 1))  # 0
-    print(x_sum_loop([43, 90, 115, 500], -2))  # 158
-    print(x_sum_loop([1, 2], -9))  # 0
-    print(x_sum_loop([2, 3, 6], 5))  # 0
-    print(x_sum_loop([6, 5, 3, 2, 9, 8, 6, 5, 4], 3))  # 15
-
-    print("\nx sum recursion:")
-    print(x_sum_recursion([], 3))  # 0
-    print(x_sum_recursion([2, 5, 6, 0, 15, 5], 3))  # 11
-    print(x_sum_recursion([0, 5, 6, -5, -9, 3], 1))  # 0
-    print(x_sum_recursion([43, 90, 115, 500], -2))  # 158
-    print(x_sum_recursion([1, 2], -9))  # 0
-    print(x_sum_recursion([2, 3, 6], 5))  # 0
-    print(x_sum_recursion([6, 5, 3, 2, 9, 8, 6, 5, 4], 3))  # 15
-
     print("\nsum squares:")
     print(sum_squares([1, 2, 3]))  # -> 14
     print(sum_squares([[1, 2], 3]))  # -> sum_squares([1, 2]) + 9 -> 1 + 4 + 9 -> 14
