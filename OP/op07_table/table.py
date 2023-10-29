@@ -2,6 +2,104 @@
 import re
 
 
+def get_times(text: str) -> list[tuple[int, int, int]]:
+    """
+    Get times from text using the time pattern.
+
+    The result should be a list of tuples containing the time that's not normalized and UTC offset.
+
+    For example:
+
+    [10:53 UTC+3] -> [(10, 53, 3)]
+    [1:43 UTC+0] -> [(1, 43, 0)]
+    [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
+
+    :param text: text to search for the times
+    :return: list of tuples containing the time and offset
+    """
+    times = []
+
+    time_pattern = r"\[([0-1]?\d|2[0-3])\D([0-5]?\d)\s?UTC([\+\-](?:0?\d|1[0-2]))(?=\b)"
+    time_match = re.findall(time_pattern, text)
+    for time in time_match:
+        hour, minute, offset = time
+
+        time_tuple = (int(hour), int(minute), int(offset))
+        times.append(time_tuple)
+
+    return times
+
+
+def get_hour_and_minute(time: tuple[int, int, int]) -> (int, int):
+    """Subtract offset from hour and return the time."""
+    hour, minute, offset = time
+    new_hour = (hour - offset) % 24
+
+    return (new_hour, minute)
+
+
+def get_formatted_time(time: tuple[int, int]) -> str:
+    """Format 24 hour time to the 12 hour time."""
+    hour, minute = time
+
+    am_pm = "AM" if hour // 12 == 0 else "PM"
+    am_pm_hour = hour % 12
+    if am_pm_hour == 0:
+        am_pm_hour = 12
+
+    return f"{am_pm_hour}:{minute:02} {am_pm}"
+
+
+def get_formatted_times(times: list[tuple[int, int]]) -> list[str]:
+    """Take all times and convert to 12-hour time."""
+    formatted_times = []
+
+    for time in times:
+        formatted_str = get_formatted_time(time)
+        formatted_times.append(formatted_str)
+
+    return formatted_times
+
+def get_usernames(text: str) -> list[str]:
+    """Get usernames from text."""
+    user_pattern = r"usr\:(\w+)"
+    user_match = re.findall(user_pattern, text)
+
+    return user_match
+
+
+def get_errors(text: str) -> list[int]:
+    """Get errors from text."""
+    error_pattern = r"error (\d{1,3}(?=\b))"
+    error_match = re.findall(error_pattern, text.lower(), flags=re.IGNORECASE)
+
+    errors = [int(error) for error in error_match] if error_match else []
+
+    return errors
+
+
+def get_addresses(text: str) -> list[str]:
+    """Get IPv4 addresses from text."""
+    ipv4_pattern = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+    ipv4_match = re.findall(ipv4_pattern, text)
+
+    return ipv4_match
+
+
+def get_endpoints(text: str) -> list[str]:
+    """Get endpoints from text."""
+    endpoint_pattern = r"\/[\w\&\/\=\?\-\_\%]*"
+    endpoint_match = re.findall(endpoint_pattern, text)
+
+    return endpoint_match
+
+
+def sorted_unique_list(some_list: list, given_key: None = None) -> list:
+    """Take the list, then find the unique items using `set` and finally return sorted list of set items with a given key."""
+    unique_items = set(some_list)
+    return sorted(unique_items, key=given_key)
+
+
 def create_table_string(text: str) -> str:
     """
     Create table string from the given logs.
@@ -43,104 +141,65 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-    dict = {}
-    dict["time"], dict["user"] = get_times(text), sorted(list(set(get_usernames(text))))
-    dict["error"], dict["ipv4"] = sorted(list(set(get_errors(text)))), sorted(list(set(get_addresses(text))))
-    dict["endpoint"] = sorted(list(set(get_endpoints(text))))
-    new_dict = dict.copy()
-    for key in new_dict:
-        if dict[key] == []:
-            del dict[key]
-        elif key == "time":
-            dict[key] = formatted_time(dict[key])
-        elif key == "error":
-            dict[key] = ", ".join([str(error) for error in dict[key]])
-        else:
-            dict[key] = ", ".join(dict[key])
-    del new_dict, key
-    longest_header = max([len(key) for key in dict])
-    result = ""
-    for key in dict:
-        result += f"{key:<{longest_header}} | {dict[key]}\n"
-    return result.rstrip("\n")
+    times_list = get_times(text)
+    times_list_calculated = [get_hour_and_minute(time) for time in times_list]
+    sorted_times = sorted_unique_list(times_list_calculated, given_key=lambda tup: (tup[0] * 60 + tup[1]))
+    formatted_times = get_formatted_times(sorted_times)
 
+    users_list = get_usernames(text)
+    sorted_users = sorted_unique_list(users_list)
 
-def get_times(text: str) -> list[tuple[int, int, int]]:
-    """
-    Get times from text using the time pattern.
+    errors_list = get_errors(text)
+    sorted_errors = sorted_unique_list(errors_list)
 
-    The result should be a list of tuples containing the time that's not normalized and UTC offset.
+    ipv4_list = get_addresses(text)
+    sorted_ipv4s = sorted_unique_list(ipv4_list)
 
-    For example:
+    endpoint_list = get_endpoints(text)
+    sorted_endpoints = sorted_unique_list(endpoint_list)
 
-    [10:53 UTC+3] -> [(10, 53, 3)]
-    [1:43 UTC+0] -> [(1, 43, 0)]
-    [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
+    data = {
+        "time": formatted_times,
+        "user": sorted_users,
+        "error": sorted_errors,
+        "ipv4": sorted_ipv4s,
+        "endpoint": sorted_endpoints
+    }
 
-    :param text: text to search for the times
-    :return: list of tuples containing the time and offset
-    """
-    str_list = re.findall(r"\[([0-1]?[\d]|2[0-3])[^\d]([0-5]?[\d]) UTC([+-]\d(?!\d)|[+-]1?[0-2])", text)
-    return [(int(hour), int(minute), int(utc)) for hour, minute, utc in str_list]
+    keys_with_values = [key for key in data if data[key] != []]
+    if not keys_with_values:
+        return ""
 
+    longest_key = max([len(key) for key in keys_with_values])
 
-def formatted_time(time_list: list[tuple[int, int, int]]) -> str:
-    """Format 24 hour time to the 12 hour time."""
-    def format_time(hour, minute):
-        period = "AM" if hour < 12 else "PM"
-        if hour == 0:
-            return f"12:{minute:02} {period}, "
-        elif hour == 12:
-            return f"12:{minute:02} {period}, "
-        else:
-            return f"{hour % 12}:{minute:02} {period}, "
+    rows = []
+    for key in keys_with_values:
+        values = data[key]
+        string_array = [str(value) for value in values]
+        values_str = ", ".join(string_array)
 
-    formatted_times = set()
+        row_string = f"{key:<{longest_key}} | {values_str}"
+        rows.append(row_string)
 
-    for hour, minute, utc in time_list:
-        adjusted_hour = (hour - utc) % 24
-        formatted_times.add(format_time(adjusted_hour, minute))
-
-    result = ''.join(formatted_times).rstrip(', ')
-    return result
-
-
-def get_usernames(text: str) -> list[str]:
-    """Get usernames from text."""
-    result = []
-    for username in re.findall(r"usr:([\w\d_]+)", text):
-        if username not in result:
-            result += [username]
-    return result
-
-
-def get_errors(text: str) -> list[int]:
-    """Get errors from text."""
-    return [int(digit) for digit in re.findall(r"error (\d{1,3})", text, flags=re.IGNORECASE)]
-
-
-def get_addresses(text: str) -> list[str]:
-    """Get IPv4 addresses from text."""
-    return re.findall(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", text)
-
-
-def get_endpoints(text: str) -> list[str]:
-    """Get endpoints from text."""
-    return re.findall(r"\/[\w\d&\/=?\-_%]+", text)
+    return "\n".join(rows)
 
 
 if __name__ == '__main__':
     logs = """
-            [14?36 UTC+9] /tere eRRoR 418 192.168.0.255
-            [8B48 UTC-6] usr:kasutaja
-            [14?36 UTC+9] 1.1.1.1
-            [8B48 UTC-6] 20.234.454.111
-            [14?36 UTC+9] 192.1.3.54
-            [8B48 UTC-6] 145.34.5.6
-            [14?36 UTC+9] 23453.45643.5322
-            [8B48 UTC-6] 754.6.5.5
-            [14?36 UTC+9] /A-36DUV1 /DZ&jKith
-            [23B00 UTC-12] usr:whatever usr:waccaflower
+            [-1b35 UTC-4] errOR 741
+            [24a48 UTC+0] 776.330.579.818
+            [02:53 UTC+5] usr:96NC9yqb /aA?Y4pK
+            [5b05 UTC+5] ERrOr 700 268.495.856.225
+            [24-09 UTC+10] usr:uJV5sf82_ eRrOR 844 715.545.485.989
+            [04=54 UTC+3] eRROR 452
+            [11=57 UTC-6] 15.822.272.473 error 9
+            [15=53 UTC+7] /NBYFaC0 468.793.214.681
+            [23-7 UTC+12] /1slr8I
+            [07.46 UTC+4] usr:B3HIyLm 119.892.677.533
+
+            [0:60 UTC+0] bad
+            [0?0 UTC+0] ok
+            [0.0 UTC+0] also ok
             """
     print(create_table_string(logs))
     # time     | 5:36 AM, 2:48 PM
