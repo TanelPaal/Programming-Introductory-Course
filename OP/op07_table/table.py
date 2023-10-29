@@ -60,6 +60,7 @@ def get_formatted_times(times: list[tuple[int, int]]) -> list[str]:
 
     return formatted_times
 
+
 def get_usernames(text: str) -> list[str]:
     """Get usernames from text."""
     user_pattern = r"usr\:(\w+)"
