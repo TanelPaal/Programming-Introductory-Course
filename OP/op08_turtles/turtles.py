@@ -89,11 +89,14 @@ def format_curve(string: str) -> str:
     :param string: instruction string
     :return: clean instructions with only "F", "R", and "L" characters
     """
-    clean_string = ""
-    for char in string:
-        if char in "FRL":
-            clean_string += char
-    return clean_string
+    if not string:
+        return ""
+
+    char = string[0]
+    if char in "FRL":
+        return char + format_curve(string[1:])
+    else:
+        return format_curve(string[1:])
 
 
 def draw_dragon(string: str, length: float) -> None:
@@ -109,15 +112,23 @@ def draw_dragon(string: str, length: float) -> None:
     """
     t = Turtle()
     t.speed(0)
-    for char in string:
-        if char == "F":
-            t.forward(length)
-        elif char == "R":
-            t.right(90)
-            t.forward(length)
-        elif char == "L":
-            t.left(90)
-            t.forward(length)
+    draw_dragon_recursive(string, length, t)
+
+
+def draw_dragon_recursive(string: str, length: float, t):
+    """This does something in recursive :)."""
+    if not string:
+        return
+    char = string[0]
+    if char == "F":
+        t.forward(length)
+    elif char == "R":
+        t.right(90)
+        t.forward(length)
+    elif char == "L":
+        t.left(90)
+        t.forward(length)
+    draw_dragon_recursive(string[1:], length, t)
 
 
 def get_line_length(dragon_width: int, depth: int) -> float:
