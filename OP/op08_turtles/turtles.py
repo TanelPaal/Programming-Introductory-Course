@@ -110,25 +110,21 @@ def draw_dragon(string: str, length: float) -> None:
     :param string: instructions left to process
     :param length: how many pixels to move forward, left or right
     """
-    t = Turtle()
-    t.speed(0)
-    draw_dragon_recursive(string, length, t)
-
-
-def draw_dragon_recursive(string: str, length: float, t):
-    """This does something in recursive :)."""
     if not string:
         return
     char = string[0]
-    if char == "F":
+    remaining_string = string[1:]
+
+    if char == 'F':
         t.forward(length)
-    elif char == "R":
-        t.right(90)
-        t.forward(length)
-    elif char == "L":
+    elif char == 'L':
         t.left(90)
         t.forward(length)
-    draw_dragon_recursive(string[1:], length, t)
+    elif char == 'R':
+        t.right(90)
+        t.forward(length)
+
+    draw_dragon(remaining_string, length)
 
 
 def get_line_length(dragon_width: int, depth: int) -> float:
