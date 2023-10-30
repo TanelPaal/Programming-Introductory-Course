@@ -51,7 +51,12 @@ def apply_dragon_rules(string: str) -> str:
     :param string: sentence with "a" and "b" characters that need to be replaced
     :return: new sentence with "a" and "b" characters replaced
     """
-    pass
+    if string == "a":
+        return "aRbFR"
+    elif string == "b":
+        return "LFaLb"
+    else:
+        return string
 
 
 def curve(string: str, depth: int) -> None | str:
@@ -65,7 +70,13 @@ def curve(string: str, depth: int) -> None | str:
     :param depth: how many times the rules are applied
     :return: instructionset for drawing the dragon at iteration 'depth'
     """
-    pass
+    if depth == 0:
+        return string
+    else:
+        new_string = ""
+        for char in string:
+            new_string += apply_dragon_rules(char)
+        return curve(new_string, depth - 1)
 
 
 def format_curve(string: str) -> str:
@@ -78,7 +89,11 @@ def format_curve(string: str) -> str:
     :param string: instruction string
     :return: clean instructions with only "F", "R", and "L" characters
     """
-    pass
+    clean_string = ""
+    for char in string:
+        if char in "FRL":
+            clean_string += char
+    return clean_string
 
 
 def draw_dragon(string: str, length: float) -> None:
@@ -92,7 +107,17 @@ def draw_dragon(string: str, length: float) -> None:
     :param string: instructions left to process
     :param length: how many pixels to move forward, left or right
     """
-    pass
+    t = Turtle()
+    t.speed(0)
+    for char in string:
+        if char == "F":
+            t.forward(length)
+        elif char == "R":
+            t.right(90)
+            t.forward(length)
+        elif char == "L":
+            t.left(90)
+            t.forward(length)
 
 
 def get_line_length(dragon_width: int, depth: int) -> float:
