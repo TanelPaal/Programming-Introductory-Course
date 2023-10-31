@@ -2,7 +2,7 @@
 import re
 
 
-def get_times(text: str) -> list[tuple[int, int, int]]:
+def get_times(log_text: str) -> list[tuple[int, int, int]]:
     """
     Get times from text using the time pattern.
 
@@ -14,19 +14,17 @@ def get_times(text: str) -> list[tuple[int, int, int]]:
     [1:43 UTC+0] -> [(1, 43, 0)]
     [14A3 UTC-4] [14:3 UTC-4] -> [(14, 3, -4), (14, 3, -4)]
 
-    :param text: text to search for the times
+    :param log_text: text to search for the times
     :return: list of tuples containing the time and offset
     """
     times = []
 
     time_pattern = r"\[([0-1]?\d|2[0-3])\D([0-5]?\d)\s?UTC([\+\-](?:0?\d|1[0-2]))(?=\b)"
-    time_match = re.findall(time_pattern, text)
+    time_match = re.findall(time_pattern, log_text)
     for time in time_match:
         hour, minute, offset = time
-
         time_tuple = (int(hour), int(minute), int(offset))
         times.append(time_tuple)
-
     return times
 
 
@@ -34,64 +32,51 @@ def get_hour_and_minute(time: tuple[int, int, int]) -> (int, int):
     """Subtract offset from hour and return the time."""
     hour, minute, offset = time
     new_hour = (hour - offset) % 24
-
     return (new_hour, minute)
 
 
 def get_formatted_time(time: tuple[int, int]) -> str:
     """Format 24 hour time to the 12 hour time."""
     hour, minute = time
-
     am_pm = "AM" if hour // 12 == 0 else "PM"
     am_pm_hour = hour % 12
     if am_pm_hour == 0:
         am_pm_hour = 12
-
     return f"{am_pm_hour}:{minute:02} {am_pm}"
 
 
 def get_formatted_times(times: list[tuple[int, int]]) -> list[str]:
     """Take all times and convert to 12-hour time."""
-    formatted_times = []
-
-    for time in times:
-        formatted_str = get_formatted_time(time)
-        formatted_times.append(formatted_str)
-
+    formatted_times = [get_formatted_time(time) for time in times]
     return formatted_times
 
 
-def get_usernames(text: str) -> list[str]:
+def get_usernames(log_text: str) -> list[str]:
     """Get usernames from text."""
     user_pattern = r"usr\:(\w+)"
-    user_match = re.findall(user_pattern, text)
-
+    user_match = re.findall(user_pattern, log_text)
     return user_match
 
 
-def get_errors(text: str) -> list[int]:
+def get_errors(log_text: str) -> list[int]:
     """Get errors from text."""
     error_pattern = r"error (\d{1,3}(?=\b))"
-    error_match = re.findall(error_pattern, text.lower(), flags=re.IGNORECASE)
-
+    error_match = re.findall(error_pattern, log_text.lower(), flags=re.IGNORECASE)
     errors = [int(error) for error in error_match] if error_match else []
-
     return errors
 
 
-def get_addresses(text: str) -> list[str]:
+def get_addresses(log_text: str) -> list[str]:
     """Get IPv4 addresses from text."""
     ipv4_pattern = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
-    ipv4_match = re.findall(ipv4_pattern, text)
-
+    ipv4_match = re.findall(ipv4_pattern, log_text)
     return ipv4_match
 
 
-def get_endpoints(text: str) -> list[str]:
+def get_endpoints(log_text: str) -> list[str]:
     """Get endpoints from text."""
     endpoint_pattern = r"\/[\w\&\/\=\?\-\_\%]*"
-    endpoint_match = re.findall(endpoint_pattern, text)
-
+    endpoint_match = re.findall(endpoint_pattern, log_text)
     return endpoint_match
 
 
@@ -101,7 +86,7 @@ def sorted_unique_list(some_list: list, given_key: None = None) -> list:
     return sorted(unique_items, key=given_key)
 
 
-def create_table_string(text: str) -> str:
+def create_table_string(log_text: str) -> str:
     """
     Create table string from the given logs.
 
@@ -142,23 +127,18 @@ def create_table_string(text: str) -> str:
     and "12:00 AM".
     Times in the table should be displayed in UTC(https://et.wikipedia.org/wiki/UTC) time.
     """
-    times_list = get_times(text)
+    times_list = get_times(log_text)
     times_list_calculated = [get_hour_and_minute(time) for time in times_list]
-    sorted_times = sorted_unique_list(times_list_calculated, given_key=lambda tup: (tup[0] * 60 + tup[1]))
+    sorted_times = sorted_unique_list(times_list_calculated, given_key=lambda tup: (tup * 60 + tup))
     formatted_times = get_formatted_times(sorted_times)
-
-    users_list = get_usernames(text)
+    users_list = get_usernames(log_text)
     sorted_users = sorted_unique_list(users_list)
-
-    errors_list = get_errors(text)
+    errors_list = get_errors(log_text)
     sorted_errors = sorted_unique_list(errors_list)
-
-    ipv4_list = get_addresses(text)
+    ipv4_list = get_addresses(log_text)
     sorted_ipv4s = sorted_unique_list(ipv4_list)
-
-    endpoint_list = get_endpoints(text)
+    endpoint_list = get_endpoints(log_text)
     sorted_endpoints = sorted_unique_list(endpoint_list)
-
     data = {
         "time": formatted_times,
         "user": sorted_users,
@@ -166,22 +146,17 @@ def create_table_string(text: str) -> str:
         "ipv4": sorted_ipv4s,
         "endpoint": sorted_endpoints
     }
-
     keys_with_values = [key for key in data if data[key] != []]
     if not keys_with_values:
         return ""
-
     longest_key = max([len(key) for key in keys_with_values])
-
     rows = []
     for key in keys_with_values:
         values = data[key]
         string_array = [str(value) for value in values]
         values_str = ", ".join(string_array)
-
         row_string = f"{key:<{longest_key}} | {values_str}"
         rows.append(row_string)
-
     return "\n".join(rows)
 
 
