@@ -51,12 +51,14 @@ def apply_dragon_rules(string: str) -> str:
     :param string: sentence with "a" and "b" characters that need to be replaced
     :return: new sentence with "a" and "b" characters replaced
     """
-    if string == "a":
-        return "aRbFR"
-    elif string == "b":
-        return "LFaLb"
-    else:
+    if not string:
         return string
+    if string[0] == "a":
+        return "aRbFR" + apply_dragon_rules(string[1:])
+    elif string[0] == "b":
+        return "LFaLb" + apply_dragon_rules(string[1:])
+    else:
+        return string[0] + apply_dragon_rules(string[1:])
 
 
 def curve(string: str, depth: int) -> None | str:
@@ -70,13 +72,10 @@ def curve(string: str, depth: int) -> None | str:
     :param depth: how many times the rules are applied
     :return: instructionset for drawing the dragon at iteration 'depth'
     """
-    if depth == 0:
+    if not string or not depth:
         return string
-    else:
-        new_string = ""
-        for char in string:
-            new_string += apply_dragon_rules(char)
-        return curve(new_string, depth - 1)
+    application = apply_dragon_rules(string)
+    return curve(application, depth - 1)
 
 
 def format_curve(string: str) -> str:
@@ -146,7 +145,7 @@ if __name__ == '__main__':
     t.pensize(2)
     t.left(90)
     # use this to draw the binary tree
-    tree(200)
+    #tree(200)
 
     s = curve("Fa", 8)
     s = format_curve(s)
