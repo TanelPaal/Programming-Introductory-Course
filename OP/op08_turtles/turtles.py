@@ -145,7 +145,7 @@ if __name__ == '__main__':
     t.pensize(2)
     t.left(90)
     # use this to draw the binary tree
-    #tree(200)
+    tree(200)
 
     s = curve("Fa", 8)
     s = format_curve(s)
