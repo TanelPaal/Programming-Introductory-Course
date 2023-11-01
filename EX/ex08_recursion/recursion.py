@@ -300,14 +300,13 @@ def sum_squares(nested_list: list | int) -> int:
     :param nested_list: list of lists of lists of lists of lists ... and ints
     :return: sum of squares
     """
-    result = 0
-    for item in nested_list:
-        if isinstance(item, list):
-            result += sum_squares(item)
-        elif isinstance(item, int):
-            result += item ** 2
-
-    return result
+    if isinstance(nested_list, int):
+        return nested_list ** 2
+    elif isinstance(nested_list, list):
+        if len(nested_list) == 1:
+            return sum_squares(nested_list[0])
+        else:
+            return sum_squares(nested_list[0]) + sum_squares(nested_list[1:])
 
 
 if __name__ == '__main__':
