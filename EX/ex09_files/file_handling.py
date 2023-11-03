@@ -1,3 +1,6 @@
+"""File."""
+
+
 def read_file_contents(filename: str) -> str:
     """
     Read file contents into a string.
