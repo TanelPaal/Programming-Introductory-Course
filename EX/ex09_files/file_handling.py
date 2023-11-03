@@ -1,5 +1,5 @@
 """File."""
-
+import csv
 
 def read_file_contents(filename: str) -> str:
     """
@@ -54,8 +54,12 @@ def read_csv_file(filename: str) -> list[list[str]]:
     :param filename: The name of the file to read.
     :return: A list of lists, where each inner list represents a row of CSV data.
     """
-    pass
-
+    result = []
+    with open(filename, 'r', encoding='utf-8') as file:
+        for line in file:
+            columns = line.strip().split(',')
+            result.append(columns)
+    return result
 
 def write_contents_to_file(filename: str, contents: str) -> None:
     """
@@ -159,3 +163,5 @@ if __name__ == '__main__':
     print(read_file_contents("file.txt"))
     print("\nRead File Contents to List:\n")
     print(read_file_contents_to_list("file.txt"))
+    print("\nRead CSV File Contents:\n")
+    print(read_csv_file("data.csv"))
