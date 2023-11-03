@@ -10,7 +10,8 @@ def read_file_contents(filename: str) -> str:
     :param filename: The name of the file to read.
     :return: The contents of the file as a string.
     """
-    pass
+    with open(filename, 'r') as file:
+        return file.read()
 
 
 def read_file_contents_to_list(filename: str) -> list[str]:
@@ -150,3 +151,7 @@ def merge_dates_and_towns_into_csv(dates_filename: str, towns_filename: str, csv
     :return: None
     """
     pass
+
+
+if __name__ == '__main__':
+    print(read_file_contents("file.txt"))
