@@ -1,5 +1,5 @@
 """File."""
-import csv
+
 
 def read_file_contents(filename: str) -> str:
     """
@@ -60,6 +60,7 @@ def read_csv_file(filename: str) -> list[list[str]]:
             columns = line.strip().split(',')
             result.append(columns)
     return result
+
 
 def write_contents_to_file(filename: str, contents: str) -> None:
     """
