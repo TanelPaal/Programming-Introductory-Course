@@ -75,7 +75,6 @@ def write_contents_to_file(filename: str, contents: str) -> None:
     """
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(contents)
-        file.write('\n')
 
 
 def write_lines_to_file(filename: str, lines: list[str]) -> None:
