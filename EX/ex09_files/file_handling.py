@@ -75,8 +75,6 @@ def write_contents_to_file(filename: str, contents: str) -> None:
     """
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(contents)
-        if contents:
-            file.write('\n')
 
 
 def write_lines_to_file(filename: str, lines: list[str]) -> None:
@@ -169,3 +167,6 @@ if __name__ == '__main__':
     print(read_file_contents_to_list("file.txt"))
     print("\nRead CSV File Contents:\n")
     print(read_csv_file("data.csv"))
+    print("\nWrite lines to file:\n")
+    print(write_lines_to_file("file.txt", ["hello", "world"]))
+
