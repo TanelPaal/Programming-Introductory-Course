@@ -1,4 +1,5 @@
 """File."""
+import csv
 
 
 def read_file_contents(filename: str) -> str:
@@ -118,7 +119,9 @@ def write_csv_file(filename: str, data: list[list[str]]) -> None:
     :param data: A list of lists to write to the file, where each list represents a row.
     :return: None
     """
-    pass
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
 
 
 def merge_dates_and_towns_into_csv(dates_filename: str, towns_filename: str, csv_output_filename: str) -> None:
@@ -174,3 +177,4 @@ if __name__ == '__main__':
     print(read_csv_file("data.csv"))
     print("\nWrite lines to file:\n")
     print(write_lines_to_file("file.txt", ["hello", "world"]))
+    print(write_csv_file("data.csv", ))
