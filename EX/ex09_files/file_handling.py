@@ -27,7 +27,8 @@ def read_file_contents_to_list(filename: str) -> list[str]:
     :param filename: The name of the file to read.
     :return: A list of lines without newline characters.
     """
-    pass
+    with open(filename, 'r', encoding='utf-8') as file:
+        return [line.strip('\n') for line in file]
 
 
 def read_csv_file(filename: str) -> list[list[str]]:
@@ -156,4 +157,5 @@ def merge_dates_and_towns_into_csv(dates_filename: str, towns_filename: str, csv
 if __name__ == '__main__':
     print("Read File Contents:\n")
     print(read_file_contents("file.txt"))
-
+    print("\nRead File Contents to List:\n")
+    print(read_file_contents_to_list("file.txt"))
