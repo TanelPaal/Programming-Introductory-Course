@@ -115,11 +115,12 @@ def write_csv_file(filename: str, data: list[list[str]]) -> None:
 
     Note: The "csv" module should be used.
 
+    :rtype: object
     :param filename: The name of the file to write to.
     :param data: A list of lists to write to the file, where each list represents a row.
     :return: None
     """
-    with open(filename, 'w', newline='') as file:
+    with open(filename, 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(data)
 
@@ -165,16 +166,43 @@ def merge_dates_and_towns_into_csv(dates_filename: str, towns_filename: str, csv
     :param csv_output_filename: The name of the CSV file to write to names, towns, and dates.
     :return: None
     """
-    pass
+    # Read dates file and create a dictionary with names as keys and dates as values
+    with open(dates_filename, 'r', newline='', encoding='utf-8') as file:
+        dates_reader = csv.reader(file, delimiter=':')
+        dates_dict = {rows[0]: rows[1] for rows in dates_reader}
+
+    # Read towns file and create a dictionary with names as keys and towns as values
+    with open(towns_filename, 'r', newline='', encoding='utf-8') as file:
+        towns_reader = csv.reader(file, delimiter=':')
+        towns_dict = {rows[0]: rows[1] for rows in towns_reader}
+
+    # Merge the dictionaries into a single dictionary for output
+    merged_data = {}
+    for name in dates_dict:
+        merged_data[name] = {
+            'town': towns_dict.get(name, '-'),
+            'date': dates_dict[name]
+        }
+
+    for name in towns_dict:
+        if name not in merged_data:
+            merged_data[name] = {
+                'town': towns_dict[name],
+                'date': '-'
+            }
+
+    # Write the merged data to the CSV output file
+    with open(csv_output_filename, 'w', newline='', encoding='utf-8') as file:
+        csv_writer = csv.writer(file)
+        # Write header
+        csv_writer.writerow(['name', 'town', 'date'])
+        # Write data from the dates file first, followed by any additional data from the towns file
+        for name in dates_dict.keys():
+            csv_writer.writerow([name, merged_data[name]['town'], merged_data[name]['date']])
+        for name in towns_dict.keys():
+            if name not in dates_dict:
+                csv_writer.writerow([name, merged_data[name]['town'], merged_data[name]['date']])
 
 
 if __name__ == '__main__':
-    print("Read File Contents:\n")
-    print(read_file_contents("file.txt"))
-    print("\nRead File Contents to List:\n")
-    print(read_file_contents_to_list("file.txt"))
-    print("\nRead CSV File Contents:\n")
-    print(read_csv_file("data.csv"))
-    print("\nWrite lines to file:\n")
-    print(write_lines_to_file("file.txt", ["hello", "world"]))
-    print(write_csv_file("data.csv", ))
+    merge_dates_and_towns_into_csv(dates_filename="dates.csv", towns_filename="towns.csv", csv_output_filename="output.csv")
