@@ -52,7 +52,17 @@ def nr_into_num_list(nr: int, num_list: list) -> list:
     nr_into_num_list(0, [1,2,3,4,5]) -> [0,1,2,3,4,5,]
 
     """
-    pass
+    if not num_list or nr > num_list[-1]:
+        num_list.append(nr)
+        return num_list
+
+    for i in range(len(num_list)):
+        if num_list[i] >= nr:
+            num_list.insert(i, nr)
+            return num_list
+
+    num_list.append(nr)
+    return num_list
 
 
 def symbol_average_position_in_words(words: list) -> dict:
@@ -115,3 +125,7 @@ def str_dist(string: str, sub: str) -> int:
 
 if __name__ == '__main__':
     print(nr_of_common_characters("iva", "avis"))
+    print(nr_into_num_list(5, []))  # Output: [5]
+    print(nr_into_num_list(5, [1, 2, 3, 4]))  # Output: [1, 2, 3, 4, 5]
+    print(nr_into_num_list(5, [1, 2, 3, 4, 5, 6]))  # Output: [1, 2, 3, 4, 5, 5, 6]
+    print(nr_into_num_list(0, [1, 2, 3, 4, 5]))  # Output: [0, 1, 2, 3, 4, 5]
