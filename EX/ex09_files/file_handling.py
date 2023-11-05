@@ -264,8 +264,28 @@ def write_list_of_dicts_to_csv_file(filename: str, data: list[dict]) -> None:
     :param data: List of dictionaries to write to the file.
     :return: None
     """
-    pass
+    with open(filename, 'w', newline='', encoding="utf-8") as file:
+        # If there's no data, no further action is required
+        if not data:
+            return
+
+        # Collect all keys from all dictionaries to ensure all fields are captured
+        fieldnames = list({key for single_dict in data for key in single_dict.keys()})
+
+        # Create a csv writer object and write the header
+        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
+        csv_writer.writeheader()
+
+        # Write the data rows
+        for row in data:
+            csv_writer.writerow(row)
+
 
 if __name__ == '__main__':
     #  merge_dates_and_towns_into_csv(dates_filename="dates.csv", towns_filename="towns.csv", csv_output_filename="output.csv")
-    print(read_csv_file_into_list_of_dicts(filename="input.csv"))
+    #  print(read_csv_file_into_list_of_dicts(filename="input.csv"))
+    input_list = [
+        {"name": "John"},
+        {"name": "Mary", "age": "19", "town": "tallinn"}
+    ]
+    write_list_of_dicts_to_csv_file(filename="dict_output.csv", data=input_list)
