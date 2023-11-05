@@ -32,7 +32,12 @@ def nr_of_common_characters(string1: str, string2: str) -> int:
     common_characters("memm", "") -> 0
 
     """
-    pass
+    set1 = set(string1)
+    set2 = set(string2)
+
+    common_characters_set = set1.intersection(set2)
+
+    return len(common_characters_set)
 
 
 def nr_into_num_list(nr: int, num_list: list) -> list:
@@ -109,8 +114,4 @@ def str_dist(string: str, sub: str) -> int:
 
 
 if __name__ == '__main__':
-    print(add_char_into_pos("a", 2, "kheksa")) #  -> "kaheksa"
-    print(add_char_into_pos("t", 8, "kaheksa")) #  -> "kaheksat"
-    print(add_char_into_pos("a", 1, "mps")) #  -> "amps"
-    print(add_char_into_pos("a", 1, "")) #  -> "a"
-    print(add_char_into_pos("k", 10, "kalla")) #  -> "kalla"
+    print(nr_of_common_characters("iva", "avis"))
