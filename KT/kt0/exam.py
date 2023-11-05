@@ -120,12 +120,19 @@ def str_dist(string: str, sub: str) -> int:
     str_dist("catcowcat", "cow") => 3
     str_dist("cccatcowcatxx", "cat") => 9
     """
-    pass
+    if len(string) < len(sub):
+        return 0
+
+    if string.startswith(sub):
+        if string.endswith(sub):
+            return len(string)
+        else:
+            return str_dist(string[:-1], sub)
+    else:
+        return str_dist(string[1:], sub)
 
 
 if __name__ == '__main__':
-    print(nr_of_common_characters("iva", "avis"))
-    print(nr_into_num_list(5, []))  # Output: [5]
-    print(nr_into_num_list(5, [1, 2, 3, 4]))  # Output: [1, 2, 3, 4, 5]
-    print(nr_into_num_list(5, [1, 2, 3, 4, 5, 6]))  # Output: [1, 2, 3, 4, 5, 5, 6]
-    print(nr_into_num_list(0, [1, 2, 3, 4, 5]))  # Output: [0, 1, 2, 3, 4, 5]
+    print(str_dist("catcowcat", "cat"))  # Output: 9
+    print(str_dist("catcowcat", "cow"))  # Output: 3
+    print(str_dist("cccatcowcatxx", "cat"))  # Output: 9
