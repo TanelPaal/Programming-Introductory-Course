@@ -3,8 +3,7 @@
 
 def function_a(x: int) -> int:
     """Docstring."""
-    result = x / x
-    return result
+    return x
 
 
 def function_b(x: int) -> int:
