@@ -1,4 +1,4 @@
-"""WAT."""
+"""What is this hell."""
 
 
 def function_a(x: int) -> int:
@@ -21,7 +21,8 @@ def function_c(x: int) -> int:
 
 def function_d(x: int) -> int:
     """Docstring."""
-    return x
+    result = (x * x) * (6 * 6)
+    return result
 
 
 def function_e(x: int) -> int:
