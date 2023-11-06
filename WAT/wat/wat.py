@@ -33,8 +33,10 @@ def function_e(x: int) -> int:
 
 def function_f(x: int) -> int:
     """Docstring."""
-    result = x // 5
+    result = x // 175
     return result
+
+print(function_f(5840)) # 33
 
 
 def function_g(x: int) -> int:
