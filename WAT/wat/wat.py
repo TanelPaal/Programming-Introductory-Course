@@ -1,13 +1,14 @@
 """WAT. """
 
 
-def function_a(x):
+def function_a(x: int) -> int:
     result = x / x
     return result
 
 
-def function_b(x):
-    return x
+def function_b(x: int) -> int:
+    result = x - 11
+    return result
 
 
 def function_c(x):
