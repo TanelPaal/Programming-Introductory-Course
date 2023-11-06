@@ -27,7 +27,8 @@ def function_d(x: int) -> int:
 
 def function_e(x: int) -> int:
     """Docstring."""
-    return x
+    result = x * 10
+    return result
 
 
 def function_f(x: int) -> int:
