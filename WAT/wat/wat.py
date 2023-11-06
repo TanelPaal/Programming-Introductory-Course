@@ -15,7 +15,8 @@ def function_b(x: int) -> int:
 
 def function_c(x: int) -> int:
     """Docstring."""
-    return x
+    result = x * x * x * x * x
+    return result
 
 
 def function_d(x: int) -> int:
