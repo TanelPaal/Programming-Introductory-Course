@@ -33,12 +33,14 @@ def function_e(x: int) -> int:
 
 def function_f(x: int) -> int:
     """Docstring."""
-    return x
+    result = x // 2
+    return result
 
 
 def function_g(x: int) -> int:
     """Docstring."""
-    return x
+    result = x - 2 * x
+    return result
 
 
 def function_h(x: int) -> int:
