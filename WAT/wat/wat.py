@@ -53,7 +53,8 @@ def function_h(x: int) -> int:
 
 def function_i(x: int) -> int:
     """Docstring."""
-    return 0
+    result = x * 0
+    return result
 
 
 def function_j(x: int) -> int:
