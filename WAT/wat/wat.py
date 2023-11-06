@@ -3,13 +3,13 @@
 
 def function_a(x: int) -> int:
     """Docstring."""
-    return x / x
+    result = x / x
+    return int(result)
 
 
 def function_b(x: int) -> int:
     """Docstring."""
-    result = x - 11
-    return result
+    return x
 
 
 def function_c(x: int) -> int:
