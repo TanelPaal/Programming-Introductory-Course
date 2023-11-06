@@ -53,9 +53,10 @@ def function_h(x: int) -> int:
 
 def function_i(x: int) -> int:
     """Docstring."""
-    return x
+    return 0
 
 
 def function_j(x: int) -> int:
     """Docstring."""
-    return x
+    result = x * 10 - 10
+    return result
