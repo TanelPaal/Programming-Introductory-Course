@@ -41,13 +41,14 @@ print(function_f(5840)) # 33
 
 def function_g(x: int) -> int:
     """Docstring."""
-    result = x - 2 * x
+    result = -x
     return result
 
 
 def function_h(x: int) -> int:
     """Docstring."""
-    return x
+    result = x * 2538
+    return result
 
 
 def function_i(x: int) -> int:
