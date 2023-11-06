@@ -33,7 +33,7 @@ def function_e(x: int) -> int:
 
 def function_f(x: int) -> int:
     """Docstring."""
-    result = x // 4
+    result = (x // 6) * 2
     return result
 
 
