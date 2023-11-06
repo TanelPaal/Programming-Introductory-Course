@@ -9,7 +9,7 @@ def function_a(x: int) -> int:
 
 def function_b(x: int) -> int:
     """Docstring."""
-    result = x - 22
+    result = x + 11
     return result
 
 
