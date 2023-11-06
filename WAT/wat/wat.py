@@ -9,7 +9,8 @@ def function_a(x: int) -> int:
 
 def function_b(x: int) -> int:
     """Docstring."""
-    return x
+    result = x - 11
+    return result
 
 
 def function_c(x: int) -> int:
