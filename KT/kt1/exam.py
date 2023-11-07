@@ -92,8 +92,6 @@ def parse_call_log(call_log: str) -> dict:
     return call_dict
 
 
-
-
 def mirror_ends(s: str) -> str:
     """
     Return the first non-matching symbol pair from both ends.
@@ -120,8 +118,8 @@ def mirror_ends(s: str) -> str:
 
 if __name__ == '__main__':
     print("\nCall Log:")
-    #print(parse_call_log(""))  # Output: {}
-    #print(parse_call_log("ago:kati,mati:malle"))  # {"ago": ["kati"], "mati": ["malle"]}
-    #print(parse_call_log("ago:kati,ago:mati,ago:kati"))  # {"ago": ["kati", "mati"]}
-    #print(parse_call_log("ago:kati:mati"))  # {"ago": ["kati"], "kati": ["mati"]}
+    print(parse_call_log(""))  # Output: {}
+    print(parse_call_log("ago:kati,mati:malle"))  # {"ago": ["kati"], "mati": ["malle"]}
+    print(parse_call_log("ago:kati,ago:mati,ago:kati"))  # {"ago": ["kati", "mati"]}
+    print(parse_call_log("ago:kati:mati"))  # {"ago": ["kati"], "kati": ["mati"]}
     print(parse_call_log("mati:kalle,kalle:malle:mari:juri,mari:mati"))  # {'mati': ['kalle'], 'kalle': ['malle'], 'malle': ['mari'], 'mari': ['juri', 'mati']}
