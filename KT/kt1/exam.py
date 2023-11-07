@@ -41,7 +41,6 @@ def has_seven(nums):
     return sevens_count == 3
 
 
-
 def parse_call_log(call_log: str) -> dict:
     """
     Parse calling logs to find out who has been calling to whom.
@@ -93,10 +92,25 @@ def mirror_ends(s: str) -> str:
     mirror_ends("abAAca") => "bc"
     mirror_ends("") => ""
     """
-    pass
+    if len(s) <= 1:
+        return ""
+
+    if s[0] != s[-1]:
+        return s[0] + s[-1]
+
+    return mirror_ends(s[1:-1])
+
 
 if __name__ == '__main__':
+    print("\nHas Seven:")
     print(has_seven([1, 2, 3]))             # False
     print(has_seven([7, 1, 7, 7]))          # False
     print(has_seven([7, 1, 7, 1, 7]))       # True
     print(has_seven([7, 1, 7, 1, 1, 7]))    # False
+
+    print("\nMirror Ends:")
+    print(mirror_ends("abc"))  # "ac"
+    print(mirror_ends("aba"))  # ""
+    print(mirror_ends("abca"))  # "bc"
+    print(mirror_ends("abAAca"))  # "bc"
+    print(mirror_ends(""))  # ""
