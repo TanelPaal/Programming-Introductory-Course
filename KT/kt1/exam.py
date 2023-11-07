@@ -29,7 +29,17 @@ def has_seven(nums):
     has_seven([7, 1, 7, 1, 7]) => True
     has_seven([7, 1, 7, 1, 1, 7]) => False
     """
-    pass
+    sevens_count = 0
+
+    for i in range(len(nums)):
+        if nums[i] == 7:
+            sevens_count += 1
+
+        if i > 0 and nums[i] == nums[i - 1]:
+            return False
+
+    return sevens_count == 3
+
 
 
 def parse_call_log(call_log: str) -> dict:
@@ -84,3 +94,9 @@ def mirror_ends(s: str) -> str:
     mirror_ends("") => ""
     """
     pass
+
+if __name__ == '__main__':
+    print(has_seven([1, 2, 3]))             # False
+    print(has_seven([7, 1, 7, 7]))          # False
+    print(has_seven([7, 1, 7, 1, 7]))       # True
+    print(has_seven([7, 1, 7, 1, 1, 7]))    # False
