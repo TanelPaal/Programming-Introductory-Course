@@ -74,7 +74,24 @@ def parse_call_log(call_log: str) -> dict:
     :param call_log: the whole log as string
     :return: dictionary with call information
     """
-    pass
+    call_dict = {}
+    call_chains = call_log.split(',') if call_log else []
+
+    for chain in call_chains:
+        people = chain.split(':')
+
+        for i in range(len(people) - 1):
+            caller = people[i]
+            callee = people[i + 1]
+
+            if caller not in call_dict:
+                call_dict[caller] = []
+            if callee not in call_dict[caller]:
+                call_dict[caller].append(callee)
+
+    return call_dict
+
+
 
 
 def mirror_ends(s: str) -> str:
@@ -102,15 +119,9 @@ def mirror_ends(s: str) -> str:
 
 
 if __name__ == '__main__':
-    print("\nHas Seven:")
-    print(has_seven([1, 2, 3]))             # False
-    print(has_seven([7, 1, 7, 7]))          # False
-    print(has_seven([7, 1, 7, 1, 7]))       # True
-    print(has_seven([7, 1, 7, 1, 1, 7]))    # False
-
-    print("\nMirror Ends:")
-    print(mirror_ends("abc"))  # "ac"
-    print(mirror_ends("aba"))  # ""
-    print(mirror_ends("abca"))  # "bc"
-    print(mirror_ends("abAAca"))  # "bc"
-    print(mirror_ends(""))  # ""
+    print("\nCall Log:")
+    #print(parse_call_log(""))  # Output: {}
+    #print(parse_call_log("ago:kati,mati:malle"))  # {"ago": ["kati"], "mati": ["malle"]}
+    #print(parse_call_log("ago:kati,ago:mati,ago:kati"))  # {"ago": ["kati", "mati"]}
+    #print(parse_call_log("ago:kati:mati"))  # {"ago": ["kati"], "kati": ["mati"]}
+    print(parse_call_log("mati:kalle,kalle:malle:mari:juri,mari:mati"))  # {'mati': ['kalle'], 'kalle': ['malle'], 'malle': ['mari'], 'mari': ['juri', 'mati']}
