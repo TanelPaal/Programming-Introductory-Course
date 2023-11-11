@@ -77,37 +77,57 @@ def read_csv_file_into_list_of_dicts_using_datatypes(filename: str) -> list[dict
     :return: A list of dictionaries containing processed field values.
     """
     data = []
+    types = {}
 
+    # Helper function to check if a value can be an integer.
+    def can_be_int(value):
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
+
+    # Helper function to check if a value can be a date.
+    def can_be_date(value):
+        try:
+            datetime.strptime(value, '%d.%m.%Y')
+            return True
+        except ValueError:
+            return False
+
+    # Read the file and determine the data types.
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
+        fieldnames = reader.fieldnames
         rows = list(reader)
 
-        # Determine the data type for each column
-        types = {column: 'int' for column in reader.fieldnames}
-        for row in rows:
-            for column, value in row.items():
-                if value != '-':
-                    if types[column] == 'int':
-                        if not value.isdigit():
-                            types[column] = 'date'
-                    if types[column] == 'date':
-                        try:
-                            datetime.strptime(value, '%d.%m.%Y')
-                        except ValueError:
-                            types[column] = 'str'
+        # Initialize types dict with all fields as 'int'.
+        types = {field: 'int' for field in fieldnames}
 
-        # Convert the data
+        # Check data types for each field.
         for row in rows:
-            new_row = {}
-            for column, value in row.items():
+            for field, value in row.items():
                 if value == '-':
-                    new_row[column] = None
-                elif types[column] == 'int':
-                    new_row[column] = int(value)
-                elif types[column] == 'date':
-                    new_row[column] = datetime.strptime(value, '%d.%m.%Y').date()
+                    continue
+                if types[field] == 'int' and not can_be_int(value):
+                    types[field] = 'date'
+                if types[field] == 'date' and not can_be_date(value):
+                    types[field] = 'str'
+
+    # Convert the data to the determined types.
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            new_row = {}
+            for field, value in row.items():
+                if value == ', ':
+                    new_row[field] = None
+                elif types[field] == 'int':
+                    new_row[field] = int(value)
+                elif types[field] == 'date':
+                    new_row[field] = datetime.strptime(value, '%d.%m.%Y').date() if can_be_date(value) else value
                 else:
-                    new_row[column] = value
+                    new_row[field] = value
             data.append(new_row)
 
     return data
