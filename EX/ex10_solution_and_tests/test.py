@@ -85,3 +85,24 @@ def test_fruit_order():
     assert fruit_order(3, 300_000, 500_000) == 0
     assert fruit_order(56, 0, 56) == 56
     assert fruit_order(0, 49, 16) == -1
+    assert fruit_order(1, 5, 21) == 1
+    assert fruit_order(4, 1, 9) == 4
+    assert fruit_order(3, 1, 10) == -1
+    assert fruit_order(10, 0, 9) == 9
+    assert fruit_order(3, 3, 15) == 0
+    assert fruit_order(0, 0, 0) == 0
+    assert fruit_order(5, 0, 0) == 0
+    assert fruit_order(0, 5, 0) == 0
+    assert fruit_order(5, 5, 0) == 0
+    assert fruit_order(0, 5, 25) == 0
+    assert fruit_order(0, 5, 50) == -1
+    assert fruit_order(0, 6, 25) == 0
+    assert fruit_order(25, 0, 25) == 25
+    assert fruit_order(25, 0, 35) == -1
+    assert fruit_order(0, 5, 35) == -1
+    assert fruit_order(105, 101, 610) == 105
+    assert fruit_order(0, 105, 600) == -1
+    assert fruit_order(0, 101, 503) == -1
+    assert fruit_order(6, 0, 10) == -1
+    assert fruit_order(20, 10, 70) == 20
+    assert fruit_order(0, 10, 48) == -1
