@@ -10,18 +10,21 @@ def test_students_study_during_day():
     This case represents the time period of a day and coffee is present.
     Expected result: True.
     """
-    # Check for sleepers.
+    # Night.
     assert students_study(1, False) is False
     assert students_study(4, True) is False
 
-    # Check for day time studiers.
+    # Day.
     assert students_study(5, False) is False
     assert students_study(17, False) is False
     assert students_study(6, True) is True
 
-    # Check for evening time studiers.
+    # Evening.
     assert students_study(18, True) is True
     assert students_study(24, False) is True
+
+    # Extra.
+
 
 
 def test_lottery():
@@ -34,6 +37,13 @@ def test_lottery():
     assert lottery(4, 4, 4) == 5
     assert lottery(5, 4, 3) == 1
     assert lottery(5, 5, 4) == 0
+    assert lottery(-1, -1, -1) == 5
+    assert lottery(0, 0, 0) == 5
+    assert lottery(2, 2, 1) == 0
+    assert lottery(2, 3, 3) == 1
+    assert lottery(3, 2, 3) == 0
+    assert lottery(-2, -2, -2) == 5
+
 
 
 def test_fruit_order():
