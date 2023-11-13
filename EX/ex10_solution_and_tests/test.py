@@ -1,5 +1,5 @@
 """Test cases for solution."""
-from solution import *
+from solution import students_study, lottery, fruit_order
 
 
 def test_students_study_during_day():
