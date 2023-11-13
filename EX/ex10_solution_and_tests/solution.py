@@ -9,11 +9,12 @@ def students_study(time: int, coffee_needed: bool) -> bool:
     (1, True) -> False.
     """
     if 1 <= time <= 4:
-        return False # Sleep students.
-    elif (5 <= time <= 17 and coffee_needed == True) or (18 <= time <= 24 and coffee_needed == False):
+        return False  # Sleep students.
+    elif (5 <= time <= 17 and not coffee_needed != True) or (18 <= time <= 24 and not coffee_needed != False):
         return True
     else:
         return False
+
 
 def lottery(a: int, b: int, c: int) -> int:
     """
@@ -69,4 +70,3 @@ if __name__ == '__main__':
     print(fruit_order(0, 0, 5))  # -1.
     print(fruit_order(5, 5, 0))  # 0.
     print(fruit_order(10, 10, 55))  # 5.
-
