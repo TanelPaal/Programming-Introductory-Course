@@ -48,14 +48,3 @@ def test_fruit_order():
     assert fruit_order(3, 1, 10) == -1
     assert fruit_order(0, 0, 5) == -1
     assert fruit_order(5, 5, 0) == 0
-
-
-'''if __name__ == '__main__':
-    print(fruit_order(0, 2, 10))  # 0.
-    print(fruit_order(10, 0, 10))  # 0.
-    print(fruit_order(5, 1, 9))  # 4.
-    print(fruit_order(3, 2, 9))  # -1.
-    print(fruit_order(3, 1, 10))  # -1.
-    print(fruit_order(0, 0, 5))  # -1.
-    print(fruit_order(5, 5, 0))  # 0.
-    print(fruit_order(10, 10, 55))  # 5.'''
