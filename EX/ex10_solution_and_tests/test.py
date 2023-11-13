@@ -108,4 +108,4 @@ def test_fruit_order():
     assert fruit_order(0, 10, 48) == -1
     assert fruit_order(5, 0, 11) == -1
     assert fruit_order(2, 100, 502) == 2
-    assert fruit_order(2, 100, 503) == -1
+    assert fruit_order(7, 100, 509) == -1
