@@ -19,24 +19,37 @@ def get_times(log_text: str) -> list[tuple[int, int, int]]:
     """
     times = []
 
-    time_pattern = r"\[([0-1]?\d|2[0-3])\D([0-5]?\d)\s?UTC([\+\-](?:0?\d|1[0-2]))(?=\b)"
+    # Regex pattern for matching times in the log text
+    time_pattern = r"\\[([0-1]?\\d|2[0-3])\\D([0-5]?\\d)\\s?UTC([\\+\\-](?:0?\\d|1[0-2]))(?=\\b)"
     time_match = re.findall(time_pattern, log_text)
+
     for time in time_match:
         hour, minute, offset = time
         time_tuple = (int(hour), int(minute), int(offset))
         times.append(time_tuple)
+
     return times
 
 
 def get_hour_and_minute(time: tuple[int, int, int]) -> (int, int):
-    """Subtract offset from hour and return the time."""
+    """
+    Subtract offset from hour and return the time.
+
+    :param time: A tuple containing the hour, minute, and offset
+    :return: A tuple of the normalized hour and minute
+    """
     hour, minute, offset = time
     new_hour = (hour - offset) % 24
     return (new_hour, minute)
 
 
 def get_formatted_time(time: tuple[int, int]) -> str:
-    """Format 24 hour time to the 12 hour time."""
+    """
+    Format 24 hour time to the 12 hour time format.
+
+    :param time: A tuple containing the hour and minute
+    :return: A string representing the time in 12-hour format
+    """
     hour, minute = time
     am_pm = "AM" if hour // 12 == 0 else "PM"
     am_pm_hour = hour % 12
@@ -46,7 +59,12 @@ def get_formatted_time(time: tuple[int, int]) -> str:
 
 
 def get_formatted_times(times: list[tuple[int, int]]) -> list[str]:
-    """Take all times and convert to 12-hour time."""
+    """
+    Take all times and convert them to 12-hour time format.
+
+    :param times: A list of tuples containing hours and minutes
+    :return: A list of times in 12-hour format
+    """
     formatted_times = [get_formatted_time(time) for time in times]
     return formatted_times
 
