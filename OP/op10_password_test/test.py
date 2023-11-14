@@ -176,3 +176,12 @@ def test__includes_number_true_but_not_first():
     assert password.includes_number("p4ssw0rd") is True
     assert password.includes_number("pa55w0rd") is True
     assert password.includes_number("passw0rd!") is True
+
+
+def test__is_different__new_pass_case_sensitive():
+    """Test whether new password is case-sensitive."""
+    assert password.is_different("password", "Password") is False
+    assert password.is_different("password", "PASSWORD") is False
+    assert password.is_different("password", "pASSWORD") is False
+    assert password.is_different("password", "paSSWORD") is False
+
