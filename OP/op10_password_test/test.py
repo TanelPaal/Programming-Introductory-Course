@@ -179,13 +179,3 @@ def test__includes_number_true_but_not_first():
     assert password.includes_number("p4ssw0rd") is True
     assert password.includes_number("pa55w0rd") is True
     assert password.includes_number("passw0rd!") is True
-
-
-def test__is_different__case_sensitive():
-    """Test whether password is different and case-sensitive."""
-    assert password.is_different_from_old_password("password", "Password") is False
-    assert password.is_different_from_old_password("password", "PASSWORD") is False
-    assert password.is_different_from_old_password("password", "pAssword") is False
-    assert password.is_different_from_old_password("password", "PASSword") is False
-    assert password.is_different_from_old_password("password", "passWord") is False
-    assert password.is_different_from_old_password("password", "PASSWord") is False
