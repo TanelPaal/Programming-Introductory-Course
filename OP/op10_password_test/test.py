@@ -198,3 +198,4 @@ def test__is_different__new_pass_case_insensitive():
     assert not password.is_different("Password123", "password1234") is True
     assert not password.is_different("Password123", "PASSWORD1234") is True
     assert password.is_different("Password123", "passw0rd123") is True
+
