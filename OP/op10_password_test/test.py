@@ -140,6 +140,14 @@ def test__includes_special__several_different_special():
     assert password.includes_special("passw!$%^ord1!") is True
     assert password.includes_special("passw!$%^ord1") is True
     assert password.includes_special("passw!$%^ord") is True
+    assert password.includes_special("pàsswórd!") is True  # Unicode special character
+    assert password.includes_special("p@ssw#rd!") is True  # ASCII special characters
+    assert password.includes_special("pa$$ word") is True
+    assert password.includes_special("%p a s s w o r d%") is False
+    assert password.includes_special("passw$%^ord123") is True
+    assert password.includes_special("1!2@3#4$5%6^7&8*9(0)") is True
+    assert password.includes_special("passw!!ord") is True
+    assert password.includes_special("pa!!ssw!!ord") is True
 
 
 def test__includes_number__empty():
