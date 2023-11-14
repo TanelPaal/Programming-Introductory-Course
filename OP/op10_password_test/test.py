@@ -62,17 +62,17 @@ def test__includes_uppercase__true_but_not_first():
 def test__includes_uppercase__only_uppercase_letters():
     """Test whether"""
     assert password.includes_uppercase("PASSWORD") is True
-    assert password.includes_uppercase("PASSWORD1") is True # Includes numbers.
-    assert password.includes_uppercase("PASSWORD!") is True # Includes special characters.
-    assert password.includes_uppercase("PASSWORD1!") is True # Includes numbers and special characters.
+    assert password.includes_uppercase("PASSWORD1") is True  # Includes numbers.
+    assert password.includes_uppercase("PASSWORD!") is True  # Includes special characters.
+    assert password.includes_uppercase("PASSWORD1!") is True  # Includes numbers and special characters.
 
 
 def test__includes_uppercase__every_uppercase_letters():
     """Test whether password includes every uppercase letter."""
     assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ") is True
-    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ1") is True # Includes numbers.
-    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ!") is True # Includes special characters.
-    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ1!") is True # Includes numbers and special characters.
+    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ1") is True  # Includes numbers.
+    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ!") is True  # Includes special characters.
+    assert password.includes_uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ1!") is True  # Includes numbers and special characters.
 
 
 def test__includes_lowercase__empty():
@@ -97,17 +97,17 @@ def test__includes_lowercase__true_but_not_first():
 
 def test__includes_lowercase__only_lowercase_letters():
     assert password.includes_lowercase("password") is True
-    assert password.includes_lowercase("password1") is True # Includes numbers.
-    assert password.includes_lowercase("password!") is True # Includes special characters.
-    assert password.includes_lowercase("password1!") is True # Includes numbers and special characters.
+    assert password.includes_lowercase("password1") is True  # Includes numbers.
+    assert password.includes_lowercase("password!") is True  # Includes special characters.
+    assert password.includes_lowercase("password1!") is True  # Includes numbers and special characters.
 
 
 def test__includes_lowercase__every_lowercase_letters():
     """Test whether password includes every lowercase letter."""
     assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz") is True
-    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz1") is True # Includes numbers.
-    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz!") is True # Includes special characters.
-    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz1!") is True # Includes numbers and special characters.
+    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz1") is True  # Includes numbers.
+    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz!") is True  # Includes special characters.
+    assert password.includes_lowercase("abcdefghijklmnopqrstuvwxyz1!") is True  # Includes numbers and special characters.
 
 
 def test__includes_special__empty():
@@ -143,12 +143,12 @@ def test__includes_number__empty():
 def test__includes_number__every_digit():
     """Test whether password includes every digit."""
     assert password.includes_number("0123456789") is True
-    assert password.includes_number("0123456789a") is True # Includes lowercase letters.
-    assert password.includes_number("0123456789A") is True # Includes uppercase letters.
-    assert password.includes_number("0123456789!") is True # Includes special characters.
-    assert password.includes_number("0123456789a!") is True # Includes lowercase letters and special characters.
-    assert password.includes_number("0123456789A!") is True # Includes uppercase letters and special characters.
-    assert password.includes_number("0123456789aA!") is True # Includes lowercase letters, uppercase letters and special characters.
+    assert password.includes_number("0123456789a") is True  # Includes lowercase letters.
+    assert password.includes_number("0123456789A") is True  # Includes uppercase letters.
+    assert password.includes_number("0123456789!") is True  # Includes special characters.
+    assert password.includes_number("0123456789a!") is True  # Includes lowercase letters and special characters.
+    assert password.includes_number("0123456789A!") is True  # Includes uppercase letters and special characters.
+    assert password.includes_number("0123456789aA!") is True  # Includes lowercase letters, uppercase letters and special characters.
 
 
 def test__includes_number_no_digit():
@@ -173,8 +173,3 @@ def test__includes_number_true_but_not_first():
     assert password.includes_number("p4ssw0rd") is True
     assert password.includes_number("pa55w0rd") is True
     assert password.includes_number("passw0rd!") is True
-
-
-
-
-
