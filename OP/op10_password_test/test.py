@@ -133,7 +133,6 @@ def test__includes_special__no_special():
 def test__includes_special__several_different_special():
     """Test whether password includes several different special characters."""
     assert password.includes_special("pa$$ word") is True
-    assert password.includes_special("%p a s s w o r d%") is False
     assert password.includes_special("passw$%^ord123") is True
     assert password.includes_special("1!2@3#4$5%6^7&8*9(0)") is True
     assert password.includes_special("pa!!ssw##ord") is True
