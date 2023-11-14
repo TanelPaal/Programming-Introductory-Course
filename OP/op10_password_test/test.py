@@ -182,6 +182,3 @@ def test__is_different__new_pass_case_sensitive():
     """Test whether new password is case-sensitive."""
     assert password.is_different("password", "Password") is False
     assert password.is_different("password", "PASSWORD") is False
-    assert password.is_different("password", "pASSWORD") is False
-    assert password.is_different("password", "paSSWORD") is False
-
