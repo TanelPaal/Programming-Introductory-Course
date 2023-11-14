@@ -193,9 +193,9 @@ def test__is_different__case_insensitive_overlap():
     pass
 
 
-def test__is_different__new_pass_case_insensitive():
-    """Test whether new password is case-insensitive."""
-    assert not password.is_different("Password123", "password1234") is True
-    assert not password.is_different("Password123", "PASSWORD1234") is True
-    assert password.is_different("Password123", "passw0rd123") is True
+def test_different_password_with_uppercase():
+    """Test whether the function ignores the case for new and old password. Friends test cases."""
+    assert password.is_different_from_old_password("TeStInG", "tEsTiNg") is False
+    assert password.is_different_from_old_password("WhAAAAAAAAt?!", "THaaaaaaaat.") is False
+    assert password.is_different_from_old_password("Lorem Ipsum dolor sit amet", "Helvetica, SF Pro Display, Arial") is True
 
