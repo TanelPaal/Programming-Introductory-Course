@@ -65,7 +65,7 @@ def includes_number(password: str) -> bool:
     return False
 
 
-def is_different(old_password: str, new_password: str) -> bool:
+def is_different_from_old_password(old_password: str, new_password: str) -> bool:
     """
     Check if the new password is different enough from the old password.
 
@@ -204,7 +204,7 @@ def is_password_valid(new_password: str, old_password: str, name: str, birthdate
     if not includes_number(new_password):
         return False
 
-    if not is_different(old_password, new_password):
+    if not is_different_from_old_password(old_password, new_password):
         return False
 
     if is_name_in_password(new_password, name):
@@ -242,13 +242,13 @@ if __name__ == '__main__':
     print(includes_number("ÖJOWE%&/"))  # -> False
 
     print("\nNew password is different from the old one validation:")
-    print(is_different("õunamoos", "maasikamoos"))  # -> True
-    print(is_different("olevsulev67", "ämblikmees18"))  # -> True
-    print(is_different("seinav2rv", "seinakapp"))  # -> False
-    print(is_different("merineitsi99", "mereneitsi11"))  # -> False
-    print(is_different("eva1970", "0791ave"))  # -> False
-    print(is_different("abxyab", "abcxy"))  # -> True
-    print(is_different("lammas987", "lammas789"))  # -> False
+    print(is_different_from_old_password("õunamoos", "maasikamoos"))  # -> True
+    print(is_different_from_old_password("olevsulev67", "ämblikmees18"))  # -> True
+    print(is_different_from_old_password("seinav2rv", "seinakapp"))  # -> False
+    print(is_different_from_old_password("merineitsi99", "mereneitsi11"))  # -> False
+    print(is_different_from_old_password("eva1970", "0791ave"))  # -> False
+    print(is_different_from_old_password("abxyab", "abcxy"))  # -> True
+    print(is_different_from_old_password("lammas987", "lammas789"))  # -> False
 
     print("\nPassword has your name:")
     print(is_name_in_password("ddccwemelani", "Melani Mets"))  # -> True
