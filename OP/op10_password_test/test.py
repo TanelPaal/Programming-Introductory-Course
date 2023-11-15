@@ -178,7 +178,7 @@ def test__includes_number_true_but_not_first():
     assert password.includes_number("passw0rd!") is True
 
 
-def test_is_different__password_with_uppercase():
+def test__is_different__password_with_uppercase():
     """Test whether the function ignores the case for new and old password."""
     assert password.is_different_from_old_password("TeStInG", "tEsTiNg") is False
     assert password.is_different_from_old_password("WhEEEEEEEn?!", "THeeeeeeeN.") is False
@@ -186,7 +186,33 @@ def test_is_different__password_with_uppercase():
     assert password.is_different_from_old_password("Lorem Ipsum dolor sit amet", "Lorem Ipsum Dolor Sit Amet") is False
 
 
-def test__is_different__password_odd_lengths():
-    """Test whether the function works with odd length passwords."""
-    assert password.is_different_from_old_password("12345", "123456") is False  # Old password odd length, new password one character longer
-    assert password.is_different_from_old_password("abcdef", "abcdefg") is False  # Old password even length, new password one character longer and odd
+def test__is_different__odd_length_barely_different():
+    assert password.is_different_from_old_password("password1", "password12") is False
+
+
+def test__is_different__odd_length_barely_not_different():
+    assert password.is_different_from_old_password("password", "passworD") is False
+
+
+def test__is_different__odd_length_barely_not_different_change_not_beginning():
+    assert password.is_different_from_old_password("password", "passwoRd") is False
+
+
+def test__is_different__even_length_barely_different():
+    assert password.is_different_from_old_password("password12", "password123") is False
+
+
+def test__is_diffrent__even_length_barely_not_different():
+    assert password.is_different_from_old_password("password123", "Password123") is False
+
+
+def test__is_different__even_length_barely_not_different_change_not_beginning():
+    assert password.is_different_from_old_password("password123", "passworD123") is False
+
+
+def test__is_different__odd_length_barely_different_reversed():
+    assert password.is_different_from_old_password("password12", "password1") is False
+
+
+
+
