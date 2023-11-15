@@ -186,31 +186,61 @@ def test__is_different__password_with_uppercase():
     assert password.is_different_from_old_password("Lorem Ipsum dolor sit amet", "Lorem Ipsum Dolor Sit Amet") is False
 
 
-def test__is_different__odd_length_barely_different():
-    assert password.is_different_from_old_password("password1", "password12") is False
-    assert password.is_different_from_old_password("password1", "password1!") is False
-    assert password.is_different_from_old_password("password1", "password1SAG!") is False
+def test__is_different__odd_different():
+    """Test if different, odd."""
+    assert password.is_different_from_old_password("õunamoos", "maasikamoos") is True
 
 
-def test__is_different__odd_length_barely_not_different():
-    assert password.is_different_from_old_password("password", "passworD") is False
+def test__is_different__odd_enough_not_different():
+    """Test if not different enough."""
+    assert password.is_different_from_old_password("seinav2rv", "seinakapp") is False
 
 
-def test__is_different__odd_length_barely_not_different_change_not_beginning():
-    assert password.is_different_from_old_password("password", "passwoRd") is False
+def test__is_different__odd_enough_upper_not_different_old():
+    """Test whether the function ignores the case for new and old password."""
+    assert password.is_different_from_old_password("SEINAV2RV", "seinakapp") is False
 
 
-def test__is_different__even_length_barely_different():
-    assert password.is_different_from_old_password("password12", "password123") is False
+def test__is_different__odd_enough_upper_not_different_new():
+    """Test whether the function ignores the case for new and old password."""
+    assert password.is_different_from_old_password("seinav2rv", "SEINAKAPP") is False
 
 
-def test__is_diffrent__even_length_barely_not_different():
-    assert password.is_different_from_old_password("password123", "Password123") is False
+def test_is_different_even_different():
+    """Test if different, even."""
+    assert password.is_different_from_old_password("merineitsi99", "mereneit11") is True
 
 
-def test__is_different__even_length_barely_not_different_change_not_beginning():
-    assert password.is_different_from_old_password("password123", "passworD123") is False
+def test_is_different__even_enough_not_different():
+    """Test if not different enough, even."""
+    assert password.is_different_from_old_password("merineitsi99", "mereneitsi11") is False
 
 
-def test__is_different__odd_length_barely_different_reversed():
-    assert password.is_different_from_old_password("password12", "password1") is False
+def test_is_different__even_enough_not_different_not_beginning():
+    """Test if not different enough, even."""
+    assert password.is_different_from_old_password("99mereneitsi", "11mereneitsi") is False
+
+
+def test_is_different__odd_enough_not_different_not_beginning():
+    """Test if not different enough, not beginning."""
+    assert password.is_different_from_old_password("v2rvsseina", "kappseina") is False
+
+
+def test_is_different__odd_differen_reverse():
+    """Test if different, old partially reversed."""
+    assert password.is_different_from_old_password("õunasoom", "maasimoos") is True
+
+
+def test_is_different__odd_enough_not_different_reverse():
+    """Test if not different enough, old partially reversed."""
+    assert password.is_different_from_old_password("aniesv2rv", "seinakapp") is False
+
+
+def test_is_different__even_different_reverse():
+    """Test if different, old partially reversed, even."""
+    assert password.is_different_from_old_password("istienirem99", "mereneit11") is True
+
+
+def test_is_different__even_enough_not_different_enough_reverse():
+    """Test if not different enough, old partially reversed, even."""
+    assert password.is_different_from_old_password("istienirem99", "mereneitsi11") is False
