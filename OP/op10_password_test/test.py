@@ -16,6 +16,7 @@ def test__is_correct_length__in_range_random():
     for length in range(8, 65):
         assert password.is_correct_length(random.choices(alphabet, k=length)) is True
 
+
 def test__is_correct_length__min():
     """Test whether password of length 8 is correct."""
     assert password.is_correct_length("password") is True
