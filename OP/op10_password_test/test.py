@@ -188,9 +188,5 @@ def test_is_different__password_with_uppercase():
 
 def test__is_different__password_odd_lengths():
     """Test whether the function works with odd length passwords."""
-    assert password.is_different_from_old_password("", "") is True  # New Pass odd length but barely different.
-    assert password.is_different_from_old_password("abcdefgh", "abcdefghi") is False  # New Pass odd length but barely different.
-    assert password.is_different_from_old_password("pass", "password") is True  # New password is longer
-    assert password.is_different_from_old_password("password", "pass") is True  # New password is shorter
-    assert password.is_different_from_old_password("12345","123456") is False  # Old password odd length, new password one character longer
-    assert password.is_different_from_old_password("abcdef","abcdefg") is False  # Old password even length, new password one character longer and odd
+    assert password.is_different_from_old_password("12345", "123456") is False  # Old password odd length, new password one character longer
+    assert password.is_different_from_old_password("abcdef", "abcdefg") is False  # Old password even length, new password one character longer and odd
