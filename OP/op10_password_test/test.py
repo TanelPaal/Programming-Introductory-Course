@@ -188,6 +188,8 @@ def test__is_different__password_with_uppercase():
 
 def test__is_different__odd_length_barely_different():
     assert password.is_different_from_old_password("password1", "password12") is False
+    assert password.is_different_from_old_password("password1", "password1!") is False
+    assert password.is_different_from_old_password("password1", "password1SAG!") is False
 
 
 def test__is_different__odd_length_barely_not_different():
@@ -212,7 +214,3 @@ def test__is_different__even_length_barely_not_different_change_not_beginning():
 
 def test__is_different__odd_length_barely_different_reversed():
     assert password.is_different_from_old_password("password12", "password1") is False
-
-
-
-
