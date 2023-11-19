@@ -142,7 +142,6 @@ def write_cars_to_file(cars: list[Car], file_name: str):
             "features": car.features
         } for car in cars
     ]
-
     with open(file_name, 'w') as file:
         json.dump(car_to_dict, file, indent=4)
 
