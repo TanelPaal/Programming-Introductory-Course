@@ -123,16 +123,6 @@ def most_popular_feature(cars: list[Car]) -> str:
     return most_popular_feature
 
 
-def car_to_dict(car: Car) -> dict:
-    """Help function to convert a Car object to a dictionary."""
-    return {
-        'make': car.make,
-        'model': car.model,
-        'fuel_consumption': car.fuel_consumption,
-        'features': car.features
-    }
-
-
 def write_cars_to_file(cars: list[Car], file_name: str):
     """
     Write the given list of cars to the given file in JSON format.
@@ -144,6 +134,16 @@ def write_cars_to_file(cars: list[Car], file_name: str):
     :param cars: The list of cars to write to the file.
     :param file_name: The name of the file to write the cars to.
     """
+
+    def car_to_dict(car: Car) -> dict:
+        """Helper function to convert a Car object to a dictionary."""
+        return {
+            'make': car.make,
+            'model': car.model,
+            'fuel_consumption': car.fuel_consumption,
+            'features': car.features
+        }
+
     with open(file_name, 'w') as file:
         json.dump([car_to_dict(car) for car in cars], file, indent=4)
 
