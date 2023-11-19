@@ -74,8 +74,9 @@ def find_cars_by_feature(cars: list[Car], feature: str) -> list[Car]:
     :param feature: The given feature.
     :return: The list of cars that have the specified feature.
     """
-    return sorted([car for car in cars if feature.lower() in map(str.lower, car.features)],
-                  key=lambda car: (car.make.lower(), car.model.lower()))
+    cars_with_feature = [car for car in cars if feature.lower() in map(str.lower, car.features)]
+    return sort_cars_by_make(cars_with_feature)
+
 
 def fuel_needed(car: Car, distance: int) -> float:
     """
