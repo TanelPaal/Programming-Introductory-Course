@@ -143,7 +143,7 @@ def write_cars_to_file(cars: list[Car], file_name: str):
         } for car in cars
     ]
     with open(file_name, 'w') as file:
-        json.dump(car_to_dict, file, indent=4)
+        json.dump(car_to_dict, file, indent=2)
 
 
 def read_cars_from_file(file_name: str) -> list[Car]:
