@@ -123,7 +123,7 @@ def most_popular_feature(cars: list[Car]) -> str:
 
 
 def car_to_dict(car: Car) -> dict:
-    """Helper function to convert a Car object to a dictionary."""
+    """Help function to convert a Car object to a dictionary."""
     return {
         'make': car.make,
         'model': car.model,
