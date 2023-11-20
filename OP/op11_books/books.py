@@ -151,7 +151,12 @@ def find_books_by_genre_and_year(library: list[Book], genre: str, year: int) -> 
     :param year: The year to search for.
     :return: A list of books, that match the given genre and year, sorted by sales (descending) and title (alphabetically).
     """
-    pass
+    books = []
+    for book in library:
+        if genre in book.genres and book.year == year:
+            books.append(book)
+    books.sort(key=lambda x: (-x.sales, x.title))
+    return books
 
 
 def most_popular_author_per_century(library: list[Book]) -> dict[int, str]:
