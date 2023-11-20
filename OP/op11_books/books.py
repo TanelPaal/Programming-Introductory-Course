@@ -151,12 +151,12 @@ def find_books_by_genre_and_year(library: list[Book], genre: str, year: int) -> 
     :param year: The year to search for.
     :return: A list of books, that match the given genre and year, sorted by sales (descending) and title (alphabetically).
     """
-    books = []
-    for book in library:
-        if genre in book.genres and book.year == year:
-            books.append(book)
-    books.sort(key=lambda x: (-x.sales, x.title))
-    return books
+    filtered_books = [book for book in library if genre in book.genres and book.year == year]
+
+    # Sorting by sales (descending) and then by title (alphabetically) in case of a tie in sales
+    filtered_books.sort(key=lambda book: (-book.sales, book.title))
+
+    return filtered_books
 
 
 def most_popular_author_per_century(library: list[Book]) -> dict[int, str]:
@@ -169,7 +169,21 @@ def most_popular_author_per_century(library: list[Book]) -> dict[int, str]:
     :return: A dictionary, where the keys are the centuries and the values are the authors with the most sales in that
     century.
     """
-    pass
+    books_by_century = {}
+
+    # Categorizing books by century
+    for book in library:
+        century = (book.year // 100) + 1
+        if century not in books_by_century:
+            books_by_century[century] = []
+        books_by_century[century].append(book)
+
+    # Finding the most popular author for each century
+    most_popular_authors = {}
+    for century, books in books_by_century.items():
+        most_popular_authors[century] = most_popular_author(books)
+
+    return {century: most_popular_authors[century] for century in sorted(most_popular_authors)}  # Sorting by century
 
 
 def correct_titles_and_count_books(library: list[Book]) -> dict[Book, int]:
