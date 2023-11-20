@@ -49,7 +49,6 @@ def author_book_count(library: list[Book], author: str) -> int:
     :param author: The given author.
     :return: The amount of books written by the author.
     """
-
     count = 0
     for book in library:
         if book.author == author:
@@ -65,7 +64,6 @@ def author_page_count(library: list[Book], author: str) -> int:
     :param author: The given author.
     :return: The total number of pages written by the author.
     """
-
     count = 0
     for book in library:
         if book.author == author:
@@ -80,7 +78,6 @@ def most_popular_book(library: list[Book]) -> Book:
     :param library: The list of books.
     :return: The Book object with the most sales.
     """
-
     most_sales = 0
     most_sales_book = None
     for book in library:
@@ -99,7 +96,6 @@ def most_popular_author(library: list[Book]) -> str:
     :param library: The list of books.
     :return: The author with the most sales.
     """
-
     most_sales = 0
     most_sales_author = None
     for book in library:
@@ -117,7 +113,6 @@ def average_author_book_length(library: list[Book], author: str) -> float:
     :param author: The given author.
     :return: The average length of the author's books.
     """
-
     count = 0
     total_pages = 0
     for book in library:
@@ -136,7 +131,6 @@ def find_best_selling_genre(library: list[Book]) -> str:
     :param library: The list of books.
     :return: The genre with the most total sales.
     """
-
     genre_sales = {}
     for book in library:
         for genre in book.genres:
