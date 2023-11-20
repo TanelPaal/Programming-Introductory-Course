@@ -113,15 +113,12 @@ def average_author_book_length(library: list[Book], author: str) -> float:
     :param author: The given author.
     :return: The average length of the author's books.
     """
-    count = 0
-    total_pages = 0
-    for book in library:
-        if book.author == author:
-            count += 1
-            total_pages += book.pages
-    if count == 0:
+    total_pages = author_page_count(library, author)
+    book_count = author_book_count(library, author)
+
+    if book_count == 0:
         return 0
-    return total_pages / count
+    return total_pages / book_count
 
 
 def find_best_selling_genre(library: list[Book]) -> str:
