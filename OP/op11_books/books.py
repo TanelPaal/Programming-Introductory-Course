@@ -214,7 +214,40 @@ def correct_titles_and_count_books(library: list[Book]) -> dict[Book, int]:
     :param library: The list of books.
     :return: The amount of books in the list.
     """
-    pass
+    corrected_books = {}
+    for i in range(len(library)):
+        for j in range(len(library)):
+            if i != j and library[i].author == library[j].author \
+                    and library[i].pages == library[j].pages \
+                    and library[i].sales == library[j].sales \
+                    and library[i].genres == library[j].genres \
+                    and library[i].year == library[j].year:
+                if is_one_letter_off(library[i].title, library[j].title):
+                    library[j].title = library[i].title
+
+        corrected_books[library[i]] = corrected_books.get(library[i], 0) + 1
+
+    return corrected_books
+
+
+def is_one_letter_off(title1: str, title2: str) -> bool:
+    """
+    Check if one title is the same as the other, but with one letter missing.
+
+    :param title1: The first title.
+    :param title2: The second title.
+    :return: True if the titles are one letter off, False otherwise.
+    """
+    if abs(len(title1) - len(title2)) != 1:
+        return False
+
+    shorter, longer = sorted([title1, title2], key=len)
+
+    for i in range(len(longer)):
+        if shorter == longer[:i] + longer[i + 1:]:
+            return True
+
+    return False
 
 
 if __name__ == '__main__':
