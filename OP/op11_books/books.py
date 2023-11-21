@@ -173,7 +173,7 @@ def most_popular_author_per_century(library: list[Book]) -> dict[int, str]:
 
     # Categorizing books by century
     for book in library:
-        century = (book.year // 100) + 1
+        century = (book.year // 100)
         if century not in books_by_century:
             books_by_century[century] = []
         books_by_century[century].append(book)
