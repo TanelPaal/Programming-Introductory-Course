@@ -96,13 +96,20 @@ def most_popular_author(library: list[Book]) -> str:
     :param library: The list of books.
     :return: The author with the most sales.
     """
-    most_sales = 0
-    most_sales_author = None
+    author_sales = {}
+
     for book in library:
-        if book.sales > most_sales:
-            most_sales = book.sales
-            most_sales_author = book.author
-    return most_sales_author
+        if book.author in author_sales:
+            author_sales[book.author] += book.sales
+        else:
+            author_sales[book.author] = book.sales
+
+    most_sales = max(author_sales.values())
+    for author, sales in author_sales.items():
+        if sales == most_sales:
+            return author
+
+    return ""
 
 
 def average_author_book_length(library: list[Book], author: str) -> float:
