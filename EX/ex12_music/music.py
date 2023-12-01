@@ -64,6 +64,9 @@ class Note:
         # = +0.5, b = -0.5
         NB! Ab == Z#
         """
+        if self.original_note == 'Ab':
+            return 25.5
+
         pos = ascii_uppercase.index(self.note[0])
         if len(self.note) > 1:
             if self.note[1] == '#':
@@ -82,12 +85,6 @@ class Note:
             return False
         # Check direct equality or equivalent notes.
         if self.get_numerical_value() == other.get_numerical_value():
-            return True
-
-        equivalent_self = self.note_equivalent.get(self.original_note, self.original_note)
-        equivalent_other = self.note_equivalent.get(other.original_note, other.original_note)
-
-        if equivalent_self == equivalent_other:
             return True
 
 
