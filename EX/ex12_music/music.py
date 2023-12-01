@@ -84,6 +84,13 @@ class Note:
         if self.get_numerical_value() == other.get_numerical_value():
             return True
 
+        equivalent_self = self.note_equivalent.get(self.original_note, self.original_note)
+        equivalent_other = self.note_equivalent.get(other.original_note, other.original_note)
+
+        if equivalent_self == equivalent_other:
+            return True
+
+
 class NoteCollection:
     """NoteCollection class."""
 
