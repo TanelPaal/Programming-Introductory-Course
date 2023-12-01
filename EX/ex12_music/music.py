@@ -1,6 +1,7 @@
 """Music."""
 from string import ascii_uppercase
 
+
 class Note:
     """
     Note class.
@@ -61,12 +62,11 @@ class Note:
                        'Z': 'Z'
                        }
 
-
     def __init__(self, note: str):
         """Initialize the class.
 
         To make the logic a bit easier it is recommended to normalize the notes, that is, choose a sharpness
-        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc or
+        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc. or
         A Bb, B, Cb, C.
         Note is a single alphabetical letter which is always uppercase.
         NB! Ab == Z#
@@ -111,7 +111,6 @@ class Note:
 class NoteCollection:
     """NoteCollection class."""
 
-
     def __init__(self):
         """
         Initialize the NoteCollection class.
@@ -119,7 +118,6 @@ class NoteCollection:
         You will likely need to add something here, maybe a dict or a list?
         """
         self.notes = []
-
 
     def add(self, note: Note) -> None:
         """
@@ -197,14 +195,15 @@ class NoteCollection:
             content += f" * {note.note}\n"
         return content
 
+
 if __name__ == '__main__':
-    note_one = Note('a') # yes, lowercase
+    note_one = Note('a')  # yes, lowercase
     note_two = Note('C')
     note_three = Note('Eb')
     collection = NoteCollection()
 
-    print(note_one) # <Note: A>
-    print(note_three) # <Note: Eb>
+    print(note_one)  # <Note: A>
+    print(note_three)  # <Note: Eb>
 
     collection.add(note_one)
     collection.add(note_two)
@@ -214,7 +213,7 @@ if __name__ == '__main__':
     #   * A
     #   * C
 
-    print(collection.extract()) # [<Note: A>,<Note: C>]
+    print(collection.extract())  # [<Note: A>,<Note: C>]
     print(collection.get_content())
     # Notes:
     #  Empty
