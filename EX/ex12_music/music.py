@@ -60,13 +60,17 @@ class Note:
         """
         Return the numerical value of the note.
 
-        A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6
+        A = 0, B = 1, C = 2... Z = 25
         # = +0.5, b = -0.5
         NB! Ab == Z#
         """
         pos = ascii_uppercase.index(self.note[0])
-        if self.note[1] == '#':
-            return pos + 0.5
+        if len(self.note) > 1:
+            if self.note[1] == '#':
+                pos += 0.5
+            elif self.note[1] == 'b':
+                pos -= 0.5
+        return pos
 
     def __eq__(self, other):
         """
@@ -77,7 +81,7 @@ class Note:
         if not isinstance(other, Note):
             return False
         # Check direct equality or equivalent notes.
-        return self.get_numerical_value() == other.get_numerical_value() or self.note == other.note
+        return self.get_numerical_value() == other.get_numerical_value()
 
 class NoteCollection:
     """NoteCollection class."""
