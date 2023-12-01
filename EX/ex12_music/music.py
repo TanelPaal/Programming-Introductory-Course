@@ -81,7 +81,8 @@ class Note:
         if not isinstance(other, Note):
             return False
         # Check direct equality or equivalent notes.
-        return self.get_numerical_value() == other.get_numerical_value()
+        if self.get_numerical_value() == other.get_numerical_value()
+            return True
 
 class NoteCollection:
     """NoteCollection class."""
