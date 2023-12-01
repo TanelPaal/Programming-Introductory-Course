@@ -2,21 +2,13 @@
 from string import ascii_uppercase
 
 
-def _normalize(note):
-    # Replace 'b' with '#' for consistency
-    if len(note) > 1 and note[1].lower() == 'b':
-        # Find the previous note
-        prev_note = ascii_uppercase[ascii_uppercase.find(note[0].upper()) - 1]
-        return prev_note + '#'
-    return note.capitalize()
-
-
 class Note:
     """
     Note class.
 
     Every note has a name and a sharpness or alteration (supported values: "", "#", "b").
     """
+
     def __init__(self, note: str):
         """Initialize the class.
 
@@ -27,7 +19,7 @@ class Note:
         NB! Ab == Z#
         """
         self.original_note = note.capitalize()
-        self.note = _normalize(note)
+        self.note = self._normalize(note)
 
     def _normalize(self, note):
         # Replace 'b' with '#' for consistency
@@ -47,6 +39,7 @@ class Note:
         return f"<Note: {self.note[0].upper()}{self.note[1:]}>"
 
     def get_number(self):
+        """Give the note a number."""
         if self.note == 'Ab':
             return 25.5
         pos = ascii_uppercase.find(self.note[0])
