@@ -1,6 +1,16 @@
 """Music."""
 from string import ascii_uppercase
 
+
+def _normalize(note):
+    # Replace 'b' with '#' for consistency
+    if len(note) > 1 and note[1].lower() == 'b':
+        # Find the previous note
+        prev_note = ascii_uppercase[ascii_uppercase.find(note[0].upper()) - 1]
+        return prev_note + '#'
+    return note.capitalize()
+
+
 class Note:
     """
     Note class.
@@ -11,12 +21,21 @@ class Note:
         """Initialize the class.
 
         To make the logic a bit easier it is recommended to normalize the notes, that is, choose a sharpness
-        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc or
+        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc. or
         A Bb, B, Cb, C.
         Note is a single alphabetical letter which is always uppercase.
         NB! Ab == Z#
         """
-        self.note = note
+        self.original_note = note.capitalize()
+        self.note = _normalize(note)
+
+    def _normalize(self, note):
+        # Replace 'b' with '#' for consistency
+        if len(note) > 1 and note[1].lower() == 'b':
+            # Find the previous note
+            prev_note = ascii_uppercase[ascii_uppercase.find(note[0].upper()) - 1]
+            return prev_note + '#'
+        return note.capitalize()
 
     def __repr__(self) -> str:
         """
@@ -103,7 +122,9 @@ class NoteCollection:
 
         :return: A list of all the notes that were previously in the collection.
         """
-        return []
+        extracted_notes = self.notes.copy()
+        self.notes.clear()
+        return extracted_notes
 
     def get_content(self) -> str:
         """
@@ -125,16 +146,22 @@ class NoteCollection:
 
         :return: Content as a string
         """
-        return ''
+        if not self.notes:
+            return "Notes:\n  Empty"
+
+        sorted_notes = sorted(self.notes, key=lambda note: (note.note, note.note[1:] if len(note.note) > 1 else ''))
+        content = "Notes:\n" + "\n".join(f"  * {note.note}" for note in sorted_notes)
+        return content
+
 
 if __name__ == '__main__':
-    note_one = Note('a') # yes, lowercase
+    note_one = Note('a')  # yes, lowercase
     note_two = Note('C')
     note_three = Note('Eb')
     collection = NoteCollection()
 
-    print(note_one) # <Note: A>
-    print(note_three) # <Note: Eb>
+    print(note_one)  # <Note: A>
+    print(note_three)  # <Note: Eb>
 
     collection.add(note_one)
     collection.add(note_two)
@@ -144,7 +171,7 @@ if __name__ == '__main__':
     #   * A
     #   * C
 
-    print(collection.extract()) # [<Note: A>,<Note: C>]
+    print(collection.extract())  # [<Note: A>,<Note: C>]
     print(collection.get_content())
     # Notes:
     #  Empty
