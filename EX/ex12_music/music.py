@@ -71,8 +71,10 @@ class Note:
         Note is a single alphabetical letter which is always uppercase.
         NB! Ab == Z#
         """
-        self.original_note = note
-        self.note = note[0].upper()  # Normalizing to uppercase.
+        note_components = list(note)
+        note_components[0] = note_components[0].upper()
+        self.original_note = ''.join(note_components)
+        self.note = self.normalize_note(self.original_note)
 
     def normalize_note(self, note: str) -> str:
         """
@@ -116,6 +118,7 @@ class NoteCollection:
 
         You will likely need to add something here, maybe a dict or a list?
         """
+        self.notes = []
 
 
     def add(self, note: Note) -> None:
@@ -126,6 +129,9 @@ class NoteCollection:
 
         :param note: Input object to add to the collection
         """
+        if not isinstance(note, Note):
+            raise TypeError("Note is not an instance of Note class.")
+        self.notes.append(note)
 
     def pop(self, note: str) -> Note | None:
         """
@@ -136,6 +142,9 @@ class NoteCollection:
         :param note: Note to remove
         :return: The removed Note object or None.
         """
+        for i, n in enumerate(self.notes):
+            if n.note == note.upper():
+                return self.notes.pop(i)
         return None
 
     def extract(self) -> list[Note]:
@@ -155,7 +164,9 @@ class NoteCollection:
 
         :return: A list of all the notes that were previously in the collection.
         """
-        return []
+        extracted_notes = self.notes.copy()
+        self.notes.clear()
+        return extracted_notes
 
     def get_content(self) -> str:
         """
@@ -177,7 +188,14 @@ class NoteCollection:
 
         :return: Content as a string
         """
-        return ''
+        if not self.notes:
+            return "Notes:\n Empty"
+
+        sorted_notes = sorted(self.notes, key=lambda x: x.note)
+        content = "Notes:\n"
+        for note in sorted_notes:
+            content += f" * {note.note}\n"
+        return content
 
 if __name__ == '__main__':
     note_one = Note('a') # yes, lowercase
