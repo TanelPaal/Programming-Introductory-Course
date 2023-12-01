@@ -32,7 +32,35 @@ class Note:
                        'W#': 'Xb', 'Xb': 'W#',
                        'X#': 'Yb', 'Yb': 'X#',
                        'Y#': 'Zb', 'Zb': 'Y#',
-                       'Z#': 'Ab', 'Ab': 'Z#'}
+                       'Z#': 'Ab', 'Ab': 'Z#',
+                       'A': 'A',
+                       'B': 'B',
+                       'C': 'C',
+                       'D': 'D',
+                       'E': 'E',
+                       'F': 'F',
+                       'G': 'G',
+                       'H': 'H',
+                       'I': 'I',
+                       'J': 'J',
+                       'K': 'K',
+                       'L': 'L',
+                       'M': 'M',
+                       'N': 'N',
+                       'O': 'O',
+                       'P': 'P',
+                       'Q': 'Q',
+                       'R': 'R',
+                       'S': 'S',
+                       'T': 'T',
+                       'U': 'U',
+                       'V': 'V',
+                       'W': 'W',
+                       'X': 'X',
+                       'Y': 'Y',
+                       'Z': 'Z'
+                       }
+
 
     def __init__(self, note: str):
         """Initialize the class.
@@ -46,6 +74,17 @@ class Note:
         self.original_note = note
         self.note = note[0].upper()  # Normalizing to uppercase.
 
+    def normalize_note(self, note: str) -> str:
+        """
+        Normalize the note.
+
+        If the note is not in the note_equivalent dict, return the note as is.
+        If the note is in the note_equivalent dict, return the equivalent note.
+        """
+        if note in self.note_equivalent:
+            return self.note_equivalent[note]
+        return note
+
     def __repr__(self) -> str:
         """
         Representation of the Note class.
@@ -55,26 +94,6 @@ class Note:
         """
         return f"<Note: {self.original_note}>"
 
-
-    def get_numerical_value(self):
-        """
-        Return the numerical value of the note.
-
-        A = 0, B = 1, C = 2... Z = 25
-        # = +0.5, b = -0.5
-        NB! Ab == Z#
-        """
-        if self.original_note == 'Ab':
-            return 25.5
-
-        pos = ascii_uppercase.index(self.note[0])
-        if len(self.note) > 1:
-            if self.note[1] == '#':
-                pos += 0.5
-            elif self.note[1] == 'b':
-                pos -= 0.5
-        return pos
-
     def __eq__(self, other):
         """
         Compare two Notes.
@@ -83,8 +102,7 @@ class Note:
         """
         if not isinstance(other, Note):
             return False
-        # Check direct equality or equivalent notes.
-        if self.get_numerical_value() == other.get_numerical_value():
+        if self.note == other.note:
             return True
 
 
