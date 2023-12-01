@@ -1,65 +1,22 @@
 """Music."""
 from string import ascii_uppercase
 
-
 class Note:
     """
     Note class.
 
     Every note has a name and a sharpness or alteration (supported values: "", "#", "b").
     """
-    note_equivalent = {'A#': 'Bb', 'Bb': 'A#',
-                       'B#': 'Cb', 'Cb': 'B#',
-                       'C#': 'Db', 'Db': 'C#',
-                       'D#': 'Eb', 'Eb': 'D#',
-                       'E#': 'Fb', 'Fb': 'E#',
-                       'F#': 'Gb', 'Gb': 'F#',
-                       'G#': 'Hb', 'Hb': 'G#',
-                       'H#': 'Ib', 'Ib': 'H#',
-                       'I#': 'Jb', 'Jb': 'I#',
-                       'J#': 'Kb', 'Kb': 'J#',
-                       'K#': 'Lb', 'Lb': 'K#',
-                       'L#': 'Mb', 'Mb': 'L#',
-                       'M#': 'Nb', 'Nb': 'M#',
-                       'N#': 'Ob', 'Ob': 'N#',
-                       'O#': 'Pb', 'Pb': 'O#',
-                       'P#': 'Qb', 'Qb': 'P#',
-                       'Q#': 'Rb', 'Rb': 'Q#',
-                       'R#': 'Sb', 'Sb': 'R#',
-                       'S#': 'Tb', 'Tb': 'S#',
-                       'T#': 'Ub', 'Ub': 'T#',
-                       'U#': 'Vb', 'Vb': 'U#',
-                       'V#': 'Wb', 'Wb': 'V#',
-                       'W#': 'Xb', 'Xb': 'W#',
-                       'X#': 'Yb', 'Yb': 'X#',
-                       'Y#': 'Zb', 'Zb': 'Y#',
-                       'Z#': 'Ab', 'Ab': 'Z#',
-                       }
-
     def __init__(self, note: str):
         """Initialize the class.
 
         To make the logic a bit easier it is recommended to normalize the notes, that is, choose a sharpness
-        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc. or
+        either '#' or 'b' and use it as the main, that means the notes will be either A, A#, B, B#, C etc or
         A Bb, B, Cb, C.
         Note is a single alphabetical letter which is always uppercase.
         NB! Ab == Z#
         """
-        note_components = list(note)
-        note_components[0] = note_components[0].upper()
-        self.original_note = ''.join(note_components)
-        self.note = self.normalize_note(self.original_note)
-
-    def normalize_note(self, note: str) -> str:
-        """
-        Normalize the note.
-
-        If the note is not in the note_equivalent dict, return the note as is.
-        If the note is in the note_equivalent dict, return the equivalent note.
-        """
-        if note in self.note_equivalent:
-            return self.note_equivalent[note]
-        return note
+        self.note = note
 
     def __repr__(self) -> str:
         """
@@ -68,7 +25,18 @@ class Note:
         Return: <Note: [note]> where [note] is the note_name + sharpness if the sharpness is given, that is not "".
         Repr should display the original note and sharpness, before normalization.
         """
-        return f"<Note: {self.original_note}>"
+        return f"<Note: {self.note[0].upper()}{self.note[1:]}>"
+
+    def get_number(self):
+        if self.note == 'Ab':
+            return 25.5
+        pos = ascii_uppercase.find(self.note[0])
+        if len(self.note) != 1:
+            if self.note[1] == '#':
+                pos += .5
+            elif self.note[1].lower() == 'b':
+                pos -= .5
+        return pos
 
     def __eq__(self, other):
         """
@@ -78,8 +46,7 @@ class Note:
         """
         if not isinstance(other, Note):
             return False
-        if self.note == other.note:
-            return True
+        return self.get_number() == other.get_number()
 
 
 class NoteCollection:
@@ -102,8 +69,9 @@ class NoteCollection:
         :param note: Input object to add to the collection
         """
         if not isinstance(note, Note):
-            raise TypeError("Note is not an instance of Note class.")
-        self.notes.append(note)
+            raise TypeError
+        elif note not in self.notes:
+            self.notes.append(note)
 
     def pop(self, note: str) -> Note | None:
         """
@@ -115,9 +83,8 @@ class NoteCollection:
         :return: The removed Note object or None.
         """
         for i, n in enumerate(self.notes):
-            if n.note == note.upper():
+            if n.note == note:
                 return self.notes.pop(i)
-        return None
 
     def extract(self) -> list[Note]:
         """
@@ -136,9 +103,7 @@ class NoteCollection:
 
         :return: A list of all the notes that were previously in the collection.
         """
-        extracted_notes = self.notes.copy()
-        self.notes.clear()
-        return extracted_notes
+        return []
 
     def get_content(self) -> str:
         """
@@ -160,24 +125,16 @@ class NoteCollection:
 
         :return: Content as a string
         """
-        if not self.notes:
-            return "Notes:\n Empty"
-
-        sorted_notes = sorted(self.notes, key=lambda x: x.note)
-        content = "Notes:\n"
-        for note in sorted_notes:
-            content += f" * {note.note}\n"
-        return content
-
+        return ''
 
 if __name__ == '__main__':
-    note_one = Note('a')  # yes, lowercase
+    note_one = Note('a') # yes, lowercase
     note_two = Note('C')
     note_three = Note('Eb')
     collection = NoteCollection()
 
-    print(note_one)  # <Note: A>
-    print(note_three)  # <Note: Eb>
+    print(note_one) # <Note: A>
+    print(note_three) # <Note: Eb>
 
     collection.add(note_one)
     collection.add(note_two)
@@ -187,7 +144,7 @@ if __name__ == '__main__':
     #   * A
     #   * C
 
-    print(collection.extract())  # [<Note: A>,<Note: C>]
+    print(collection.extract()) # [<Note: A>,<Note: C>]
     print(collection.get_content())
     # Notes:
     #  Empty
