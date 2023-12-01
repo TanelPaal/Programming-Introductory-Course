@@ -1,5 +1,5 @@
 """Music."""
-
+from string import ascii_uppercase
 
 class Note:
     """
@@ -34,7 +34,6 @@ class Note:
                        'Y#': 'Zb', 'Zb': 'Y#',
                        'Z#': 'Ab', 'Ab': 'Z#'}
 
-
     def __init__(self, note: str):
         """Initialize the class.
 
@@ -47,7 +46,6 @@ class Note:
         self.original_note = note
         self.note = note[0].upper()  # Normalizing to uppercase.
 
-
     def __repr__(self) -> str:
         """
         Representation of the Note class.
@@ -58,6 +56,18 @@ class Note:
         return f"<Note: {self.original_note}>"
 
 
+    def get_numerical_value(self):
+        """
+        Return the numerical value of the note.
+
+        A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6
+        # = +0.5, b = -0.5
+        NB! Ab == Z#
+        """
+        pos = ascii_uppercase.index(self.note[0])
+        if self.note[1] == '#':
+            return pos + 0.5
+
     def __eq__(self, other):
         """
         Compare two Notes.
@@ -67,11 +77,11 @@ class Note:
         if not isinstance(other, Note):
             return False
         # Check direct equality or equivalent notes.
-        return (self.note == other.note or self.note in Note.note_equivalent and Note.note_equivalent[self.note] == other.note)
-
+        return self.get_numerical_value() == other.get_numerical_value() or self.note == other.note
 
 class NoteCollection:
     """NoteCollection class."""
+
 
     def __init__(self):
         """
@@ -79,6 +89,7 @@ class NoteCollection:
 
         You will likely need to add something here, maybe a dict or a list?
         """
+
 
     def add(self, note: Note) -> None:
         """
