@@ -169,7 +169,8 @@ class Chord:
         self.chord_name = chord_name
 
         # Check for duplicate notes.
-        if len(set(self.notes)) != len(self.notes):
+        note_names = [note.note for note in self.notes if note]
+        if len(set(note_names)) != len(note_names):
             raise DuplicateNoteNamesException
 
     def __repr__(self) -> str:
