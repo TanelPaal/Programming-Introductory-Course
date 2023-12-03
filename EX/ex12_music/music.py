@@ -143,7 +143,7 @@ class NoteCollection:
         if not self.notes:
             return "Notes:\n  Empty"
 
-        sorted_notes = sorted(self.notes, key=lambda note: (note.note, note.note[1:] if len(note.note) > 1 else ''))
+        sorted_notes = sorted(self.notes, key=lambda x: x.note)
         content = "Notes:\n" + "\n".join(f"  * {note.note}" for note in sorted_notes)
         return content
 
