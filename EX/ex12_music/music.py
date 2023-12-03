@@ -146,7 +146,7 @@ class NoteCollection:
         sorted_notes = sorted(self.notes, key=lambda x: x.note)
         content = "Notes:"
         for note in sorted_notes:
-            content += f"\n  * {note}"
+            content += f"\n  * {note.note}"
         return content
 
 
