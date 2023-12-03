@@ -141,7 +141,7 @@ class NoteCollection:
         :return: Content as a string
         """
         if not self.notes:
-            return "Notes:\n  Empty"
+            return "Notes:\n  Empty."
 
         sorted_notes = sorted(self.notes, key=lambda x: x.note)
         content = "Notes:"
