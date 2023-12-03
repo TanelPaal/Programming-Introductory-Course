@@ -22,6 +22,7 @@ class Note:
         self.note = self.normalize_note(note)
 
     def normalize_note(self, note):
+        """Normalize the note."""
         # Replace 'b' with '#' for consistency
         if len(note) > 1 and note[1].lower() == 'b':
             # Find the previous note
