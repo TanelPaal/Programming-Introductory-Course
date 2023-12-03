@@ -19,9 +19,9 @@ class Note:
         NB! Ab == Z#
         """
         self.original_note = note.capitalize()
-        self.note = self._normalize(note)
+        self.note = self.normalize_note(note)
 
-    def _normalize(self, note):
+    def normalize_note(self, note):
         # Replace 'b' with '#' for consistency
         if len(note) > 1 and note[1].lower() == 'b':
             # Find the previous note
@@ -94,9 +94,10 @@ class NoteCollection:
         :param note: Note to remove
         :return: The removed Note object or None.
         """
-        for i, n in enumerate(self.notes):
-            if n.note == note:
-                return self.notes.pop(i)
+        note_to_remove = Note(note)
+        if note_to_remove in self.notes:
+            return self.notes.pop(self.notes.index(note_to_remove))
+        return None
 
     def extract(self) -> list[Note]:
         """
@@ -116,7 +117,7 @@ class NoteCollection:
         :return: A list of all the notes that were previously in the collection.
         """
         extracted_notes = self.notes.copy()
-        self.notes.clear()
+        self.notes = []
         return extracted_notes
 
     def get_content(self) -> str:
