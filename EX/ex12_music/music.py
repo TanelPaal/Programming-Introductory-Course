@@ -51,6 +51,10 @@ class Note:
                 pos -= .5
         return pos
 
+    def __hash__(self):
+        """Hash the note."""
+        return hash(self.get_number())
+
     def __eq__(self, other):
         """
         Compare two Notes.
@@ -161,19 +165,12 @@ class Chord:
         A chord consists of 2-3 notes and their chord product (string).
         If any of the parameters are the same, raise the 'DuplicateNoteNamesException' exception.
         """
-        self.notes = [note_one, note_two]
-        if note_three:
-            self.notes.append(note_three)
-
-        notes = [note.note.upper() for note in self.notes]
-        for n in notes:
-            if n == chord_name.upper():
-                raise DuplicateNoteNamesException
-
-        if len(set(notes)) != len(self.notes):
-            raise DuplicateNoteNamesException
-
+        self.notes = [note_one, note_two, note_three] if note_three else [note_one, note_two]
         self.chord_name = chord_name
+
+        # Check for duplicate notes.
+        if len(set(self.notes)) != len(self.notes):
+            raise DuplicateNoteNamesException
 
     def __repr__(self) -> str:
         """
@@ -183,9 +180,6 @@ class Chord:
         """
         return f"<Chord: {self.chord_name}>"
 
-def sorted_notes(notes):
-    """Sort notes."""
-    return sorted(notes, key=lambda x: x.note)
 
 class Chords:
     """Chords class."""
@@ -196,7 +190,7 @@ class Chords:
 
         Add whatever you need to make this class function.
         """
-        self.chords = {}
+        self.chords = []
 
     def add(self, chord: Chord) -> None:
         """
@@ -206,10 +200,11 @@ class Chords:
 
         :param chord: Chord to be added.
         """
-        for notes in self.chords:
-            if sorted_notes(notes) == sorted_notes(chord.notes):
+        # Check for duplicate notes.
+        for existing_chord in self.chords:
+            if set(chord.notes) == set(existing_chord.notes):
                 raise ChordOverlapException
-        self.chords[chords] = chord
+        self.chords.append(chord)
 
     def get(self, first_note: Note, second_note: Note, third_note: Note = None) -> Chord | None:
         """
@@ -233,13 +228,10 @@ class Chords:
         :param third_note: The third note of the chord.
         :return: Chord or None.
         """
-        chord_to_search = [first_note, second_note]
-        if third_note:
-            chord_to_search.append(third_note)
-
-        for key, val in self.chords.items():
-            if sorted_notes(val) == sorted_notes(chord_to_search):
-                return key
+        notes_set = {first_note, second_note, third_note} if third_note else {first_note, second_note}
+        for chord in self.chords:
+            if notes_set == set(chord.notes):
+                return chord
         return None
 
 
@@ -252,34 +244,6 @@ class ChordOverlapException(Exception):
 
 
 if __name__ == '__main__':
-    note_one = Note('a')  # yes, lowercase
-    note_two = Note('C')
-    note_three = Note('Eb')
-    collection = NoteCollection()
-
-    print(note_one)  # <Note: A>
-    print(note_three)  # <Note: Eb>
-
-    collection.add(note_one)
-    collection.add(note_two)
-
-    print(collection.get_content())
-    # Notes:
-    #   * A
-    #   * C
-
-    print(collection.extract())  # [<Note: A>,<Note: C>]
-    print(collection.get_content())
-    # Notes:
-    #  Empty
-
-    collection.add(note_one)
-    collection.add(note_two)
-    collection.add(note_three)
-
-    print(collection.pop('a') == note_one)  # True
-    print(collection.pop('Eb') == note_three)  # True
-
     chords = Chords()
     chords.add(Chord(Note('A'), Note('B'), 'Amaj', Note('C')))
     print(chords.get(Note('A'), Note('B'), Note('C')))  # ->  <Chord: Amaj>
