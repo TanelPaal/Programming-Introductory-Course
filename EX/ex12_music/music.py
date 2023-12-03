@@ -180,7 +180,6 @@ class Chord:
 
         self.chord_name = chord_name
 
-
     def __repr__(self) -> str:
         """
         Chord representation.
