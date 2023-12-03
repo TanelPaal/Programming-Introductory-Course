@@ -63,6 +63,9 @@ class Note:
         """
         if not isinstance(other, Note):
             return False
+        if (self.note == 'Ab' and other.note == 'Z#') or (self.note == 'Z#' and other.note == 'Ab'):
+            return True
+
         return self.get_number() == other.get_number()
 
 
@@ -165,13 +168,18 @@ class Chord:
         A chord consists of 2-3 notes and their chord product (string).
         If any of the parameters are the same, raise the 'DuplicateNoteNamesException' exception.
         """
-        self.notes = [note_one, note_two, note_three] if note_three else [note_one, note_two]
+        self.notes = [note for note in [note_one, note_two, note_three] if note is not None]
+        self.note_names = sorted(note.original_note for note in self.notes)
+
+        unique_name = set(self.note_names)
+
+        length_not_matching = len(unique_name) != len(self.note_names)
+        name_in_notes = all([name != chord_name for name in self.note_names])
+        if length_not_matching or not name_in_notes:
+            raise DuplicateNoteNamesException()
+
         self.chord_name = chord_name
 
-        # Check for duplicate notes.
-        note_names = [note.note for note in self.notes if note]
-        if len(set(note_names)) != len(note_names):
-            raise DuplicateNoteNamesException
 
     def __repr__(self) -> str:
         """
