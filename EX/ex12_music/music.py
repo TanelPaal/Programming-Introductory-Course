@@ -144,7 +144,9 @@ class NoteCollection:
             return "Notes:\n  Empty"
 
         sorted_notes = sorted(self.notes, key=lambda x: x.note)
-        content = "Notes:\n" + "\n".join(f"  * {note.note}" for note in sorted_notes)
+        content = "Notes:"
+        for note in sorted_notes:
+            content += f"\n  * {note}"
         return content
 
 
