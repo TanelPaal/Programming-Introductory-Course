@@ -26,14 +26,15 @@ class Crewmate:
 
 class Impostor:
     """ Impostor class. """
-    def __init__(self, color: str):
+    def __init__(self, color: str, role: str = "Impostor"):
         """ Impostor constructor. """
         self.color = color.title()
+        self.role = role.title()
         self.kills = 0
 
     def __repr__(self):
         """ Impostor representation. """
-        return f"Impostor {self.color}, kills: {self.kills}"
+        return f"Impostor {self.color}, kills: {self.kills}."
 
 
 class Spaceship:
