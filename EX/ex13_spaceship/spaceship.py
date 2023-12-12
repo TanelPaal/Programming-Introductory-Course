@@ -87,6 +87,10 @@ class Spaceship:
 
     def kill_crewmate(self, impostor: Impostor, crewmate_color: str):
         """Kill crewmate."""
+        if impostor not in self.impostor_list:
+            print(f"{impostor.color} is not an Impostor on the Spaceship.")
+            return
+
         for crewmate in self.crewmate_list:
             if crewmate.color.lower() == crewmate_color.lower():
                 if not crewmate.protected:
