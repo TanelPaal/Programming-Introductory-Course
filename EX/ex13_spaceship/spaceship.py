@@ -3,6 +3,7 @@
 
 class Crewmate:
     """Crewmate class."""
+
     crewmate_roles = ["Sheriff", "Guardian Angel", "Altruist"]
 
     def __init__(self, color: str, role: str, tasks: int = 10):
@@ -40,6 +41,7 @@ class Impostor:
 
 class Spaceship:
     """Spaceship class."""
+
     max_impostors = 3
 
     def __init__(self):
