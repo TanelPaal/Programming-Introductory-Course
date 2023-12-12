@@ -149,7 +149,7 @@ class Spaceship:
 
     def get_impostor_with_most_kills(self):
         """ Get impostor with most kills. """
-        pass
+        return self.sort_impostors_by_kills()[0]
 
 
 if __name__ == "__main__":
