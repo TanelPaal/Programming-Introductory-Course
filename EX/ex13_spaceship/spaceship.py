@@ -124,7 +124,7 @@ class Spaceship:
 
     def sort_crewmates_by_tasks(self):
         """ Sort crewmate by tasks. """
-        return sorted(self.crewmate_list, key=lambda crewmate: crewmate.tasks)
+        return sorted(self.crewmate_list, key=lambda crewmate: crewmate.tasks, reverse=True)
 
     def sort_impostors_by_kills(self):
         """ Sort impostors by kills. """
@@ -145,7 +145,7 @@ class Spaceship:
 
     def get_crewmate_with_most_tasks_done(self):
         """ Crewmate with most tasks done. """
-        return self.sort_crewmates_by_tasks()[-1]
+        return self.sort_crewmates_by_tasks()[0]
 
     def get_impostor_with_most_kills(self):
         """ Get impostor with most kills. """
