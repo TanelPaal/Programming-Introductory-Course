@@ -26,8 +26,9 @@ class Crewmate:
 
 class Impostor:
     """Impostor class."""
+
     def __init__(self, color: str, role: str = "Impostor"):
-        """ Impostor constructor. """
+        """Impostor constructor."""
         self.color = color.title()
         self.role = role.title()
         self.kills = 0
