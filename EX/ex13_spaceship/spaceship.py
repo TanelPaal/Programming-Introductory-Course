@@ -124,7 +124,7 @@ class Spaceship:
 
     def sort_crewmates_by_tasks(self):
         """ Sort crewmate by tasks. """
-        return sorted(self.crewmate_list, key=lambda crewmate: crewmate.tasks, reverse=True)
+        return sorted(self.crewmate_list, key=lambda crewmate: crewmate.tasks)
 
     def sort_impostors_by_kills(self):
         """ Sort impostors by kills. """
