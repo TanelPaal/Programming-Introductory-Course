@@ -81,16 +81,17 @@ def stream_request(url: str) -> str:
     :param url: The URL to send the GET request to.
     :return: A string containing the streamed content.
     """
+    content = ""
     try:
-        with requests.get(url, stream=True) as response:
-            response.raise_for_status()
-            chunks = []
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    chunks.append(chunk.decode("utf-8"))
-            return "".join(chunks)
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+        for chunk in response.iter_lines():
+            if chunk:
+                decoded_chunk = chunk.decode("utf-8")
+                content += decoded_chunk + '\n'
+        return content
     except requests.exceptions.RequestException as error:
-        return str(error)
+        return error
 
 
 def get_authenticated_request(url: str, auth_token: str) -> Any | requests.RequestException:
