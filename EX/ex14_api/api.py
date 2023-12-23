@@ -91,7 +91,7 @@ def stream_request(url: str) -> str:
                 content += decoded_chunk + '\n'
         return content
     except requests.exceptions.RequestException as error:
-        return error
+        return str(error)
 
 
 def get_authenticated_request(url: str, auth_token: str) -> Any | requests.RequestException:
@@ -105,7 +105,13 @@ def get_authenticated_request(url: str, auth_token: str) -> Any | requests.Reque
     :return: Server's response json object or the exception object if an error occurs.
 
     """
-    pass
+    headers = {"Authorization": f"Bearer {auth_token}"}
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as error:
+        return error
 
 
 def advanced_user_filter(url, min_followers: int, min_posts: int, min_following: int) -> list:
