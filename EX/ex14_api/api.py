@@ -2,6 +2,7 @@
 from typing import Any
 import requests
 import requests.exceptions
+from requests import Response, RequestException
 
 
 def get_request(url: str) -> int:
@@ -34,7 +35,7 @@ def get_request_error_handling(url: str) -> int | requests.RequestException:
         return error
 
 
-def post_request(url: str, data: dict) -> requests.Response:
+def post_request(url: str, data: dict) -> Response | RequestException:
     """
     Send an HTTP POST request with JSON data to the specified URL.
 
@@ -127,7 +128,29 @@ def advanced_user_filter(url, min_followers: int, min_posts: int, min_following:
     :param min_following: Minimum following required.
     :return: List of user data dictionaries.
     """
-    pass
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        users = response.json()
+
+        filtered_users = []
+        for user in users:
+            if (user.get('followers', 0) >= min_followers and
+                    user.get('posts', 0) >= min_posts and
+                    user.get('following', 0) >= min_following):
+                filtered_users.append({
+                    'username': user.get('username'),
+                    'full_name': user.get('full_name'),
+                    'followers': user.get('followers'),
+                    'following': user.get('following'),
+                    'posts': user.get('posts')
+                })
+
+        return filtered_users
+
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
+        return []
 
 
 def fetch_aggregate_data(url: str) -> dict:
