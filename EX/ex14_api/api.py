@@ -135,9 +135,7 @@ def advanced_user_filter(url, min_followers: int, min_posts: int, min_following:
 
         filtered_users = []
         for user in users:
-            if (user.get('followers', 0) >= min_followers and
-                    user.get('posts', 0) >= min_posts and
-                    user.get('following', 0) >= min_following):
+            if user.get('followers', 0) >= min_followers and user.get('posts', 0) >= min_posts and user.get('following', 0) >= min_following:
                 filtered_users.append({
                     'username': user.get('username'),
                     'full_name': user.get('full_name'),
