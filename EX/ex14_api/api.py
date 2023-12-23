@@ -44,7 +44,12 @@ def post_request(url: str, data: dict) -> requests.Response:
     :param data: Dictionary to be sent along with the POST request.
     :return: Server's response json object or the exception object if an error occurs.
     """
-    pass
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        return response
+    except requests.exceptions.RequestException as error:
+        return error
 
 
 def delete_request(url: str) -> int | requests.RequestException:
