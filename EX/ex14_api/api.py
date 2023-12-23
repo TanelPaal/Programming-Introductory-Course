@@ -28,6 +28,7 @@ def get_request_error_handling(url: str) -> int | requests.RequestException:
     """
     try:
         response = requests.get(url)
+        response.raise_for_status()
         return response.status_code
     except requests.exceptions.RequestException as error:
         return error
