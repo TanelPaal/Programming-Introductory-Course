@@ -29,14 +29,6 @@ def get_request_error_handling(url: str) -> int | requests.RequestException:
     try:
         response = requests.get(url)
         return response.status_code
-    except requests.exceptions.HTTPError as http_error:
-        return http_error
-    except requests.exceptions.Timeout as timeout_error:
-        return timeout_error
-    except requests.exceptions.ConnectionError as connection_error:
-        return connection_error
-    except requests.exceptions.TooManyRedirects as redirect_error:
-        return redirect_error
     except requests.exceptions.RequestException as error:
         return error
 
