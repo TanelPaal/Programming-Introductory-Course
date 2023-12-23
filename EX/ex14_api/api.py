@@ -13,12 +13,8 @@ def get_request(url: str) -> int:
     :param url: The URL to which the GET request will be sent.
     :return: Server's response to the request.
     """
-    try:
-        response = requests.get(url)
-        return response.status_code
-    except requests.exceptions.RequestException as error:
-        print(f'Error: {error}')
-        return None
+    response = requests.get(url)
+    return response.status_code
 
 
 def get_request_error_handling(url: str) -> int | requests.RequestException:
@@ -33,9 +29,14 @@ def get_request_error_handling(url: str) -> int | requests.RequestException:
     try:
         response = requests.get(url)
         return response.status_code
+    except requests.exceptions.HTTPError as http_error:
+        return http_error
+    except requests.exceptions.Timeout as timeout_error:
+        return timeout_error
+    except requests.exceptions.ConnectionError as connection_error:
+        return connection_error
     except requests.exceptions.RequestException as error:
-        print(f'Error: {error}')
-        return None
+        return error
 
 
 def post_request(url: str, data: dict) -> requests.Response:
