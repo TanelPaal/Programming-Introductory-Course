@@ -35,6 +35,8 @@ def get_request_error_handling(url: str) -> int | requests.RequestException:
         return timeout_error
     except requests.exceptions.ConnectionError as connection_error:
         return connection_error
+    except requests.exceptions.TooManyRedirects as redirect_error:
+        return redirect_error
     except requests.exceptions.RequestException as error:
         return error
 
