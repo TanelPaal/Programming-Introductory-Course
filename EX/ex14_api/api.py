@@ -171,7 +171,34 @@ def fetch_aggregate_data(url: str) -> dict:
     :param url: URL from which to fetch user data.
     :return: Aggregated data including total and average values.
     """
-    pass
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        users = response.json()
+
+        total_followers = total_following = total_posts = 0
+        for user in users:
+            total_followers += user.get('followers', 0)
+            total_following += user.get('following', 0)
+            total_posts += user.get('posts', 0)
+
+        num_users = len(users)
+        avg_followers = total_followers / num_users if num_users else 0
+        avg_following = total_following / num_users if num_users else 0
+        avg_posts = total_posts / num_users if num_users else 0
+
+        return {
+            'average_followers': avg_followers,
+            'average_following': avg_following,
+            'average_posts': avg_posts,
+            'total_followers': total_followers,
+            'total_following': total_following,
+            'total_posts': total_posts
+        }
+
+    except requests.RequestException as error:
+        print(f"Error fetching data: {error}")
+        return {}
 
 
 if __name__ == '__main__':
