@@ -132,6 +132,7 @@ class MovieFilter:
         :return: None
         """
         self.movie_data = movie_data
+
     def filter_movies_by_rating_value(self, rating: float, comp: str) -> pd.DataFrame | None:
         """
         Return pandas DataFrame of self.movie_data filtered according to rating and comp string value.
@@ -153,7 +154,7 @@ class MovieFilter:
             return self.movie_data[self.movie_data['rating'] > rating]
         elif comp == 'equals':
             return self.movie_data[self.movie_data['rating'] == rating]
-        else: # less_than
+        else:  # less_than
             return self.movie_data[self.movie_data['rating'] < rating]
 
     def filter_movies_by_genre(self, genre: str) -> pd.DataFrame:
