@@ -41,7 +41,6 @@ class MovieData:
         self.ratings = pd.read_csv(ratings_filename)
         self.tags = pd.read_csv(tags_filename)
 
-
     def create_aggregate_movie_dataframe(self, nan_placeholder: str = '') -> None:
         """
         Create an aggregate dataframe from frames self.movies, self.ratings and self.tags.
@@ -60,7 +59,21 @@ class MovieData:
         :param nan_placeholder: Value to replace all np.nan-valued elements in column 'tag'.
         :return: None
         """
-        pass
+        # Group and aggregate tags
+        tags_grouped = self.tags.groupby('movieId')['tag'].apply(lambda x: ' '.join(x)).reset_index()
+
+        # Merge movies and tags
+        movies_tags = pd.merge(self.movies, tags_grouped, on='movieId', how='left')
+
+        # Replace NaN in tags with placeholder
+        movies_tags['tag'].fillna(nan_placeholder)
+
+        # Merge with ratings and drop unwanted columns
+        merged_data = pd.merge(movies_tags, self.ratings, on='movieId')
+        merged_data.drop(['userId', 'timestamp'], axis=1, inplace=True)
+
+        # Reorder columns to match the specified format
+        self.aggregate_movie_dataframe = merged_data[['movieId', 'title', 'genres', 'rating', 'tag']]
 
     def get_aggregate_movie_dataframe(self) -> pd.DataFrame | None:
         """
@@ -68,7 +81,7 @@ class MovieData:
 
         :return: pandas DataFrame
         """
-        pass
+        return self.aggregate_movie_dataframe
 
     def get_movies_dataframe(self) -> pd.DataFrame | None:
         """
@@ -76,7 +89,7 @@ class MovieData:
 
         :return: pandas DataFrame
         """
-        pass
+        return self.movies
 
     def get_ratings_dataframe(self) -> pd.DataFrame | None:
         """
@@ -84,7 +97,7 @@ class MovieData:
 
         :return: pandas DataFrame
         """
-        pass
+        return self.ratings
 
     def get_tags_dataframe(self) -> pd.DataFrame | None:
         """
@@ -92,7 +105,7 @@ class MovieData:
 
         :return: pandas DataFrame
         """
-        pass
+        self.tags
 
 
 class MovieFilter:
