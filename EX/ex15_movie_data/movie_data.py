@@ -131,8 +131,7 @@ class MovieFilter:
         :param movie_data: pandas DataFrame object
         :return: None
         """
-        pass
-
+        self.movie_data = movie_data
     def filter_movies_by_rating_value(self, rating: float, comp: str) -> pd.DataFrame | None:
         """
         Return pandas DataFrame of self.movie_data filtered according to rating and comp string value.
@@ -144,7 +143,18 @@ class MovieFilter:
         :param comp: string representation of the comparison operation
         :return: pandas DataFrame object of the filtration result
         """
-        pass
+        if rating is None or rating < 0:
+            raise ValueError("Invalid rating value")
+
+        if comp not in ['greater_than', 'equals', 'less_than']:
+            raise ValueError("Invalid comparison string")
+
+        if comp == 'greater_than':
+            return self.movie_data[self.movie_data['rating'] > rating]
+        elif comp == 'equals':
+            return self.movie_data[self.movie_data['rating'] == rating]
+        else: # less_than
+            return self.movie_data[self.movie_data['rating'] < rating]
 
     def filter_movies_by_genre(self, genre: str) -> pd.DataFrame:
         """
@@ -158,7 +168,10 @@ class MovieFilter:
         :param genre: string value to filter by
         :return: pandas DataFrame object of the filtration result
         """
-        pass
+        if genre is None or genre == '':
+            raise ValueError("Invalid genre")
+
+        return self.movie_data[self.movie_data['genres'].str.contains(genre, case=False)]
 
     def filter_movies_by_tag(self, tag: str) -> pd.DataFrame:
         """
@@ -172,7 +185,10 @@ class MovieFilter:
         :param tag: string value tu filter by
         :return: pandas DataFrame object of the filtration result
         """
-        pass
+        if tag is None or tag == '':
+            raise ValueError("Invalid tag")
+
+        return self.movie_data[self.movie_data['tag'].str.contains(tag, case=False)]
 
     def filter_movies_by_year(self, year: int) -> pd.DataFrame:
         """
@@ -185,7 +201,9 @@ class MovieFilter:
         :param year: integer value of the year to filter by
         :return: pandas DataFrame object of the filtration result
         """
-        pass
+        if year is None or year < 0:
+            raise ValueError("Invalid year")
+        return self.movie_data[self.movie_data['title'].str.contains(str(year))]
 
     def get_decent_movies(self) -> pd.DataFrame:
         """
@@ -193,7 +211,7 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        pass
+        return self.filter_movies_by_rating_value(3.0, 'greater_than')
 
     def get_decent_comedy_movies(self) -> pd.DataFrame | None:
         """
@@ -201,7 +219,8 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        pass
+        decent_movies = self.get_decent_movies()
+        return decent_movies[decent_movies['genres'].str.contains('Comedy', case=False)]
 
     def get_decent_children_movies(self) -> pd.DataFrame | None:
         """
@@ -209,7 +228,8 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        pass
+        decent_movies = self.get_decent_movies()
+        return decent_movies[decent_movies['genres'].str.contains('Children', case=False)]
 
 
 if __name__ == '__main__':
