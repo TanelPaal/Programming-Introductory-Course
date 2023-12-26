@@ -220,8 +220,16 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
+        original = self.movie_data.copy()
+
+        self.movie_data = self.filter_movies_by_genre('Comedy')
+        decent_movies = pd.concat([
+            self.filter_movies_by_rating_value(3.0, 'greater_than'),
+            self.filter_movies_by_rating_value(3.0, 'equals'),
+        ]).drop_duplicates()
+        self.movie_data = original
         decent_movies = self.get_decent_movies()
-        return decent_movies[decent_movies['genres'].str.contains('Comedy', case=False)]
+        return decent_movies
 
     def get_decent_children_movies(self) -> pd.DataFrame | None:
         """
@@ -229,8 +237,15 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        decent_movies = self.get_decent_movies()
-        return decent_movies[decent_movies['genres'].str.contains('Children', case=False)]
+        original = self.movie_data.copy()
+
+        self.movie_data = self.filter_movies_by_genre('Children')
+        decent_movies = pd.concat([
+            self.filter_movies_by_rating_value(3.0, 'greater_than'),
+            self.filter_movies_by_rating_value(3.0, 'equals')
+        ]).drop_duplicates()
+        self.movie_data = original
+        return decent_movies
 
 
 if __name__ == '__main__':
