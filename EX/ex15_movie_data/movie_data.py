@@ -61,7 +61,7 @@ class MovieData:
         """
         columns = ['timestamp', 'userId']
 
-        ratings = self.ratings.drop(columns, axis=1)
+        ratings = self.ratings.drop(labels=columns, axis=1)
 
         necessary_tag_columns = self.tags.drop(labels=columns, axis=1)
         tags = necessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
@@ -118,6 +118,12 @@ class MovieFilter:
         """
         self.movie_data: pd.DataFrame | None = None
 
+    def __intersect_two_dataframes(self, left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
+        """Finds the intersection of two dataframes."""
+        intersections = set(left.index) & set(right.index)
+
+        return self.movie_data.filter(items=sorted(intersections), axis=0)
+
     def set_movie_data(self, movie_data: pd.DataFrame) -> None:
         """
         Set the value of self.movie_data to be given argument movie_data.
@@ -126,12 +132,6 @@ class MovieFilter:
         :return: None
         """
         self.movie_data = movie_data
-
-    def __intersect_two_dataframes(self, left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
-        """Finds the intersection of two dataframes."""
-        intersections = set(left.index) & set(right.index)
-
-        return self.movie_data.filter(items=sorted(intersections), axis=0)
 
     def filter_movies_by_rating_value(self, rating: float, comp: str) -> pd.DataFrame | None:
         """
@@ -217,9 +217,9 @@ class MovieFilter:
         greater = self.filter_movies_by_rating_value(3.0, 'greater_than')
         equal = self.filter_movies_by_rating_value(3.0, 'equals')
 
-        union = pd.concat([greater, equal]).drop_duplicates()
+        union = set(equal.index) | set(greater.index)
 
-        return self.movie_data.filter(items=union.index, axis=0)
+        return self.movie_data.filter(items=union, axis=0)
 
     def get_decent_comedy_movies(self) -> pd.DataFrame | None:
         """
