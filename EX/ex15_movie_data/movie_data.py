@@ -17,10 +17,10 @@ class MovieData:
         Here we declare variables for storing initial data and a variable for storing
         an aggregate of processed initial data.
         """
-        self.movies = None or pd.DataFrame
-        self.ratings = None or pd.DataFrame
-        self.tags = None or pd.DataFrame
-        self.aggregate_movie_dataframe = None or pd.DataFrame
+        self.movies: pd.DataFrame | None = None
+        self.ratings: pd.DataFrame | None = None
+        self.tags: pd.DataFrame | None = None
+        self.aggregate_movie_dataframe: pd.DataFrame | None = None
 
     def load_data(self, movies_filename: str, ratings_filename: str, tags_filename: str) -> None:
         """
@@ -59,21 +59,15 @@ class MovieData:
         :param nan_placeholder: Value to replace all np.nan-valued elements in column 'tag'.
         :return: None
         """
-        # Group and aggregate tags
-        tags_grouped = self.tags.groupby('movieId')['tag'].apply(lambda x: ' '.join(x)).reset_index()
+        columns = ['timestamp', 'userId']
 
-        # Merge movies and tags
-        movies_tags = pd.merge(self.movies, tags_grouped, on='movieId', how='left')
+        ratings = self.ratings.drop(columns, axis=1)
 
-        # Replace NaN in tags with placeholder
-        movies_tags['tag'].fillna(nan_placeholder)
+        necessary_tag_columns = self.tags.drop(labels=columns, axis=1)
+        tags = necessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
 
-        # Merge with ratings and drop unwanted columns
-        merged_data = pd.merge(movies_tags, self.ratings, on='movieId')
-        merged_data.drop(['userId', 'timestamp'], axis=1, inplace=True)
-
-        # Reorder columns to match the specified format
-        self.aggregate_movie_dataframe = merged_data[['movieId', 'title', 'genres', 'rating', 'tag']]
+        self.aggregate_movie_dataframe = self.movies.merge(ratings, on='movieId', how='left').merge(tags, on='movieId', how='left')
+        self.aggregate_movie_dataframe['tag'] = self.aggregate_movie_dataframe['tag'].fillna(nan_placeholder)
 
     def get_aggregate_movie_dataframe(self) -> pd.DataFrame | None:
         """
@@ -122,7 +116,7 @@ class MovieFilter:
         Here we only need to store the aggregate dataframe from MovieData class for now.
         For OP part, some more variables might be a good idea here.
         """
-        self.movie_data = None or pd.DataFrame
+        self.movie_data: pd.DataFrame | None = None
 
     def set_movie_data(self, movie_data: pd.DataFrame) -> None:
         """
@@ -132,6 +126,12 @@ class MovieFilter:
         :return: None
         """
         self.movie_data = movie_data
+
+    def __intersect_two_dataframes(self, left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
+        """Finds the intersection of two dataframes."""
+        intersections = set(left.index) & set(right.index)
+
+        return self.movie_data.filter(items=sorted(intersections), axis=0)
 
     def filter_movies_by_rating_value(self, rating: float, comp: str) -> pd.DataFrame | None:
         """
@@ -144,18 +144,20 @@ class MovieFilter:
         :param comp: string representation of the comparison operation
         :return: pandas DataFrame object of the filtration result
         """
+        allowed = {"greater_than", "equals", "less_than"}
+
         if rating is None or rating < 0:
-            raise ValueError("Invalid rating value")
+            raise ValueError("Rating can not be a negative number or 'None'.")
+        elif comp not in allowed:
+            raise ValueError(f"Comparison value of '{comp}' is not 'greater_than', 'equals' or 'less_than'.")
 
-        if comp not in ['greater_than', 'equals', 'less_than']:
-            raise ValueError("Invalid comparison string")
-
-        if comp == 'greater_than':
-            return self.movie_data[self.movie_data['rating'] > rating]
-        elif comp == 'equals':
-            return self.movie_data[self.movie_data['rating'] == rating]
-        else:  # less_than
-            return self.movie_data[self.movie_data['rating'] < rating]
+        match comp:
+            case "less_than":
+                return self.movie_data[self.movie_data["rating"] < rating]
+            case "equals":
+                return self.movie_data[self.movie_data["rating"] == rating]
+            case "greater_than":
+                return self.movie_data[self.movie_data["rating"] > rating]
 
     def filter_movies_by_genre(self, genre: str) -> pd.DataFrame:
         """
@@ -172,7 +174,7 @@ class MovieFilter:
         if genre is None or genre == '':
             raise ValueError("Invalid genre")
 
-        return self.movie_data[self.movie_data['genres'].str.contains(genre, case=False)]
+        return self.movie_data[self.movie_data.genres.str.contains(genre, case=False, regex=False)]
 
     def filter_movies_by_tag(self, tag: str) -> pd.DataFrame:
         """
@@ -189,7 +191,7 @@ class MovieFilter:
         if tag is None or tag == '':
             raise ValueError("Invalid tag")
 
-        return self.movie_data[self.movie_data['tag'].str.contains(tag, case=False)]
+        return self.movie_data[self.movie_data.tag.str.contains(tag, case=False, regex=False)]
 
     def filter_movies_by_year(self, year: int) -> pd.DataFrame:
         """
@@ -204,7 +206,7 @@ class MovieFilter:
         """
         if year is None or year < 0:
             raise ValueError("Invalid year")
-        return self.movie_data[self.movie_data['title'].str.contains(str(year))]
+        return self.movie_data[self.movie_data.title.str.endswith(f'({year})')]
 
     def get_decent_movies(self) -> pd.DataFrame:
         """
@@ -212,7 +214,12 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        return self.filter_movies_by_rating_value(3.0, 'greater_than')
+        greater = self.filter_movies_by_rating_value(3.0, 'greater_than')
+        equal = self.filter_movies_by_rating_value(3.0, 'equals')
+
+        union = pd.concat([greater, equal]).drop_duplicates()
+
+        return self.movie_data.filter(items=union.index, axis=0)
 
     def get_decent_comedy_movies(self) -> pd.DataFrame | None:
         """
@@ -220,16 +227,10 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        original = self.movie_data.copy()
+        decent = self.get_decent_movies()
+        by_genre = self.filter_movies_by_genre("Comedy")
 
-        self.movie_data = self.filter_movies_by_genre('Comedy')
-        decent_movies = pd.concat([
-            self.filter_movies_by_rating_value(3.0, 'greater_than'),
-            self.filter_movies_by_rating_value(3.0, 'equals'),
-        ]).drop_duplicates()
-        self.movie_data = original
-        decent_movies = self.get_decent_movies()
-        return decent_movies
+        return self.__intersect_two_dataframes(decent, by_genre)
 
     def get_decent_children_movies(self) -> pd.DataFrame | None:
         """
@@ -237,15 +238,10 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        original = self.movie_data.copy()
+        decent = self.get_decent_movies()
+        by_genre = self.filter_movies_by_genre("Children")
 
-        self.movie_data = self.filter_movies_by_genre('Children')
-        decent_movies = pd.concat([
-            self.filter_movies_by_rating_value(3.0, 'greater_than'),
-            self.filter_movies_by_rating_value(3.0, 'equals')
-        ]).drop_duplicates()
-        self.movie_data = original
-        return decent_movies
+        return self.__intersect_two_dataframes(decent, by_genre)
 
 
 if __name__ == '__main__':
