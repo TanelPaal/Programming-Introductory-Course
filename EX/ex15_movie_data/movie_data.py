@@ -105,7 +105,7 @@ class MovieData:
 
         :return: pandas DataFrame
         """
-        self.tags
+        return self.tags
 
 
 class MovieFilter:
