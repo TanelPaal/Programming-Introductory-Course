@@ -119,7 +119,7 @@ class MovieFilter:
         self.movie_data: pd.DataFrame | None = None
 
     def __intersect_two_dataframes(self, left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
-        """Finds the intersection of two dataframes."""
+        """Find the intersection of two dataframes."""
         intersections = set(left.index) & set(right.index)
 
         return self.movie_data.filter(items=sorted(intersections), axis=0)
