@@ -121,7 +121,14 @@ def rainbows(field: str, lower=False) -> int:
     :param field: string to search rainbows from
     :return: number of rainbows in the string
     """
-    pass
+    field = field.lower()
+    print(field)
+    if len(field) < len('rainbow'):
+        return 0
+    if field.startswith('rainbow') or field.startswith('wobniar'):
+        return 1 + rainbows(field[7:], lower)
+    else:
+        return rainbows(field[1:], lower)
 
 
 def longest_substring(text: str) -> str:
@@ -222,7 +229,6 @@ def add_result_to_student(student: Student, grades_count: int, new_grade: int, c
         student.average_grade = round(sum_of_grades / (grades_count + 1), 3)
         student.credit_points += credit_points
         return student
-
 
 
 def get_ordered_students(students: list) -> list:
@@ -354,6 +360,10 @@ if __name__ == '__main__':
             [2, 1, 2],
             [2, 1, 1]]
     print(tic_tac_toe(game))  # = > 1
+
+    print(rainbows("rainbowThisIsJustSomeNoise"))  # = > 1  # Lisaks vikerkaarele on veel sümboleid
+    print(rainbows("WoBniar"))  # = > 1  # Vikerkaar on tagurpidi ja sisaldab suuri tähti
+    print(rainbows("rainbowobniar"))  # = > 1  # Kaks vikerkaart jagavad tähte seega üks neist ei ole valiidne
 
     hotel = Hotel()
     room1 = Room(1, 100)
