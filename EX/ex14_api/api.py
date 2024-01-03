@@ -134,6 +134,7 @@ def advanced_user_filter(url, min_followers: int, min_posts: int, min_following:
         users = response.json()
 
         filtered_users = []
+        # Iterates over users and filters based on criteria.
         for user in users:
             if user.get('followers', 0) >= min_followers and user.get('posts', 0) >= min_posts and user.get('following', 0) >= min_following:
                 filtered_users.append({
@@ -177,6 +178,7 @@ def fetch_aggregate_data(url: str) -> dict:
         users = response.json()
 
         total_followers = total_following = total_posts = 0
+        # Accumulates total followers, following, and posts.
         for user in users:
             total_followers += user.get('followers', 0)
             total_following += user.get('following', 0)
@@ -187,6 +189,7 @@ def fetch_aggregate_data(url: str) -> dict:
         avg_following = total_following / num_users if num_users else 0
         avg_posts = total_posts / num_users if num_users else 0
 
+        # Returns a dictionary with aggregate data.
         return {
             'average_followers': avg_followers,
             'average_following': avg_following,
@@ -203,6 +206,7 @@ def fetch_aggregate_data(url: str) -> dict:
 
 if __name__ == '__main__':
     print(get_request("https://www.google.com"))  # 200
+    print(get_authenticated_request("https://jsonplaceholder.typicode.com/todos/1", "1234"))
     print(advanced_user_filter(
         "https://cs.taltech.ee/services/ex14/json-data",
         750000, 900, 2500))
