@@ -66,9 +66,9 @@ class MovieData:
         ratings = self.ratings.drop(labels=columns, axis=1)
 
         # Drop unwanted columns from tags dataframe.
-        unnecessary_tag_columns = self.tags.drop(labels=columns, axis=1)
+        necessary_tag_columns = self.tags.drop(labels=columns, axis=1)
         # Group by movieID and join tags separated by space.
-        tags = unnecessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
+        tags = necessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
 
         # Merge movies and ratings dataframes.
         self.aggregate_movie_dataframe = self.movies.merge(ratings, on='movieId', how='left').merge(tags, on='movieId', how='left')
