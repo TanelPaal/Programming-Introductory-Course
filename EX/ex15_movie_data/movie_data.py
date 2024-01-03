@@ -59,14 +59,20 @@ class MovieData:
         :param nan_placeholder: Value to replace all np.nan-valued elements in column 'tag'.
         :return: None
         """
+        # Define columns to drop.
         columns = ['timestamp', 'userId']
 
+        # Drop unwanted columns from ratings dataframe.
         ratings = self.ratings.drop(labels=columns, axis=1)
 
-        necessary_tag_columns = self.tags.drop(labels=columns, axis=1)
-        tags = necessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
+        # Drop unwanted columns from tags dataframe.
+        unnecessary_tag_columns = self.tags.drop(labels=columns, axis=1)
+        # Group by movieID and join tags separated by space.
+        tags = unnecessary_tag_columns.groupby('movieId').agg({'tag': lambda x: ' '.join(x)})
 
+        # Merge movies and ratings dataframes.
         self.aggregate_movie_dataframe = self.movies.merge(ratings, on='movieId', how='left').merge(tags, on='movieId', how='left')
+        # Replace NaN values in 'tag' column with the specified placeholder.
         self.aggregate_movie_dataframe['tag'] = self.aggregate_movie_dataframe['tag'].fillna(nan_placeholder)
 
     def get_aggregate_movie_dataframe(self) -> pd.DataFrame | None:
@@ -214,12 +220,8 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        greater = self.filter_movies_by_rating_value(3.0, 'greater_than')
-        equal = self.filter_movies_by_rating_value(3.0, 'equals')
-
-        union = set(equal.index) | set(greater.index)
-
-        return self.movie_data.filter(items=union, axis=0)
+        # Filter movies with rating >= 3.0 directly
+        return self.movie_data[self.movie_data["rating"] >= 3.0]
 
     def get_decent_comedy_movies(self) -> pd.DataFrame | None:
         """
@@ -227,10 +229,9 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        decent = self.get_decent_movies()
-        by_genre = self.filter_movies_by_genre("Comedy")
-
-        return self.__intersect_two_dataframes(decent, by_genre)
+        # Filter comedy movies with rating >= 3.0 in a single step
+        return self.movie_data[
+            (self.movie_data["rating"] >= 3.0) & (self.movie_data["genres"].str.contains("Comedy", case=False))]
 
     def get_decent_children_movies(self) -> pd.DataFrame | None:
         """
@@ -238,10 +239,9 @@ class MovieFilter:
 
         :return: pandas DataFrame object of the search result
         """
-        decent = self.get_decent_movies()
-        by_genre = self.filter_movies_by_genre("Children")
-
-        return self.__intersect_two_dataframes(decent, by_genre)
+        # Filter children's movies with rating >= 3.0 in a single step
+        return self.movie_data[
+            (self.movie_data["rating"] >= 3.0) & (self.movie_data["genres"].str.contains("Children", case=False))]
 
 
 if __name__ == '__main__':
