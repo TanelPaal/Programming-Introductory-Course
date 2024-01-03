@@ -149,7 +149,22 @@ def longest_substring(text: str) -> str:
     abBcd => Bcd
     '' -> ''
     """
-    pass
+    start = max_length = max_start = 0
+    seen_chars = set()
+
+    for end in range(len(text)):
+        lower_char = text[end].lower()
+
+        while lower_char in seen_chars:
+            seen_chars.remove(text[start].lower())
+            start += 1
+
+        seen_chars.add(lower_char)
+        if end - start + 1 > max_length:
+            max_length = end - start + 1
+            max_start = start
+
+    return text[max_start:max_start + max_length]
 
 
 class Student:
@@ -245,7 +260,10 @@ class Room:
 
     def __init__(self, number: int, price: int):
         """Initialize room."""
-        pass
+        self.number = number
+        self.price = price
+        self.features = []
+        self.booked = False
 
     def add_feature(self, feature: str) -> bool:
         """
@@ -256,19 +274,22 @@ class Room:
         - the room is booked.
         Otherwise, add the feature to the room and return True
         """
-        pass
+        if self.booked or feature in self.features:
+            return False
+        self.features.append(feature)
+        return True
 
     def get_features(self) -> list:
         """Return all the features of the room."""
-        pass
+        return self.features
 
     def get_price(self) -> int:
         """Return the price."""
-        pass
+        return self.price
 
     def get_number(self) -> int:
         """Return the room number."""
-        pass
+        return self.number
 
 
 class Hotel:
@@ -276,16 +297,20 @@ class Hotel:
 
     def __init__(self):
         """Initialize hotel."""
-        pass
+        self.rooms = []
 
     def add_room(self, room: Room) -> bool:
         """
         Add room to hotel.
 
         If a room with the given number already exists, do not add a room and return False.
-        Otherwise add the room to hotel and return True.
+        Otherwise, add the room to hotel and return True.
         """
-        pass
+        for rom in self.rooms:
+            if rom.number == room.number:
+                return False
+        self.rooms.append(room)
+        return True
 
     def book_room(self, required_features: list) -> Optional[Room]:
         """
@@ -295,19 +320,30 @@ class Hotel:
         If there are several with the same amount of matching features, return the one with the smallest room number.
         If there is no available rooms, return None
         """
-        pass
+        best_match = None
+        max_features_count = -1
+        for room in self.rooms:
+            if not room.booked:
+                matched_features = len(set(required_features) & set(room.get_features()))
+                if matched_features > max_features_count or (matched_features == max_features_count and room.number < best_match.number):
+                    best_match = room
+                    max_features_count = matched_features
+
+        if best_match:
+            best_match.booked = True
+        return best_match
 
     def get_available_rooms(self) -> list:
         """Return a list of available (not booked) rooms."""
-        pass
+        return [room for room in self.rooms if not room.booked]
 
     def get_rooms(self) -> list:
         """Return all the rooms (both booked and available)."""
-        pass
+        return self.rooms
 
     def get_booked_rooms(self) -> list:
         """Return all the booked rooms."""
-        pass
+        return [room for room in self.rooms if room.booked]
 
     def get_feature_profits(self) -> dict:
         """
@@ -327,7 +363,12 @@ class Hotel:
         'd': 200
         }
         """
-        pass
+        profits = {}
+        for room in self.rooms:
+            if room.booked:
+                for feature in room.get_features():
+                    profits[feature] = profits.get(feature, 0) + room.get_price()
+        return profits
 
     def get_most_profitable_feature(self) -> Optional[str]:
         """
@@ -338,7 +379,10 @@ class Hotel:
         If there are several with the same max value, return the feature which is alphabetically lower (a < z)
         If there are no features booked, return None.
         """
-        pass
+        feature_profits = self.get_feature_profits()
+        if not feature_profits:
+            return None
+        return min(feature_profits, key=lambda feature: (-feature_profits[feature], feature))
 
 
 if __name__ == '__main__':
