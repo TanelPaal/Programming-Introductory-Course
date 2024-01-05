@@ -63,7 +63,10 @@ def without_end(s: str) -> str:
     :param s: String
     :return: String without first and last char.
     """
-    pass
+    if len(s) <= 2:
+        return ''
+    else:
+        return s[1:-1]
 
 
 def non_decreasing_list(nums: list) -> bool:
@@ -108,3 +111,7 @@ if __name__ == '__main__':
     print(lucky_guess(7))
     print(lucky_guess(26))
     print(lucky_guess(-35))
+
+    print(without_end('Hello'))
+    print(without_end('java'))
+    print(without_end('coding'))
