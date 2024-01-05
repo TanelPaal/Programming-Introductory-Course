@@ -102,13 +102,21 @@ def max_duplicate(nums: list) -> int | None:
     :param nums: List of integers
     :return: Maximum element with duplicate. None if no duplicate found.
     """
-    duplicates = set()
+    count = {}
     for num in nums:
-        if num in duplicates:
-            return num
+        if num in count:
+            count[num] += 1
         else:
-            duplicates.add(num)
-    return None
+            count[num] = 1
+
+    max_dup = None
+
+    for num, num_count in count.items():
+        if num_count > 1:
+            if max_dup is None or num > max_dup:
+                max_dup = num
+
+    return max_dup
 
 
 if __name__ == '__main__':
