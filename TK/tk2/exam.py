@@ -140,4 +140,3 @@ if __name__ == '__main__':
     print(max_duplicate([1, 2, 3]))
     print(max_duplicate([1, 2, 2]))
     print(max_duplicate([1, 2, 2, 1, 1]))
-
