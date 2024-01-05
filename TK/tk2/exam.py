@@ -40,7 +40,14 @@ def lucky_guess(n: int) -> bool:
     :param n: given number
     :return: boolean - points or no points
     """
-    pass
+    if n in (1, 3, 7):
+        return True
+    elif -6 <= n <= 121 and n % 13 == 0:
+        return True
+    elif n < 0 and '5' not in str(n) and '6' not in str(n):
+        return True
+    else:
+        return False
 
 
 def without_end(s: str) -> str:
@@ -97,3 +104,7 @@ if __name__ == '__main__':
     print(middle_value(2, 2, 4))
     print(middle_value(2, 6, 2))
     print(middle_value(88, 88, 88))
+
+    print(lucky_guess(7))
+    print(lucky_guess(26))
+    print(lucky_guess(-35))
