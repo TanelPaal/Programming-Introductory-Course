@@ -15,6 +15,8 @@ def replace_occurrences(text: str) -> str:
     :return string of the input text in which replacements will be made. Please note that the result always starts with
     capital letter and the rest are small letters.
     """
+    if not text:
+        return ''
     first_letter = text[0].lower()
     rest_of_text = text[1:].lower()
     replaced_text = rest_of_text.replace(first_letter, "@")
