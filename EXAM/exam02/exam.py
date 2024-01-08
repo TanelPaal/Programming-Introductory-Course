@@ -30,7 +30,7 @@ def swap_first_and_last_char(text: str) -> str:
 
 
 def reverse_words_in_text(text: str) -> str:
-    """
+    r"""
     Return the order of words in each line in reversed order.
 
     Words are separated by single space. Lines are separated by single new line \n.
@@ -184,7 +184,9 @@ class Product:
         :param price: price of product
         :param stock: how many in stock
         """
-        pass
+        self.name = name.capitalize()
+        self.price = price
+        self.stock = stock
 
 
 class ShoppingCart:
@@ -192,7 +194,7 @@ class ShoppingCart:
 
     def __init__(self):
         """Initialize ShoppingCart."""
-        pass
+        self.cart = {}
 
     def add_product(self, product: Product):
         """
@@ -200,7 +202,9 @@ class ShoppingCart:
 
         :param product: Product object
         """
-        pass
+        if product.stock > 0:
+            self.cart[product] = self.cart.get(product, 0) + 1
+            product.stock -= 1
 
     def can_remove_product(self, product: Product) -> bool:
         """
@@ -209,7 +213,7 @@ class ShoppingCart:
         :param product: Product object
         :return: boolean
         """
-        pass
+        return self.cart.get(product, 0) > 0
 
     def remove_product(self, product: Product):
         """
@@ -217,7 +221,11 @@ class ShoppingCart:
 
         :param product: Product object
         """
-        pass
+        if self.can_remove_product(product):
+            self.cart[product] -= 1
+            product.stock += 1
+            if self.cart[product] == 0:
+                del self.cart[product]
 
     def get_products_with_name(self, name: str) -> list:
         """
@@ -226,7 +234,7 @@ class ShoppingCart:
         :param name: name
         :return: list of products
         """
-        pass
+        return [product for product in self.cart if product.name.lower() == name.lower()]
 
     def calculate_total_price(self):
         """
@@ -234,11 +242,11 @@ class ShoppingCart:
 
         :return: total price, rounded
         """
-        pass
+        return round(sum(product.price * quantity for product, quantity in self.cart.items()), 2)
 
     def checkout(self):
         """Empty cart and decrease all products' stock."""
-        pass
+        self.cart.clear()
 
     def get_products(self):
         """
@@ -246,7 +254,7 @@ class ShoppingCart:
 
         :return: list of products
         """
-        pass
+        return list(self.cart.keys())
 
 
 class Book:
