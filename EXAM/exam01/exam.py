@@ -363,7 +363,7 @@ class IceCream:
 
     def __init__(self, flavour: str, price: int):
         """Initialize ice cream."""
-        self.flavour = flavour
+        self.flavour = flavour.lower()
         self.price = price
         self.toppings = []
 
@@ -378,7 +378,7 @@ class IceCream:
 
     def __eq__(self, other):
         """Two IceCreams are equals, if they have the same flavour and the same toppings."""
-        return self.flavour.lower() == other.flavour.lower() and self.toppings == other.toppings
+        return self.flavour == other.flavour and self.toppings == other.toppings
 
 
 class Customer:
@@ -395,22 +395,19 @@ class Kiosk:
 
     def __init__(self):
         """Initialize kiosk."""
-        self.flavours = []
-        self.price = 250
+        self.flavours = set()
+        self.default_price = 250
         self.toppings = []
-        self.order_status = False
-        self.order = []
+        self.current_order = None
+        self.orders = []
 
     def change_default_ice_cream_price(self, new_price: int):
         """Change the default price for ice cream (the price without any toppings)."""
-        if not new_price <= 0:
-            self.price = new_price
-        return self.price
+        self.default_price = new_price
 
     def add_ice_cream_flavour_to_kiosk(self, flavour: str):
         """Add new ice cream flavour to kiosk, 'chocolate' is the same as 'CHOCOLATE'. No duplicates."""
-        if flavour.lower() not in self.flavours:
-            self.flavours.append(flavour.lower())
+        self.flavours.add(flavour.lower())
 
     def add_topping_to_kiosk(self, topping: Topping):
         """Add new topping to the kiosk, if kiosk didn't already have that topping."""
@@ -419,7 +416,7 @@ class Kiosk:
 
     def get_all_ice_cream_flavours(self) -> list[str]:
         """Return all available ice cream flavours as lowercase strings, in the same order they were added."""
-        return self.flavours
+        return list(self.flavours)
 
     def get_all_toppings(self) -> list[Topping]:
         """Return all available toppings in this kiosk, in the same order they were added."""
@@ -427,7 +424,7 @@ class Kiosk:
 
     def get_all_topping_names_sorted(self) -> list:
         """Return a list of toppings names, sorted by topping prices in decreasing order."""
-        return sorted(self.toppings, key=lambda topping: topping.price, reverse=True)
+        return sorted([topping.name for topping in self.toppings], key=lambda name: [topping.price for topping in self.toppings if topping.name == name], reverse=True)
 
     def start_new_order(self, customer: Customer):
         """
@@ -435,37 +432,46 @@ class Kiosk:
 
         Can now start adding ice creams and toppings to order.
         """
-        if self.order_status is False:
-            self.order_status = True
+        self.current_order = []
 
     def add_to_order_ice_cream(self, flavour: str):
         """Add ice cream to order, but only, if there is an order started."""
-        if self.order_status is True and flavour.lower() in self.flavours:
-            self.order.append(flavour.lower())
+        if self.current_order is not None and flavour.lower() in self.flavours:
+            self.current_order.append(IceCream(flavour, self.default_price))
 
     def add_to_order_topping(self, topping: Topping):
         """Check if there is an order started and an ice cream ordered, then add topping to this ice cream."""
-        if self.order_status is True and topping in self.toppings:
-            self.order.append(topping)
+        if self.current_order and self.current_order[-1]:
+            self.current_order[-1].add_topping(topping)
 
     def pay_for_order(self):
         """Finish order."""
-        if self.order_status is True:
-            self.order_status = False
-            return self.order
+        order_price = self.__get_order_price()
+        if order_price:
+            self.orders.append(self.current_order)
+            self.current_order = None
+            return order_price
         return None
 
     def get_all_orders(self) -> list:
         """Return all orders, in the same order they were ordered from the kiosk."""
-        pass
+        return self.orders
 
     def __discount_ice_cream(self, ice_cream: IceCream):
         """Ice cream is in the third order, add discount (cheapest topping for free)."""
-        pass
+        if ice_cream.toppings:
+            cheapest_topping = min(ice_cream.toppings, key=lambda t: t.price)
+            ice_cream.price -= cheapest_topping.price
+            ice_cream.toppings.remove(cheapest_topping)
 
     def __get_order_price(self) -> int:
         """Calculate the price for the whole order."""
-        pass
+        if self.current_order:
+            if len(self.orders) == 2:  # Applying discount for the third order
+                for ice_cream in self.current_order:
+                    self.__discount_ice_cream(ice_cream)
+            return sum(ice_cream.price for ice_cream in self.current_order)
+        return 0
 
     def get_all_orders_sorted(self) -> list:
         """
@@ -475,11 +481,12 @@ class Kiosk:
         If multiple orders have the same amount of ice creams, sort those by price (more expensive order first).
         If multiple orders have the same amount of ice creams and same price, leave them in the order they were added.
         """
-        pass
+        return sorted(self.orders, key=lambda o: (-len(o), -sum(ice_cream.price for ice_cream in o)))
 
     def get_all_ordered_flavours(self) -> list:
         """Get a list of all the flavours of ice creams that were ordered, sorted alphabetically."""
-        pass
+        ordered_flavours = [ice_cream.flavour for order in self.orders for ice_cream in order]
+        return sorted(set(ordered_flavours))
 
 
 if __name__ == '__main__':
