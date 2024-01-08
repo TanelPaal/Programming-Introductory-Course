@@ -1,6 +1,6 @@
 """Exam 2 (2024-01-06)."""
 import string
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 def swap_first_and_last_char(text: str) -> str:
@@ -262,7 +262,10 @@ class Book:
 
     def __init__(self, author: str, title: str, isbn: int, return_date: datetime.date or None):
         """Initialize book."""
-        pass
+        self.author = author
+        self.title = title
+        self.isbn = isbn
+        self.return_date = return_date
 
     def set_return_date(self, return_date_str: str) -> None:
         """
@@ -272,7 +275,10 @@ class Book:
         and sets it as the return_date. If return_date_str is None, the return_date is set to None,
         indicating that the book is not currently lent out.
         """
-        pass
+        if return_date_str is None:
+            self.return_date = None
+        else:
+            self.return_date = datetime.strptime(return_date_str, '%Y-%m-%d').date()
 
 
 class Lender:
@@ -280,19 +286,20 @@ class Lender:
 
     def __init__(self, lent_books: list[Book]):
         """Initialize lender."""
-        pass
+        self.lent_books = lent_books
 
     def get_lent_books_by_return_date(self) -> list[Book]:
         """Get books lent by the lender, sorted by the return date in ascending order."""
-        pass
+        return sorted(self.lent_books, key=lambda book: book.return_date or date.max)
 
     def add_book_to_the_lent_books(self, book: Book) -> None:
         """Add the book to the lent books list."""
-        pass
+        self.lent_books.append(book)
 
     def remove_book_from_lent_books(self, book: Book) -> None:
         """Remove the book from the lent books."""
-        pass
+        if book in self.lent_books:
+            self.lent_books.remove(book)
 
 
 class Library:
@@ -300,7 +307,9 @@ class Library:
 
     def __init__(self, books: list[Book], readers: list[Lender], fee_amount: int):
         """Initialize library."""
-        pass
+        self.books = books
+        self.readers = readers
+        self.fee_amount = fee_amount
 
     def register_lender_as_reader(self, lender: Lender) -> bool:
         """
@@ -310,7 +319,12 @@ class Library:
         Also the lender cannot have any books that are over the return date.
         Return date is compared with today's date.
         """
-        pass
+        if lender in self.readers:
+            return False
+        if any(book.return_date and book.return_date < date.today() for book in lender.lent_books):
+            return False
+        self.readers.append(lender)
+        return True
 
     def add_book_to_library(self, book: Book) -> bool:
         """
@@ -319,19 +333,23 @@ class Library:
         Book cannot be added, if a book with same author and same title already exists, but ISBN is a different (fake book).
         Also the books ISBN cannot be shorter than 13 digits.
         """
-        pass
+        if len(str(book.isbn)) < 13 or any(
+                b.author == book.author and b.title == book.title and b.isbn != book.isbn for b in self.books):
+            return False
+        self.books.append(book)
+        return True
 
     def get_lendable_books(self) -> list[Book]:
         """Return all the lendable (not lent out) books."""
-        pass
+        return [book for book in self.books if book.return_date is None]
 
     def get_lent_books(self) -> list[Book]:
         """Return a list of books which are lent."""
-        pass
+        return [book for book in self.books if book.return_date is not None]
 
     def get_books_by_author(self, author: str) -> list[Book]:
         """From lendable (not lent out) books, return the book that has the author."""
-        pass
+        return [book for book in self.get_lendable_books() if book.author == author]
 
     def lend_a_book(self, lender: Lender, author: str) -> bool:
         """
@@ -340,7 +358,20 @@ class Library:
         When lending a book, lender has to be registered as a reader and also cannot have any books over the return_date.
         The return date of a book must also be set as 7 days from today.
         """
-        pass
+        if lender not in self.readers:
+            return False
+
+        if any(book.return_date and book.return_date < date.today() for book in lender.lent_books):
+            return False
+
+        books_by_author = self.get_books_by_author(author)
+        if not books_by_author:
+            return False
+
+        book_to_lend = books_by_author[0]
+        book_to_lend.return_date = date.today() + timedelta(days=7)
+        lender.add_book_to_the_lent_books(book_to_lend)
+        return True
 
     def lender_returns_book(self, lender: Lender, book: Book) -> int:
         """
@@ -355,7 +386,16 @@ class Library:
         If the book is not from the library or the lender is not a reader, return -1.
         If there is no fee to pay (return date is today or in the future), return 0.
         """
-        pass
+        if lender not in self.readers or book not in self.books:
+            return -1
+
+        lender.remove_book_from_lent_books(book)
+
+        if book.return_date is None or book.return_date >= date.today():
+            return 0
+
+        overdue_days = (date.today() - book.return_date).days
+        return overdue_days * self.fee_amount
 
 
 if __name__ == '__main__':
