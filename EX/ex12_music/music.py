@@ -46,9 +46,9 @@ class Note:
         pos = ascii_uppercase.find(self.note[0])
         if len(self.note) != 1:
             if self.note[1] == '#':
-                pos += .5
+                pos += 0.5
             elif self.note[1].lower() == 'b':
-                pos -= .5
+                pos -= 0.5
         return pos
 
     def __hash__(self):
@@ -168,16 +168,21 @@ class Chord:
         A chord consists of 2-3 notes and their chord product (string).
         If any of the parameters are the same, raise the 'DuplicateNoteNamesException' exception.
         """
+        # Store the notes in a list, filtering out any None values (for optional third note).
         self.notes = [note for note in [note_one, note_two, note_three] if note is not None]
+        # Extract and sort the original note names from the note objects.
         self.note_names = sorted(note.original_note for note in self.notes)
-
+        # Create a set of unique note names for comparison.
         unique_name = set(self.note_names)
-
+        # Check if the length of unique names is different from the total notes (indicating duplicates).
         length_not_matching = len(unique_name) != len(self.note_names)
+        # Check if the chord name is not one of the note names.
         name_in_notes = all([name != chord_name for name in self.note_names])
+        # Raise exception if there are duplicate note names or a note name matches the chord name.
         if length_not_matching or not name_in_notes:
             raise DuplicateNoteNamesException()
 
+        # Set the chord name.
         self.chord_name = chord_name
 
     def __repr__(self) -> str:

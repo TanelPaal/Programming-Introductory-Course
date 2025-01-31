@@ -55,11 +55,9 @@ def read_csv_file(filename: str) -> list[list[str]]:
     :param filename: The name of the file to read.
     :return: A list of lists, where each inner list represents a row of CSV data.
     """
-    result = []
     with open(filename, 'r', encoding='utf-8') as file:
-        for line in file:
-            columns = line.strip().split(',')
-            result.append(columns)
+        csv_reader = csv.reader(file)
+        result = list(csv_reader)
     return result
 
 

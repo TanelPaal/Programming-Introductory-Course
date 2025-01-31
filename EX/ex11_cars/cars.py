@@ -47,6 +47,7 @@ def sort_cars_by_make(cars: list[Car]) -> list[Car]:
     :param cars: The list of cars to sort.
     :return: The sorted list of cars.
     """
+    # Sorting cars first by make and then by model in alphabetical order.
     return sorted(cars, key=lambda car: (car.make.lower(), car.model.lower()))
 
 
@@ -59,6 +60,7 @@ def find_cars_by_make_and_model(cars: list[Car], make: str, model: str) -> list[
     :param model: The given model.
     :return: The list of cars with the given make and model.
     """
+    # Filtering the list of cars to only those that match the specified make and model.
     return [car for car in cars if car.make.lower() == make.lower() and car.model.lower() == model.lower()]
 
 
@@ -74,7 +76,9 @@ def find_cars_by_feature(cars: list[Car], feature: str) -> list[Car]:
     :param feature: The given feature.
     :return: The list of cars that have the specified feature.
     """
+    # Filtering cars with the specified feature.
     cars_with_feature = [car for car in cars if feature.lower() in map(str.lower, car.features)]
+    # Sorting cars with the specified feature by make and then by model in alphabetical order.
     return sort_cars_by_make(cars_with_feature)
 
 
@@ -86,6 +90,7 @@ def fuel_needed(car: Car, distance: int) -> float:
     :param distance: The distance in kilometers for which the fuel amount is calculated.
     :return: The amount of fuel needed in liters.
     """
+    # Calculating the amount of fuel needed for the given distance.
     return (car.fuel_consumption / 100) * distance
 
 
@@ -98,7 +103,9 @@ def calculate_average_fuel_consumption(cars: list[Car]) -> float:
     :param cars: The list of cars to calculate the average fuel consumption for.
     :return: The average fuel consumption of the given cars.
     """
+    # Calculating the average fuel consumption of the given cars.
     total_fuel_consumption = sum(car.fuel_consumption for car in cars)
+    # Returning the average fuel consumption of the given cars.
     return total_fuel_consumption / len(cars)
 
 
@@ -112,14 +119,15 @@ def most_popular_feature(cars: list[Car]) -> str:
     :param cars: The list of cars to search through.
     :return: The most popular feature among the given cars.
     """
+    # Counting occurrences of each feature.
     feature_count = {}
 
     for car in cars:
         for feature in car.features:
             feature_count[feature] = feature_count.get(feature, 0) + 1
 
+    # Identifying the most popular feature.
     most_popular_feature = max(feature_count, key=feature_count.get)
-
     return most_popular_feature
 
 
@@ -134,6 +142,7 @@ def write_cars_to_file(cars: list[Car], file_name: str):
     :param cars: The list of cars to write to the file.
     :param file_name: The name of the file to write the cars to.
     """
+    # Converting car objects to dictionaries for JSON serialization.
     car_to_dict: list[dict] = [
         {
             "make": car.make,
@@ -142,6 +151,7 @@ def write_cars_to_file(cars: list[Car], file_name: str):
             "features": car.features
         } for car in cars
     ]
+    # Writing the JSON data to a file.
     with open(file_name, 'w') as file:
         json.dump(car_to_dict, file, indent=2)
 
@@ -157,8 +167,10 @@ def read_cars_from_file(file_name: str) -> list[Car]:
     :param file_name: The name of the file to read the cars from.
     :return: The list of cars read from the file.
     """
+    # Reading JSON data from the file.
     with open(file_name, 'r') as file:
         cars_data = json.load(file)
+    # Converting the JSON data back into Car objects.
     return [Car(car['make'], car['model'], car['fuel_consumption'], car['features']) for car in cars_data]
 
 

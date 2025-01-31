@@ -50,25 +50,3 @@ def fruit_order(small_baskets: int, big_baskets: int, ordered_amount: int) -> in
         return remaining_amount
     else:
         return -1
-
-
-if __name__ == '__main__':
-    print("Study:")
-    print(students_study(6, False))  # False.
-    print(students_study(16, True))  # True.
-    print(students_study(19, True))  # False.
-    print(students_study(24, False))  # True.
-    print("\nLottery:")
-    print(lottery(5, 5, 5))  # 10.
-    print(lottery(4, 4, 4))  # 5.
-    print(lottery(5, 4, 3))  # 1.
-    print(lottery(5, 5, 4))  # 0.
-    print("\nFruit Order:")
-    print(fruit_order(0, 2, 10))  # 0.
-    print(fruit_order(10, 0, 10))  # 0.
-    print(fruit_order(5, 1, 9))  # 4.
-    print(fruit_order(3, 2, 9))  # -1.
-    print(fruit_order(3, 1, 10))  # -1.
-    print(fruit_order(0, 0, 5))  # -1.
-    print(fruit_order(5, 5, 0))  # 0.
-    print(fruit_order(10, 10, 55))  # 5.

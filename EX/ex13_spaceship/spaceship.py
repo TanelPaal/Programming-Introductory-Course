@@ -18,7 +18,11 @@ class Crewmate:
         return f"{self.color}, role: {self.role}, tasks left: {self.tasks}."
 
     def complete_task(self):
-        """Complete task."""
+        """Complete a task.
+
+        Reduces the number of tasks left by one, if any tasks are remaining.
+        Prints a message if no tasks are left.
+        """
         if self.tasks > 0:
             self.tasks -= 1
         else:
@@ -63,7 +67,12 @@ class Spaceship:
         return self.dead_players
 
     def add_crewmate(self, crewmate):
-        """Add crewmate."""
+        """Add a crewmate to the spaceship.
+
+        Adds a crewmate to the crewmate list if it is a valid Crewmate instance
+        and if the color of the crewmate is not already in the spaceship.
+        Prints a message if the crewmate cannot be added.
+        """
         if isinstance(crewmate, Crewmate):
             if crewmate.color not in [crew.color for crew in self.crewmate_list + self.impostor_list]:
                 self.crewmate_list.append(crewmate)
@@ -73,7 +82,13 @@ class Spaceship:
             print(f"{crewmate.color} cannot be a Crewmate.")
 
     def add_impostor(self, impostor: Impostor):
-        """Add impostor."""
+        """Add an impostor to the spaceship.
+
+        Adds an impostor to the impostor list if it is a valid Impostor instance,
+        the spaceship does not already have the maximum number of impostors,
+        and the color of the impostor is not already in the spaceship.
+        Prints a message if the impostor cannot be added.
+        """
         if isinstance(impostor, Impostor):
             if len(self.impostor_list) < self.max_impostors:
                 if impostor.color not in [imp.color for imp in self.impostor_list + self.crewmate_list]:
@@ -86,7 +101,12 @@ class Spaceship:
             print(f"{impostor.color} cannot be an Impostor.")
 
     def kill_crewmate(self, impostor: Impostor, crewmate_color: str):
-        """Kill crewmate."""
+        """Kill a crewmate.
+
+        Allows an impostor to kill a crewmate if the impostor is on the spaceship
+        and the crewmate is not protected. Removes the crewmate from the crewmate list
+        and adds it to the dead players list.
+        """
         if impostor not in self.impostor_list:
             print(f"{impostor.color} is not an Impostor on the Spaceship.")
             return
@@ -102,7 +122,11 @@ class Spaceship:
                 return
 
     def kill_impostor(self, sheriff: Crewmate, impostor_color: str):
-        """Kill impostor."""
+        """Kill an impostor.
+
+        Allows a sheriff to kill an impostor. If the target is not an impostor,
+        the sheriff dies. Updates the dead players list accordingly.
+        """
         if sheriff.role == "Sheriff" and sheriff in self.crewmate_list:
             for impostor in self.impostor_list:
                 if impostor.color.lower() == impostor_color.lower():
@@ -113,7 +137,11 @@ class Spaceship:
             self.dead_players.append(sheriff)
 
     def revive_crewmate(self, altruist: Crewmate, dead_crewmate: Crewmate):
-        """Revive crewmate."""
+        """Revive a crewmate.
+
+        Allows an altruist to revive a dead crewmate, sacrificing themselves in the process.
+        Updates the crewmate list and dead players list accordingly.
+        """
         if altruist.role == "Altruist" and altruist in self.crewmate_list and dead_crewmate in self.dead_players:
             self.dead_players.append(altruist)
             self.crewmate_list.remove(altruist)
@@ -121,7 +149,11 @@ class Spaceship:
             self.dead_players.remove(dead_crewmate)
 
     def protect_crewmate(self, guardian_angel: Crewmate, crewmate_protect: Crewmate):
-        """Protect crewmate."""
+        """Protect a crewmate.
+
+        Allows a guardian angel to protect a living crewmate, preventing the next kill attempt
+        on that crewmate. Only one crewmate can be protected at a time.
+        """
         is_protected = False
         for crewmate in self.crewmate_list:
             if crewmate.protected:
@@ -130,19 +162,31 @@ class Spaceship:
             crewmate_protect.protected = True
 
     def sort_crewmates_by_tasks(self):
-        """Sort crewmate by tasks."""
+        """Sort crewmates by the number of tasks left.
+
+        Returns a list of crewmates sorted in ascending order of tasks left.
+        """
         return sorted(self.crewmate_list, key=lambda crewmate: crewmate.tasks)
 
     def sort_impostors_by_kills(self):
-        """Sort impostors by kills."""
+        """Sort impostors by the number of kills.
+
+        Returns a list of impostors sorted in descending order of kills.
+        """
         return sorted(self.impostor_list, key=lambda impostor: impostor.kills, reverse=True)
 
     def get_regular_crewmates(self):
-        """Get regular crewmate."""
+        """Get a list of regular crewmates.
+
+        Returns a list of crewmates with the role 'Crewmate'.
+        """
         return [crewmate for crewmate in self.crewmate_list if crewmate.role == "Crewmate"]
 
     def get_role_of_player(self, color: str):
-        """Get role of player."""
+        """Get the role of a player by color.
+
+        Returns the role of the player with the specified color, if they are on the spaceship.
+        """
         for crewmate in self.crewmate_list:
             if crewmate.color.lower() == color.lower():
                 return crewmate.role
@@ -151,11 +195,17 @@ class Spaceship:
                 return impostor.role
 
     def get_crewmate_with_most_tasks_done(self):
-        """Crewmate with most tasks done."""
+        """Get the crewmate with the most tasks completed.
+
+        Returns the crewmate who has completed the most tasks.
+        """
         return self.sort_crewmates_by_tasks()[0]
 
     def get_impostor_with_most_kills(self):
-        """Get impostor with most kills."""
+        """Get the impostor with the most kills.
+
+        Returns the impostor who has made the most kills.
+        """
         return self.sort_impostors_by_kills()[0]
 
 

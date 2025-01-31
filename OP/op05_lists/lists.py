@@ -223,6 +223,15 @@ def phone_list_as_string(phone_list: list) -> str:
 
 # Add test cases if needed.
 if __name__ == '__main__':
+    print(phone_brand_and_models("Honor Magic5,Google Pixel2,Google Pixel6,IPhone 7,Google Pixel,Google Pixel,IPhone 14"))
+    # [['Honor', ['Magic5']], ['Google', ['Pixel2', 'Pixel6', 'Pixel']], ['IPhone', ['7', '14']]]
+
+    print(phone_brand_and_models("Google Pixel,Google Pixel,Google Pixel,Google Pixel"))  # [['Google', ['Pixel']]]
+    print(phone_brand_and_models(""))  # []
+
+    print(add_phones([['IPhone', ['11']], ['Google', ['Pixel']]], "IPhone 12,Samsung Galaxy S22,IPhone 11"))
+    # [['IPhone', ['11', '12']], ['Google', ['Pixel']], ['Samsung', ['Galaxy S22']]]
+
     print(number_of_phones("IPhone 11,Google Pixel,Honor Magic5,IPhone 12"))  # [('IPhone', 2), ('Google', 1), ('Honor', 1)]
 
     print(number_of_phones("HTC one,HTC one,HTC one,HTC one"))  # [('HTC', 4)]

@@ -106,7 +106,7 @@ def is_name_in_password(password: str, name: str) -> bool:
     :param name: The full name of the account owner
     :return: True if the name is present in the password, False otherwise
     """
-    # Convert the password to lowercase for case-insensitive comparison.
+    # Case-insensitive comparison.
     password_lower = password.lower()
 
     # Split the name into parts using whitespace as a separator.
